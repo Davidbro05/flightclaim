@@ -11,7 +11,8 @@ services:
       PORT: 3000
       DATABASE_URL: postgres://flightclaim:${DB_PASS}@db:5432/flightclaim
       ADMIN_USER: ${ADMIN_USER:-admin}
-      ADMIN_PASS_HASH: ${ADMIN_PASS_HASH}
+      ADMIN_PASS_HASH: ${ADMIN_PASS_HASH:-}
+      ADMIN_PASS: ${ADMIN_PASS:-}
       COMPANY_NAME: ${COMPANY_NAME:-FlightClaim AB}
       COMPANY_REG: ${COMPANY_REG:-XXXXXX-XXXX}
       COMPANY_ADDRESS: ${COMPANY_ADDRESS:-Storgatan 1, 123 45 Stockholm}
