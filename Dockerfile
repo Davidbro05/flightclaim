@@ -21,8 +21,8 @@ COPY --chown=node:node src/ ./src/
 COPY --chown=node:node public/ ./public/
 COPY --chown=node:node knexfile.js ./
 
-# Copy built React admin from stage 1
-COPY --from=client-builder --chown=node:node /app/client/dist ./public/admin
+# Copy built React admin from stage 1 (Vite outputs to /app/public/admin per vite.config.js)
+COPY --from=client-builder --chown=node:node /app/public/admin ./public/admin
 
 # Remove SQLite database — production uses PostgreSQL
 RUN rm -f database.db
