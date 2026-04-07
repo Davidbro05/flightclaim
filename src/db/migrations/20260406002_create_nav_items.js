@@ -11,10 +11,17 @@ exports.up = async function (knex) {
   });
 
   // Seed default nav structure
+  // insert() returns [id] on SQLite but rowCount on PostgreSQL — query back to get id safely
+  async function insertAndGetId(row) {
+    await knex('nav_items').insert(row);
+    const inserted = await knex('nav_items').where({ url: row.url }).first();
+    return inserted.id;
+  }
+
   // Top-level items first (no parent)
-  const [forseningId] = await knex('nav_items').insert({ label: 'Försenat flyg', url: '/forsening', sort_order: 1 });
-  const [installtId]  = await knex('nav_items').insert({ label: 'Inställt flyg', url: '/installda-flyg', sort_order: 2 });
-  const [flygbolagId] = await knex('nav_items').insert({ label: 'Flygbolag', url: '/flygbolag', sort_order: 3 });
+  const forseningId = await insertAndGetId({ label: 'Försenat flyg', url: '/forsening', sort_order: 1 });
+  const installtId  = await insertAndGetId({ label: 'Inställt flyg', url: '/installda-flyg', sort_order: 2 });
+  const flygbolagId = await insertAndGetId({ label: 'Flygbolag', url: '/flygbolag', sort_order: 3 });
   await knex('nav_items').insert({ label: 'Blogg', url: '/blogg', sort_order: 4 });
   await knex('nav_items').insert({ label: 'Ansök nu', url: '/#ansokan', sort_order: 5 });
 
