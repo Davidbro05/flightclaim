@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="sv">
+<%- include('partials/head') %>
+<body class="<%= typeof bodyClass !== 'undefined' ? bodyClass : '' %>">
+  <%- include('partials/nav') %>
+  <main>
+    <%- body %>
+  </main>
+  <%- include('partials/footer') %>
+  <script src="/js/nav.js?v=<%= assetVersion %>"></script>
+  <%- typeof scripts !== 'undefined' ? scripts : '' %>
+</body>
+</html>

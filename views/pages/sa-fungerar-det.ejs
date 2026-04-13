@@ -1,0 +1,93 @@
+<!-- Page Hero -->
+<section class="page-hero">
+  <div class="container">
+    <h1>Enkelt, tryggt och utan risk</h1>
+    <p>Vi sköter hela processen mot flygbolaget. Du skriver under en fullmakt — vi gör resten.</p>
+  </div>
+</section>
+
+<!-- Expanded Steps -->
+<section class="how-it-works" style="padding: 70px 0;">
+  <div class="container">
+    <h2>Tre enkla steg</h2>
+    <div class="steps">
+      <%- include('../components/step-card', {
+        stepNumber: '1',
+        stepTitle: 'Fyll i formuläret',
+        stepText: 'Ange dina personuppgifter och all flyginformation — flygbolag, flygnummer, datum och vad som hände. Det tar ungefär 2 minuter. Signera sedan fullmakten digitalt direkt i formuläret.'
+      }) %>
+      <%- include('../components/step-card', {
+        stepNumber: '2',
+        stepTitle: 'Vi granskar ditt ärende',
+        stepText: 'Våra juridiska experter bedömer om ditt flyg kvalificerar för ersättning enligt EU 261/2004. Vi kontaktar flygbolaget och kräver ersättning å dina vägnar. Du behöver inte göra något mer.'
+      }) %>
+      <%- include('../components/step-card', {
+        stepNumber: '3',
+        stepTitle: 'Du får din ersättning',
+        stepText: 'När flygbolaget betalar ut ersättningen drar vi av vår provision (25% + moms) och resten betalas direkt till dig. De flesta ärenden är klara inom 4–8 veckor.'
+      }) %>
+    </div>
+  </div>
+</section>
+
+<!-- EU 261/2004 Section -->
+<section style="background: var(--gray-100); padding: 70px 0;">
+  <div class="container">
+    <h2>EU-förordning 261/2004 — din rätt</h2>
+    <p style="font-size:17px; color:var(--gray-600); max-width:700px; margin-bottom:32px;">EU-förordning 261/2004 ger flygpassagerare rätt till ekonomisk ersättning vid förseningar, inställda flyg och nekad ombordstigning. Ersättningen baseras på flygsträckans längd.</p>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Flygsträcka</th>
+          <th>Störning</th>
+          <th>Ersättning</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Upp till 1 500 km</td>
+          <td>Försening &gt; 3h, inställt flyg eller nekad ombordstigning</td>
+          <td class="comp-amount">250€</td>
+        </tr>
+        <tr>
+          <td>1 500–3 500 km</td>
+          <td>Försening &gt; 3h, inställt flyg eller nekad ombordstigning</td>
+          <td class="comp-amount">400€</td>
+        </tr>
+        <tr>
+          <td>Över 3 500 km</td>
+          <td>Försening &gt; 4h, inställt flyg eller nekad ombordstigning</td>
+          <td class="comp-amount">600€</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p style="font-size:14px; color:var(--gray-500); margin-top:16px;">Gäller för flygningar inom EU samt avgångar från EU med valfritt flygbolag, och ankomster till EU med EU-baserat flygbolag.</p>
+  </div>
+</section>
+
+<!-- Full FAQ -->
+<section id="faq" class="faq" style="padding: 70px 0;">
+  <div class="container">
+    <h2>Vanliga frågor</h2>
+    <div class="faq-grid">
+      <%- include('../components/faq-item', { faqQuestion: 'Vad kostar det?', faqAnswer: 'Vi tar endast provision om vi vinner ditt ärende: 25% + moms av den totala ersättningen. Inga dolda avgifter, inga uppstartskostnader.' }) %>
+      <%- include('../components/faq-item', { faqQuestion: 'Hur lång tid tar det?', faqAnswer: 'De flesta ärenden är klara inom 4–8 veckor, men det kan variera beroende på flygbolag och hur snabbt de svarar.' }) %>
+      <%- include('../components/faq-item', { faqQuestion: 'Vilka flygningar gäller?', faqAnswer: 'Alla flygningar inom EU, samt avgångar från EU med valfritt flygbolag och ankomster till EU med EU-baserat flygbolag.' }) %>
+      <%- include('../components/faq-item', { faqQuestion: 'Måste jag göra något själv?', faqAnswer: 'Nej, vi sköter all kontakt med flygbolaget. Du behöver bara fylla i formuläret och signera fullmakten — resten tar vi hand om.' }) %>
+      <%- include('../components/faq-item', { faqQuestion: 'Vad händer om flygbolaget nekar ersättning?', faqAnswer: 'Vi ger oss inte i första taget. Om flygbolaget nekar går vi vidare med tillsynsmyndigheten (Konsumentverket) eller tar ärendet till domstol om det behövs.' }) %>
+      <%- include('../components/faq-item', { faqQuestion: 'Vilka handlingar behöver jag?', faqAnswer: 'Du behöver som minst flygnummer, flygdatum och din bokningsreferens (PNR). Eventuella kvitton för merkostnader kan stärka ärendet men är inte obligatoriska.' }) %>
+      <%- include('../components/faq-item', { faqQuestion: 'Hur fungerar fullmakten?', faqAnswer: 'Fullmakten du signerar i formuläret ger oss rätt att företräda dig gentemot flygbolaget. Den är begränsad till just detta ärende och gäller tills ärendet är avslutat.' }) %>
+      <%- include('../components/faq-item', { faqQuestion: 'Kan jag ansöka för hela familjen?', faqAnswer: 'Ja! Varje passagerare på det drabbade flyget har rätt till individuell ersättning. Fyll i ett formulär per person eller kontakta oss så hjälper vi dig.' }) %>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Block -->
+<%- include('../components/cta-block', {
+  ctaTitle: 'Redo att ansöka?',
+  ctaText: 'Det tar 2 minuter och kostar ingenting om vi inte vinner.',
+  ctaUrl: '/anmalan',
+  ctaLabel: 'Ansök om ersättning'
+}) %>

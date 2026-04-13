@@ -1,0 +1,230 @@
+<% scripts = '<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.2.0/dist/signature_pad.umd.min.js"></script><script src="/js/hero.js?v=' + assetVersion + '"></script><script src="/js/claim-form.js?v=' + assetVersion + '"></script>' %>
+
+<!-- Hero Section — full-bleed photo + frosted glass card -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-card">
+      <h1>Ansök om ersättning för ditt flyg</h1>
+      <p class="hero-subtitle">Drabbad av försening, inställt flyg eller nekad ombordstigning? Du kan ha rätt till upp till 600€ per person.</p>
+
+      <input type="text" id="hero-departure" class="hero-input" placeholder="✈ Avgångsflygplats (t.ex. ARN)">
+      <input type="text" id="hero-arrival" class="hero-input" placeholder="✈ Destinationsflygplats (t.ex. LHR)">
+      <button type="button" class="btn-primary hero-check-btn">Kontrollera din ersättning</button>
+
+      <div class="hero-badges">
+        <span class="hero-badge"><span>✓</span> Gratis kontroll</span>
+        <span class="hero-badge hero-badge-highlight"><span>🇸🇪</span> Svensk support</span>
+        <span class="hero-badge"><span>✓</span> Flygningar upp till 3 år</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works — summary -->
+<section id="how-it-works" class="how-it-works">
+  <div class="container">
+    <h2>Så här enkelt är det</h2>
+    <div class="steps">
+      <%- include('../components/step-card', { stepNumber: '1', stepTitle: 'Fyll i formuläret', stepText: 'Ange dina uppgifter och flyginformation – det tar bara 2 minuter.' }) %>
+      <%- include('../components/step-card', { stepNumber: '2', stepTitle: 'Vi granskar ditt ärende', stepText: 'Våra juridiska experter bedömer dina chanser och inleder processen.' }) %>
+      <%- include('../components/step-card', { stepNumber: '3', stepTitle: 'Du får din ersättning', stepText: 'Vi driver ärendet mot flygbolaget. Pengarna betalas ut direkt till dig.' }) %>
+    </div>
+    <div style="text-align:center; margin-top:32px;">
+      <a href="/sa-fungerar-det" class="btn-secondary">Läs mer om processen →</a>
+    </div>
+  </div>
+</section>
+
+<!-- Claim Form -->
+<section id="ansokan" class="form-section">
+  <div class="container">
+    <div class="form-container">
+      <div class="form-header">
+        <h2>Kontrollera din ersättning</h2>
+        <p>Fyll i formuläret nedan så återkommer vi inom 24 timmar</p>
+      </div>
+
+      <form action="/submit" method="POST" id="claimForm">
+        <!-- Passenger Information -->
+        <div class="form-panel">
+          <h3><span class="panel-icon">👤</span> Passagerarinformation</h3>
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label>Fullständigt namn</label>
+              <input type="text" name="namn" required placeholder="Som det står i ditt pass">
+            </div>
+            <div class="form-group full-width">
+              <label>Gatuadress</label>
+              <input type="text" name="street" required placeholder="Gata och nummer">
+            </div>
+            <div class="form-group">
+              <label>Postnummer</label>
+              <input type="text" name="zip" required placeholder="12345">
+            </div>
+            <div class="form-group">
+              <label>Ort</label>
+              <input type="text" name="city" required placeholder="Stockholm">
+            </div>
+            <div class="form-group">
+              <label>E-post</label>
+              <input type="email" name="email" required placeholder="din.email@exempel.se">
+            </div>
+            <div class="form-group">
+              <label>Telefon</label>
+              <input type="tel" name="phone" required placeholder="070-123 45 67">
+            </div>
+          </div>
+        </div>
+
+        <!-- Flight Information -->
+        <div class="form-panel">
+          <h3><span class="panel-icon">✈️</span> Flyginformation</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Flygbolag</label>
+              <input type="text" name="airline" required placeholder="t.ex. SAS, Norwegian">
+            </div>
+            <div class="form-group">
+              <label>Flygnummer</label>
+              <input type="text" name="flightNumber" required placeholder="t.ex. SK1234">
+            </div>
+            <div class="form-group">
+              <label>Bokningsreferens (PNR)</label>
+              <input type="text" name="bookingReference" placeholder="Valfritt">
+            </div>
+            <div class="form-group">
+              <label>Avgångsflygplats</label>
+              <input type="text" name="departureAirport" required placeholder="t.ex. ARN, CPH">
+            </div>
+            <div class="form-group">
+              <label>Landningsflygplats</label>
+              <input type="text" name="arrivalAirport" required placeholder="t.ex. LHR, CDG">
+            </div>
+            <div class="form-group">
+              <label>Flygdatum</label>
+              <input type="date" name="flightDate" required>
+            </div>
+            <div class="form-group full-width">
+              <label>Vad hände?</label>
+              <select name="issue" required>
+                <option value="" disabled selected>Välj typ av störning</option>
+                <option value="delay">Försening över 3 timmar</option>
+                <option value="cancelled">Inställt flyg</option>
+                <option value="denied">Nekad ombordstigning (overbooking)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Legal & Signature -->
+        <div class="form-panel">
+          <h3><span class="panel-icon">⚖️</span> Juridiskt godkännande</h3>
+          <div class="terms-box">
+            <p><strong>Fullmakt</strong></p>
+            <p>Genom att skriva under ger du FlightClaim AB i uppdrag att företräda dig i ersättningsärendet mot flygbolaget enligt EU-förordning 261/2004. Läs våra <a href="#" id="showTermsLink">fullständiga villkor</a>.</p>
+          </div>
+          <div class="checkbox-wrapper">
+            <input type="checkbox" name="terms_accepted" id="termsAccepted" required>
+            <label for="termsAccepted">Jag bekräftar att jag har läst och godkänner <a href="#" id="showTermsLinkInline">användarvillkoren</a> samt att uppgifterna ovan är korrekta.</label>
+          </div>
+          <div class="signature-area">
+            <div class="signature-label">
+              <label>Signatur</label>
+              <span class="signature-hint">Rita med fingret eller musen</span>
+            </div>
+            <div class="signature-pad-container">
+              <canvas id="signature-pad" class="signature-canvas" width="500" height="200"></canvas>
+            </div>
+            <button type="button" id="clear-signature" class="btn-secondary btn-small">Rensa signatur</button>
+            <input type="hidden" name="signature" id="signature-input">
+          </div>
+        </div>
+
+        <div class="form-footer">
+          <p class="privacy-note">🔒 Dina uppgifter hanteras säkert enligt GDPR. Vi delar aldrig dina personuppgifter med tredje part utan ditt medgivande.</p>
+          <button type="submit" class="btn-primary btn-large">Skicka ansökan – kostnadsfritt</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials">
+  <div class="container">
+    <h2>Vad våra första kunder säger</h2>
+    <div class="testimonial-grid">
+      <%- include('../components/testimonial', { stars: '★★★★★', quote: 'Enkel process och tydlig kommunikation. Skönt att någon annan sköter kontakten med flygbolaget.', author: 'Anna', city: 'Stockholm' }) %>
+      <%- include('../components/testimonial', { stars: '★★★★★', quote: 'Professionellt intryck från start. Hoppas på positivt besked från flygbolaget snart!', author: 'Johan', city: 'Göteborg' }) %>
+      <%- include('../components/testimonial', { stars: '★★★★☆', quote: 'Bra och tydlig återkoppling. Ser fram emot att följa mitt ärende.', author: 'Maria', city: 'Malmö' }) %>
+    </div>
+  </div>
+</section>
+
+<!-- About teaser -->
+<section class="about-section">
+  <div class="container">
+    <h2>Om FlightClaim</h2>
+    <div class="about-content">
+      <div class="about-text">
+        <p>FlightClaim grundades 2026 med en enkel mission: att hjälpa resenärer att få den ersättning de har rätt till enligt EU-förordning 261/2004. Vi är ett nytänkande företag som kombinerar juridisk expertis med modern teknik för att göra processen enkel och smidig.</p>
+        <p>Vi tar endast betalt om du får din ersättning — ingen seger, ingen avgift.</p>
+        <div style="margin-top:24px;">
+          <a href="/om-oss" class="btn-secondary">Läs mer om oss →</a>
+        </div>
+      </div>
+      <div class="about-stats">
+        <div class="about-stat">
+          <span class="about-number">Nystartade</span>
+          <span class="about-label">2026</span>
+        </div>
+        <div class="about-stat">
+          <span class="about-number">Juridisk</span>
+          <span class="about-label">expertis</span>
+        </div>
+        <div class="about-stat">
+          <span class="about-number">100%</span>
+          <span class="about-label">Transparens</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ (2 items) -->
+<section class="faq">
+  <div class="container">
+    <h2>Vanliga frågor</h2>
+    <div class="faq-grid">
+      <%- include('../components/faq-item', { faqQuestion: 'Vad kostar det?', faqAnswer: 'Vi tar endast provision om vi vinner ditt ärende (25% + moms på ersättningen). Inga dolda avgifter.' }) %>
+      <%- include('../components/faq-item', { faqQuestion: 'Vilka flygningar gäller?', faqAnswer: 'Alla flygningar inom EU, samt flygningar till/från EU med EU-baserade flygbolag.' }) %>
+    </div>
+    <div style="text-align:center; margin-top:28px;">
+      <a href="/sa-fungerar-det#faq" class="btn-secondary">Se alla frågor →</a>
+    </div>
+  </div>
+</section>
+
+<!-- Terms Modal -->
+<div id="termsModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Användarvillkor för FlightClaim AB</h2>
+    <div class="modal-body">
+      <h3>Fullmakt och uppdragsbeskrivning</h3>
+      <p>Härmed ger jag, undertecknad, FlightClaim AB (org.nr 559999-1234) i uppdrag att företräda mig i ärendet gällande ersättning från flygbolaget enligt EU-förordning 261/2004.</p>
+      <h4>FlightClaim AB bemyndigas att:</h4>
+      <ul>
+        <li>Inhämta alla nödvändiga uppgifter från flygbolaget</li>
+        <li>Föra min talan i kontakt med flygbolaget och eventuella tillsynsmyndigheter</li>
+        <li>Vid behov vidta rättsliga åtgärder i mitt namn</li>
+        <li>Ta emot ersättningsbetalningar på mina vägnar</li>
+      </ul>
+      <h4>Arvode</h4>
+      <p>Vid framgångsrikt ärende utgår ett arvode om 25% + moms av den totala ersättningen. Inget arvode utgår om ärendet inte vinner framgång.</p>
+      <h4>Personuppgifter</h4>
+      <p>Personuppgifter behandlas i enlighet med vår integritetspolicy och GDPR. Uppgifterna delas endast med berört flygbolag samt eventuell domstol/myndighet.</p>
+      <p><em>Genom att kryssa i rutan och signera bekräftar jag att jag har läst, förstått och godkänt dessa villkor.</em></p>
+    </div>
+  </div>
+</div>

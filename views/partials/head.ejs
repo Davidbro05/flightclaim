@@ -1,0 +1,57 @@
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title><%= typeof title !== 'undefined' ? title : 'FlightClaim – Få ersättning för försenat flyg' %></title>
+
+  <% if (typeof metaDesc !== 'undefined' && metaDesc) { %>
+  <meta name="description" content="<%= metaDesc %>">
+  <% } %>
+
+  <% if (typeof canonical !== 'undefined' && canonical) { %>
+  <link rel="canonical" href="<%= siteUrl %><%= canonical %>">
+  <% } %>
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="<%= siteName %>">
+  <meta property="og:title" content="<%= typeof ogTitle !== 'undefined' ? ogTitle : (typeof title !== 'undefined' ? title : siteName) %>">
+  <meta property="og:description" content="<%= typeof ogDesc !== 'undefined' ? ogDesc : (typeof metaDesc !== 'undefined' ? metaDesc : '') %>">
+  <% if (typeof canonical !== 'undefined' && canonical) { %>
+  <meta property="og:url" content="<%= siteUrl %><%= canonical %>">
+  <% } %>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/images/android-chrome-192x192.png">
+  <link rel="manifest" href="/images/site.webmanifest">
+
+  <!-- CSS + Google Fonts -->
+  <link rel="stylesheet" href="/style.css?v=<%= assetVersion %>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- JSON-LD: LocalBusiness -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LegalService",
+    "name": "FlightClaim AB",
+    "url": "<%= siteUrl %>",
+    "description": "FlightClaim hjälper resenärer att kräva ersättning för försenade och inställda flyg enligt EU 261/2004.",
+    "areaServed": "SE",
+    "telephone": "08-123 456 78",
+    "email": "info@flightclaim.se",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Storgatan 1",
+      "postalCode": "114 44",
+      "addressLocality": "Stockholm",
+      "addressCountry": "SE"
+    }
+  }
+  </script>
+</head>

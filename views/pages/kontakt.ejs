@@ -1,0 +1,57 @@
+<!-- Page Hero -->
+<section class="page-hero">
+  <div class="container">
+    <h1>Vi svarar inom 24 timmar</h1>
+    <p>Har du frågor om ett pågående ärende eller vill veta mer? Vi finns här för dig.</p>
+  </div>
+</section>
+
+<!-- Contact Content -->
+<section class="contact-section" style="padding: 70px 0;">
+  <div class="container">
+    <div class="contact-content">
+      <!-- Contact Info -->
+      <div class="contact-info">
+        <%- include('../components/contact-card', {
+          contactIcon: '📧',
+          contactLabel: 'E-post',
+          contactValue: '<p><a href="mailto:info@flightclaim.se">info@flightclaim.se</a></p><p class="contact-note">Svarar inom 24 timmar</p>'
+        }) %>
+        <%- include('../components/contact-card', {
+          contactIcon: '📞',
+          contactLabel: 'Telefon',
+          contactValue: '<p><a href="tel:0812345678">08-123 456 78</a></p><p class="contact-note">Vardagar 9–16</p>'
+        }) %>
+        <%- include('../components/contact-card', {
+          contactIcon: '📍',
+          contactLabel: 'Besöksadress',
+          contactValue: '<p>Storgatan 1<br>114 44 Stockholm</p>'
+        }) %>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="contact-form">
+        <% if (typeof contactSent !== 'undefined' && contactSent) { %>
+        <div class="alert-success" style="background:var(--success);color:white;padding:14px 18px;border-radius:var(--border-radius);margin-bottom:20px;font-weight:500;">
+          Tack! Vi återkommer inom 24 timmar.
+        </div>
+        <% } %>
+        <p>Fyll i formuläret så återkommer vi så snart som möjligt.</p>
+        <form class="simple-contact" action="/kontakt" method="POST">
+          <input type="text" name="contact_name" placeholder="Ditt namn" required>
+          <input type="email" name="contact_email" placeholder="Din e-post" required>
+          <textarea name="contact_message" placeholder="Din fråga eller ditt ärendenummer" rows="4" required></textarea>
+          <button type="submit" class="btn-primary">Skicka meddelande</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Block -->
+<%- include('../components/cta-block', {
+  ctaTitle: 'Vill du ansöka om ersättning?',
+  ctaText: 'Fyll i formuläret — det tar bara 2 minuter och kostar ingenting.',
+  ctaUrl: '/anmalan',
+  ctaLabel: 'Ansök om ersättning'
+}) %>

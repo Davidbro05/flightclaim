@@ -1,0 +1,17 @@
+<section class="page-hero">
+  <div class="container">
+    <h1><%= article.title %></h1>
+    <% if (article.meta_desc) { %><p><%= article.meta_desc %></p><% } %>
+  </div>
+</section>
+
+<section style="padding: 60px 0;">
+  <div class="container" style="max-width: 780px;">
+    <article class="article-body">
+      <%- article.content_html || article.content %>
+    </article>
+    <div style="margin-top: 50px; padding-top: 30px; border-top: 1px solid var(--gray-200);">
+      <a href="/anmalan" class="btn-primary">Ansök om ersättning</a>
+    </div>
+  </div>
+</section>

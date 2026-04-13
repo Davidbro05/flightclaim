@@ -70,17 +70,7 @@ router.post('/', submitLimiter, async (req, res) => {
       sendCustomerConfirmation(claimData),
     ]).catch((err) => logger.error({ err }, 'Failed to send notification emails'));
 
-    res.send(`
-      <!DOCTYPE html>
-      <html>
-      <head><meta charset="utf-8"><title>Tack!</title></head>
-      <body style="font-family:Arial,sans-serif;text-align:center;padding:60px;">
-        <h1>Tack!</h1>
-        <p>Ditt ärende har registrerats. Vi återkommer via e-post.</p>
-        <a href="/">Gå tillbaka</a>
-      </body>
-      </html>
-    `);
+    res.redirect('/tack');
   } catch (err) {
     logger.error({ err }, 'Failed to insert claim');
     res.status(500).send('Något gick fel vid sparandet.');

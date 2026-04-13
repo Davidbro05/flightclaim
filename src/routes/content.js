@@ -387,7 +387,72 @@ function render404(nav) {
 </html>`;
 }
 
-// ── Main route handler ─────────────────────────────────────────────────────
+// ── Static EJS pages ───────────────────────────────────────────────────────
+
+router.get('/', (req, res) => {
+  res.render('pages/index', {
+    title: 'FlightClaim – Få ersättning för försenat flyg',
+    metaDesc: 'Du kan ha rätt till upp till 600€ per person. Vi sköter hela processen mot flygbolaget – utan risk.',
+    canonical: '/',
+  });
+});
+
+router.get('/om-oss', (req, res) => {
+  res.render('pages/om-oss', {
+    title: 'Om oss | FlightClaim',
+    metaDesc: 'FlightClaim grundades 2026 för att hjälpa svenska resenärer få rätt ersättning enligt EU 261/2004.',
+    canonical: '/om-oss',
+  });
+});
+
+router.get('/sa-fungerar-det', (req, res) => {
+  res.render('pages/sa-fungerar-det', {
+    title: 'Så fungerar det | FlightClaim',
+    metaDesc: 'Tre enkla steg: fyll i formuläret, vi granskar ditt ärende, du får ersättningen. Ingen risk.',
+    canonical: '/sa-fungerar-det',
+  });
+});
+
+router.get('/kontakt', (req, res) => {
+  res.render('pages/kontakt', {
+    title: 'Kontakta oss | FlightClaim',
+    metaDesc: 'Frågor om ditt ärende? Vi svarar inom 24 timmar via e-post eller telefon.',
+    canonical: '/kontakt',
+    contactSent: req.query.skickat === '1',
+  });
+});
+
+router.post('/kontakt', (req, res) => {
+  const { contact_name, contact_email } = req.body;
+  logger.info({ contact_name, contact_email }, 'Contact form submitted');
+  res.redirect('/kontakt?skickat=1');
+});
+
+router.get('/anmalan', (req, res) => {
+  res.render('pages/anmalan', {
+    title: 'Ansök om ersättning | FlightClaim',
+    metaDesc: 'Ansök om flygkompensation kostnadsfritt. Vi tar bara betalt om du vinner.',
+    canonical: '/anmalan',
+  });
+});
+
+router.get('/tack', (req, res) => {
+  res.render('pages/tack', {
+    title: 'Tack för din ansökan | FlightClaim',
+    metaDesc: '',
+    canonical: '/tack',
+  });
+});
+
+router.get('/integritetspolicy', (req, res) => {
+  res.render('pages/integritetspolicy', {
+    title: 'Integritetspolicy | FlightClaim',
+    metaDesc: 'Hur FlightClaim hanterar dina personuppgifter enligt GDPR.',
+    canonical: '/integritetspolicy',
+  });
+});
+
+// ── CMS article catch-all (must stay LAST) ─────────────────────────────────
 
 router.get('/:slug{/*path}', async (req, res) => {
   const slug = req.params.slug + (req.params.path ? '/' + req.params.path : '');

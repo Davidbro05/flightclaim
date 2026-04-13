@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const pinoHttp = require('pino-http');
 const path = require('path');
+const ejsLayouts = require('express-ejs-layouts');
 
 const logger = require('./logger');
 const db = require('./db');
@@ -13,8 +14,15 @@ const articlesApiRouter = require('./routes/articlesApi');
 const navApiRouter = require('./routes/navApi');
 const documentsRouter = require('./routes/documents');
 const contentRouter = require('./routes/content');
+const siteLocals = require('./middleware/siteLocals');
 
 const app = express();
+
+// EJS + layout setup
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '../views'));
+app.use(ejsLayouts);
+app.set('layout', 'layout');
 
 app.set('trust proxy', true);
 
@@ -42,8 +50,8 @@ app.use(express.json({ limit: '5mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '5mb' }));
 app.use(cookieParser());
 
-// Static files (frontend)
-app.use(express.static(path.join(__dirname, '../public')));
+// Inject shared template locals (navItems, siteUrl, currentYear, assetVersion, currentPath)
+app.use(siteLocals);
 
 // Health check — used by Docker HEALTHCHECK and Portainer
 app.get('/health', async (req, res) => {
@@ -56,6 +64,7 @@ app.get('/health', async (req, res) => {
   }
 });
 
+// API + form routes
 app.use('/submit', claimsRouter);
 app.use('/api/admin', adminApiRouter);
 app.use('/api/articles', articlesApiRouter);
@@ -69,8 +78,16 @@ app.get(['/admin', '/admin/*splat'], (_req, res) => {
   res.sendFile(path.join(adminBuildDir, 'index.html'));
 });
 
-// Public SSR content pages — must come after all API + admin routes
+// Public SSR pages — must come before express.static so / is not intercepted by index.html
 app.use('/', contentRouter);
+
+// Static files (CSS, JS, images) — after content router
+app.use(express.static(path.join(__dirname, '../public')));
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).render('pages/404', { title: 'Sidan hittades inte | FlightClaim' });
+});
 
 // Global error handler
 app.use((err, req, res, next) => {

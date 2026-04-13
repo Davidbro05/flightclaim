@@ -1034,3 +1034,393 @@ form {
     padding: 40px 0 20px;
   }
 }
+/* ============================================================
+   MULTI-PAGE ADDITIONS
+   ============================================================ */
+
+/* Logo as link — remove default anchor styling */
+a.logo {
+  text-decoration: none;
+}
+
+/* Nav active state — underline indicator */
+.nav-menu a.active {
+  color: var(--primary);
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 2px;
+}
+
+/* Nav CTA button in navbar */
+.nav-cta .btn-small {
+  padding: 8px 20px;
+  font-size: 14px;
+  border-radius: 30px;
+}
+
+/* Small button variant */
+.btn-small {
+  padding: 8px 18px;
+  font-size: 14px;
+}
+
+/* Hamburger button */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+}
+.nav-hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background-color: var(--gray-700);
+  border-radius: 2px;
+  transition: all 0.25s ease;
+}
+
+/* ============================================================
+   HERO — full-bleed photo + frosted glass card
+   ============================================================ */
+.hero {
+  min-height: 560px;
+  background-image:
+    linear-gradient(rgba(0, 0, 20, 0.48), rgba(0, 0, 20, 0.48)),
+    url('/images/hero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  padding: 60px 0;
+  /* Remove old pseudo-element by resetting */
+  position: relative;
+  overflow: hidden;
+}
+
+/* Remove old decorative circle on new hero */
+.hero::before {
+  display: none;
+}
+
+/* Card floated left inside hero */
+.hero-card {
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 18px;
+  padding: 42px 40px;
+  max-width: 490px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+}
+
+.hero-card h1 {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: 10px;
+  line-height: 1.25;
+}
+
+.hero-card .hero-subtitle {
+  font-size: 15px;
+  color: var(--gray-600);
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+/* Pill-shaped inputs inside hero card */
+.hero-input {
+  width: 100%;
+  padding: 13px 20px;
+  border: 1.5px solid var(--gray-300);
+  border-radius: 50px;
+  font-size: 15px;
+  font-family: var(--font-family);
+  color: var(--gray-900);
+  background: var(--white);
+  margin-bottom: 12px;
+  transition: border-color 0.2s;
+}
+.hero-input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+/* Hero CTA button — full width */
+.hero-card .btn-primary {
+  width: 100%;
+  text-align: center;
+  border-radius: 50px;
+  padding: 14px 20px;
+  font-size: 16px;
+  margin-top: 4px;
+}
+
+/* Trust badges below inputs */
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  margin-top: 18px;
+}
+.hero-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  color: var(--gray-600);
+}
+.hero-badge-highlight {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* ============================================================
+   INNER PAGE HERO — used on /om-oss, /sa-fungerar-det, etc.
+   ============================================================ */
+.page-hero {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: var(--white);
+  padding: 70px 0;
+  text-align: center;
+}
+.page-hero h1 {
+  font-size: 42px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 14px;
+  line-height: 1.2;
+}
+.page-hero p {
+  font-size: 18px;
+  opacity: 0.88;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ============================================================
+   CTA BLOCK — yellow strip at bottom of inner pages
+   ============================================================ */
+.cta-block {
+  background: var(--secondary);
+  padding: 64px 0;
+  text-align: center;
+}
+.cta-block-inner h2 {
+  font-size: 32px;
+  color: var(--gray-900);
+  margin-bottom: 12px;
+}
+.cta-block-inner p {
+  font-size: 17px;
+  color: var(--gray-800);
+  margin-bottom: 28px;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ============================================================
+   VALUES GRID — /om-oss
+   ============================================================ */
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 40px;
+}
+.value-card {
+  background: var(--white);
+  border-radius: var(--border-radius);
+  padding: 32px 28px;
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+}
+.value-card .value-icon {
+  font-size: 36px;
+  margin-bottom: 14px;
+  display: block;
+}
+.value-card h3 {
+  font-size: 18px;
+  color: var(--primary);
+  margin-bottom: 10px;
+}
+.value-card p {
+  font-size: 15px;
+  color: var(--gray-600);
+  line-height: 1.6;
+}
+
+/* ============================================================
+   COMPENSATION TABLE — /sa-fungerar-det
+   ============================================================ */
+.comp-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 24px;
+  background: var(--white);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.comp-table th {
+  background: var(--primary);
+  color: var(--white);
+  padding: 14px 20px;
+  text-align: left;
+  font-size: 15px;
+}
+.comp-table td {
+  padding: 13px 20px;
+  border-bottom: 1px solid var(--gray-200);
+  font-size: 15px;
+  color: var(--gray-700);
+}
+.comp-table tr:last-child td { border-bottom: none; }
+.comp-table tr:hover td { background: var(--gray-100); }
+.comp-amount {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* ============================================================
+   THANK YOU PAGE — /tack
+   ============================================================ */
+.tack-section {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  padding: 80px 0;
+}
+.tack-icon {
+  font-size: 64px;
+  margin-bottom: 24px;
+}
+.tack-section h1 {
+  font-size: 40px;
+  color: var(--primary);
+  margin-bottom: 16px;
+}
+.tack-section p {
+  font-size: 18px;
+  color: var(--gray-600);
+  max-width: 520px;
+  margin: 0 auto 32px;
+}
+
+/* ============================================================
+   404 PAGE
+   ============================================================ */
+.error-section {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  padding: 80px 0;
+}
+.error-code {
+  font-size: 96px;
+  font-weight: 700;
+  color: var(--gray-300);
+  line-height: 1;
+  margin-bottom: 16px;
+}
+.error-section h2 {
+  font-size: 28px;
+  color: var(--gray-800);
+  margin-bottom: 12px;
+}
+
+/* ============================================================
+   RESPONSIVE — MOBILE
+   ============================================================ */
+@media (max-width: 768px) {
+  /* Hamburger visible */
+  .nav-hamburger {
+    display: flex;
+  }
+
+  /* Mobile nav menu hidden by default, shown when .open */
+  .nav-menu {
+    display: none;
+    position: absolute;
+    top: 80px;
+    left: 0;
+    right: 0;
+    background: var(--white);
+    flex-direction: column;
+    gap: 0;
+    box-shadow: var(--shadow-md);
+    z-index: 99;
+    border-top: 1px solid var(--gray-200);
+  }
+  .nav-menu.open {
+    display: flex;
+  }
+  .nav-menu li a {
+    display: block;
+    padding: 15px 24px;
+    border-bottom: 1px solid var(--gray-200);
+    font-size: 16px;
+  }
+  .nav-menu a.active {
+    border-bottom-color: var(--gray-200);
+    border-left: 3px solid var(--primary);
+    padding-left: 21px;
+  }
+
+  /* Hero — card goes full width on mobile */
+  .hero {
+    padding: 30px 0 40px;
+    min-height: auto;
+    background-position: center top;
+  }
+  .hero-card {
+    max-width: 100%;
+    border-radius: 12px;
+    padding: 28px 20px;
+  }
+  .hero-card h1 {
+    font-size: 24px;
+  }
+
+  /* Inner page hero */
+  .page-hero {
+    padding: 48px 0;
+  }
+  .page-hero h1 {
+    font-size: 28px;
+  }
+  .page-hero p {
+    font-size: 15px;
+  }
+
+  /* Values grid → single column */
+  .values-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* CTA block */
+  .cta-block-inner h2 {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-card h1 {
+    font-size: 21px;
+  }
+  .page-hero h1 {
+    font-size: 24px;
+  }
+  .tack-section h1, .error-section h2 {
+    font-size: 26px;
+  }
+}

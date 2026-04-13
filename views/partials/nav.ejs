@@ -1,0 +1,22 @@
+<nav class="navbar">
+  <div class="container nav-container">
+    <a href="/" class="logo" aria-label="FlightClaim startsida">
+      <span class="logo-icon">✈️</span>
+      <span class="logo-text">FlightClaim</span>
+    </a>
+    <button class="nav-hamburger" aria-label="Öppna meny" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <ul class="nav-menu" role="list">
+      <li><a href="/" class="<%= currentPath === '/' ? 'active' : '' %>">Hem</a></li>
+      <li><a href="/sa-fungerar-det" class="<%= currentPath === '/sa-fungerar-det' ? 'active' : '' %>">Så fungerar det</a></li>
+      <li><a href="/om-oss" class="<%= currentPath === '/om-oss' ? 'active' : '' %>">Om oss</a></li>
+      <li><a href="/kontakt" class="<%= currentPath === '/kontakt' ? 'active' : '' %>">Kontakt</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="/anmalan" class="btn-primary btn-small">Ansök nu</a>
+    </div>
+  </div>
+</nav>
