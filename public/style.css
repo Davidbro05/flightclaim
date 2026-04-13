@@ -1382,90 +1382,8 @@ a.logo {
     margin-right: -4px;
   }
 
-  /* Mobile nav menu */
-  .nav-menu {
-    display: none;
-    position: absolute;
-    top: 64px;
-    left: 0;
-    right: 0;
-    background: var(--white);
-    flex-direction: column;
-    gap: 0;
-    box-shadow: var(--shadow-md);
-    z-index: 99;
-    border-top: 1px solid var(--gray-200);
-    max-height: calc(100vh - 64px);
-    overflow-y: auto;
-  }
-  .nav-menu.open { display: flex; }
-
-  /* Hide "Ansök nu" from inside menu — it lives in header now */
-  .nav-menu .nav-cta-item { display: none; }
-
-  /* All menu rows — left-aligned, large touch target */
-  .nav-menu li a {
-    display: flex;
-    align-items: center;
-    padding: 18px 24px;
-    border-bottom: 1px solid var(--gray-200);
-    font-size: 17px;
-    font-weight: 500;
-    color: var(--gray-800);
-    min-height: 56px;
-    text-decoration: none;
-  }
-  .nav-menu a.active {
-    color: var(--primary);
-    border-left: 3px solid var(--primary);
-    padding-left: 21px;
-  }
-
-  /* Dropdown trigger row — hide ▼ chevron, show › on right */
-  .nav-menu .has-dropdown > .nav-link .chevron { display: none; }
-  .nav-menu .has-dropdown > .nav-link {
-    justify-content: space-between;
-  }
-  .nav-menu .has-dropdown > .nav-link::after {
-    content: '›';
-    font-size: 22px;
-    color: var(--gray-400);
-    line-height: 1;
-    font-weight: 300;
-    transition: transform 0.2s;
-  }
-  .nav-menu .has-dropdown.open > .nav-link::after {
-    transform: rotate(90deg);
-  }
-
-  /* Inline dropdown — shaded, indented */
-  .dropdown-menu {
-    position: static;
-    visibility: visible;
-    opacity: 1;
-    pointer-events: auto;
-    box-shadow: none;
-    border-radius: 0;
-    margin: 0;
-    padding: 0;
-    min-width: unset;
-    background: #f4f6f8;
-    border-top: 1px solid var(--gray-200);
-    display: none;
-    transition: none;
-    transition-delay: 0s;
-  }
-  .dropdown-menu::before { display: none; }
-  .has-dropdown.open .dropdown-menu { display: block; }
-  .dropdown-menu a {
-    padding: 15px 24px 15px 32px;
-    font-size: 15px;
-    font-weight: 400;
-    color: var(--gray-600);
-    border-bottom: 1px solid var(--gray-200);
-    min-height: unset;
-  }
-  .dropdown-menu a:last-child { border-bottom: none; }
+  /* Desktop nav hidden on mobile — drawer takes over */
+  .nav-menu { display: none !important; }
 
   /* Hero — card at bottom, taller hero so more photo shows above */
   .hero {
@@ -1826,4 +1744,121 @@ details[open] .faq-question::after { content: '−'; }
   .has-dropdown.open .dropdown-menu { display: block; }
   .nav-cta-item { margin: 8px 0 4px; }
 }
+}
+
+/* ============================================================
+   MOBILE NAV DRAWER — slide-in panel system
+   ============================================================ */
+
+/* Drawer hidden always — only shown on mobile when .open */
+.nav-drawer {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .nav-drawer {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--white);
+    overflow: hidden;
+    z-index: 98;
+    border-top: 1px solid var(--gray-200);
+    box-shadow: var(--shadow-md);
+  }
+  .nav-drawer.open { display: block; }
+
+  /* ── Panels ── */
+  .nav-panel {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--white);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .nav-panel-main {
+    transform: translateX(0);
+  }
+  .nav-panel-main.slide-out {
+    transform: translateX(-30%);
+  }
+  .nav-panel-sub {
+    transform: translateX(100%);
+  }
+  .nav-panel-sub.slide-in {
+    transform: translateX(0);
+  }
+
+  /* ── Sub-panel header (back + title) ── */
+  .nav-panel-header {
+    display: flex;
+    align-items: center;
+    height: 56px;
+    padding: 0 16px 0 4px;
+    border-bottom: 1px solid var(--gray-200);
+    position: sticky;
+    top: 0;
+    background: var(--white);
+    z-index: 1;
+  }
+  .nav-panel-back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--gray-700);
+    flex-shrink: 0;
+  }
+  .nav-panel-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--gray-800);
+  }
+
+  /* ── Rows (shared by links and trigger buttons) ── */
+  .nav-drawer-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 24px;
+    height: 56px;
+    border: none;
+    border-bottom: 1px solid var(--gray-200);
+    background: none;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--gray-800);
+    text-decoration: none;
+    cursor: pointer;
+    text-align: left;
+    box-sizing: border-box;
+  }
+  .nav-drawer-row:active { background: var(--gray-100); }
+  .nav-drawer-row.active { color: var(--primary); }
+
+  /* "Allt om X" row at top of sub-panel */
+  .nav-drawer-row-all {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--gray-500);
+    height: 52px;
+    background: #f8f9fa;
+    border-bottom: 2px solid var(--gray-200);
+  }
+
+  /* Right-pointing arrow on trigger rows */
+  .nav-drawer-arrow {
+    font-size: 22px;
+    color: var(--gray-400);
+    font-weight: 300;
+    line-height: 1;
+  }
 }

@@ -15,17 +15,11 @@
       <span class="logo-text">FlightClaim</span>
     </a>
 
-    <a href="/anmalan" class="btn-primary btn-small nav-cta-mobile">Ansök nu</a>
-
-    <button class="nav-hamburger" aria-label="Öppna meny" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-
+    <!-- Desktop nav -->
     <ul class="nav-menu" role="list">
       <% topLevel.forEach(item => {
            const children = childrenOf(item.id);
            const active   = isActive(item.url);
-           // "Ansök nu" gets CTA button treatment
            const isCta    = item.url === '/anmalan' || item.url === '/#ansokan' || item.label === 'Ansök nu';
       %>
         <% if (isCta) { %>
@@ -55,5 +49,74 @@
         <% } %>
       <% }) %>
     </ul>
+
+    <!-- Mobile: always-visible CTA + hamburger -->
+    <a href="/anmalan" class="btn-primary btn-small nav-cta-mobile">Ansök nu</a>
+    <button class="nav-hamburger" aria-label="Öppna meny" aria-expanded="false" aria-controls="nav-drawer">
+      <span></span><span></span><span></span>
+    </button>
   </div>
+
+  <!-- Mobile drawer (hidden on desktop) -->
+  <div class="nav-drawer" id="nav-drawer" aria-hidden="true">
+
+    <!-- Main panel -->
+    <div class="nav-panel nav-panel-main" id="nav-panel-main">
+      <ul>
+        <% topLevel.forEach(item => {
+             const children = childrenOf(item.id);
+             const active   = isActive(item.url);
+             const isCta    = item.url === '/anmalan' || item.label === 'Ansök nu';
+             if (isCta) return;
+        %>
+          <% if (children.length > 0) { %>
+            <li>
+              <button class="nav-drawer-row nav-drawer-trigger"
+                      data-target="nav-panel-<%= item.id %>">
+                <%= item.label %>
+                <span class="nav-drawer-arrow">&#8250;</span>
+              </button>
+            </li>
+          <% } else { %>
+            <li>
+              <a href="<%= item.url %>" class="nav-drawer-row<%= active ? ' active' : '' %>">
+                <%= item.label %>
+              </a>
+            </li>
+          <% } %>
+        <% }) %>
+      </ul>
+    </div>
+
+    <!-- Sub-panels -->
+    <% topLevel.forEach(item => {
+         const children = childrenOf(item.id);
+         const isCta    = item.url === '/anmalan' || item.label === 'Ansök nu';
+         if (children.length === 0 || isCta) return;
+    %>
+      <div class="nav-panel nav-panel-sub" id="nav-panel-<%= item.id %>">
+        <div class="nav-panel-header">
+          <button class="nav-panel-back" aria-label="Tillbaka">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <span class="nav-panel-title"><%= item.label %></span>
+        </div>
+        <ul>
+          <li>
+            <a href="<%= item.url %>" class="nav-drawer-row nav-drawer-row-all">
+              Allt om <%= item.label %>
+            </a>
+          </li>
+          <% children.forEach(child => { %>
+            <li>
+              <a href="<%= child.url %>" class="nav-drawer-row">
+                <%= child.label %>
+              </a>
+            </li>
+          <% }) %>
+        </ul>
+      </div>
+    <% }) %>
+
+  </div><!-- /nav-drawer -->
 </nav>

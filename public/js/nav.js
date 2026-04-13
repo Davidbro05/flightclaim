@@ -1,56 +1,71 @@
 (function () {
-  // ── Hamburger menu toggle ──────────────────────────────────────────────────
-  const btn  = document.querySelector('.nav-hamburger');
-  const menu = document.querySelector('.nav-menu');
+  const btn       = document.querySelector('.nav-hamburger');
+  const drawer    = document.getElementById('nav-drawer');
+  const mainPanel = document.getElementById('nav-panel-main');
 
-  if (btn && menu) {
+  // ── Helpers ────────────────────────────────────────────────────────────────
+  function resetPanels() {
+    if (mainPanel) mainPanel.classList.remove('slide-out');
+    document.querySelectorAll('.nav-panel-sub').forEach(function (p) {
+      p.classList.remove('slide-in');
+    });
+  }
+
+  function closeDrawer() {
+    if (drawer)  { drawer.classList.remove('open'); drawer.setAttribute('aria-hidden', 'true'); }
+    if (btn)     { btn.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
+    setTimeout(resetPanels, 280);
+  }
+
+  // ── Hamburger toggle ───────────────────────────────────────────────────────
+  if (btn && drawer) {
     btn.addEventListener('click', function () {
-      const isOpen = menu.classList.toggle('open');
+      const isOpen = drawer.classList.toggle('open');
       btn.classList.toggle('open', isOpen);
-      btn.setAttribute('aria-expanded', isOpen);
+      btn.setAttribute('aria-expanded', String(isOpen));
+      drawer.setAttribute('aria-hidden', String(!isOpen));
+      if (!isOpen) setTimeout(resetPanels, 280);
     });
 
     // Close on outside click
     document.addEventListener('click', function (e) {
-      if (!btn.contains(e.target) && !menu.contains(e.target)) {
-        menu.classList.remove('open');
-        btn.classList.remove('open');
-        btn.setAttribute('aria-expanded', 'false');
-        closeAllDropdowns();
-      }
-    });
-
-    // Close menu when a regular link (not dropdown trigger) is clicked
-    menu.querySelectorAll('a').forEach(function (link) {
-      if (link.closest('.has-dropdown') && link.parentElement.classList.contains('has-dropdown')) return;
-      link.addEventListener('click', function () {
-        menu.classList.remove('open');
-        btn.classList.remove('open');
-        btn.setAttribute('aria-expanded', 'false');
-      });
+      if (!drawer.classList.contains('open')) return;
+      if (!btn.contains(e.target) && !drawer.contains(e.target)) closeDrawer();
     });
   }
 
-  // ── Dropdown toggles (mobile only) ────────────────────────────────────────
-  function closeAllDropdowns(except) {
-    document.querySelectorAll('.has-dropdown.open').forEach(function (el) {
-      if (el !== except) {
-        el.classList.remove('open');
-        const trigger = el.querySelector('[aria-expanded]');
-        if (trigger) trigger.setAttribute('aria-expanded', 'false');
-      }
+  // ── Sub-panel: open ────────────────────────────────────────────────────────
+  document.querySelectorAll('.nav-drawer-trigger').forEach(function (trigger) {
+    trigger.addEventListener('click', function () {
+      const target = document.getElementById(trigger.dataset.target);
+      if (!target || !mainPanel) return;
+      mainPanel.classList.add('slide-out');
+      target.classList.add('slide-in');
+    });
+  });
+
+  // ── Sub-panel: back ────────────────────────────────────────────────────────
+  document.querySelectorAll('.nav-panel-back').forEach(function (backBtn) {
+    backBtn.addEventListener('click', function () {
+      const sub = backBtn.closest('.nav-panel-sub');
+      if (!sub || !mainPanel) return;
+      sub.classList.remove('slide-in');
+      mainPanel.classList.remove('slide-out');
+    });
+  });
+
+  // ── Close drawer on any link click ────────────────────────────────────────
+  if (drawer) {
+    drawer.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', closeDrawer);
     });
   }
 
+  // ── Desktop dropdowns (hover — only active above 768px) ───────────────────
   document.querySelectorAll('.has-dropdown > a').forEach(function (link) {
     link.addEventListener('click', function (e) {
-      // Only intercept on mobile
       if (window.innerWidth > 768) return;
       e.preventDefault();
-      const parent = link.closest('.has-dropdown');
-      const isOpen = parent.classList.toggle('open');
-      link.setAttribute('aria-expanded', isOpen);
-      if (isOpen) closeAllDropdowns(parent);
     });
   });
 })();
