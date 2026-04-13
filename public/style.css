@@ -1470,7 +1470,9 @@ a.logo {
 
 /* Desktop dropdown */
 .dropdown-menu {
-  display: none;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
   position: absolute;
   top: calc(100% + 4px);
   left: 0;
@@ -1481,6 +1483,9 @@ a.logo {
   padding: 6px 0;
   list-style: none;
   z-index: 300;
+  /* 0.5s delay before hiding, instant fade-out */
+  transition: opacity 0.12s, visibility 0.12s;
+  transition-delay: 0.5s;
 }
 .dropdown-menu a {
   display: block;
@@ -1496,9 +1501,14 @@ a.logo {
   color: var(--primary);
 }
 
-/* Show on hover (desktop) */
+/* Show on hover (desktop) — no delay when appearing */
 @media (min-width: 769px) {
-  .has-dropdown:hover .dropdown-menu { display: block; }
+  .has-dropdown:hover .dropdown-menu {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    transition-delay: 0s;
+  }
 }
 
 /* CTA nav button */
@@ -1660,10 +1670,14 @@ details[open] .faq-question::after { content: '−'; }
   border-top: 1px solid var(--gray-200);
 }
 
-/* Mobile dropdown toggle */
+/* Mobile dropdown toggle — override to display-based (no hover delay on mobile) */
 @media (max-width: 768px) {
   .dropdown-menu {
     display: none;
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    transition: none;
     position: static;
     box-shadow: none;
     border-radius: 0;
