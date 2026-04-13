@@ -1078,6 +1078,13 @@ a.logo {
   display: none; /* shown only on mobile */
 }
 
+/* Yellow hover — same as desktop nav CTA */
+.nav-cta-mobile:hover {
+  background: var(--secondary) !important;
+  color: var(--gray-900) !important;
+  transform: translateY(-1px);
+}
+
 .nav-hamburger {
   display: none;
   flex-direction: column;
@@ -1365,14 +1372,15 @@ a.logo {
    RESPONSIVE — MOBILE
    ============================================================ */
 @media (max-width: 768px) {
-  /* Mobile CTA always visible in header */
+  /* Mobile CTA always visible in header — same look as desktop, no shadow */
   .nav-cta-mobile {
     display: inline-flex;
     align-items: center;
-    font-size: 13px;
-    padding: 8px 14px;
-    margin-right: 6px;
+    font-size: 12px;
+    padding: 6px 11px;
+    margin-right: 4px;
     white-space: nowrap;
+    box-shadow: none;
   }
 
   /* Hamburger visible — larger tap target */
