@@ -1,7 +1,7 @@
 import knex from 'knex';
 import path from 'path';
 
-const migrationsDir = path.join(__dirname, 'migrations');
+const migrationsDir = path.join(process.cwd(), 'src/db/migrations');
 
 const db = knex(
   process.env.NODE_ENV === 'test'
