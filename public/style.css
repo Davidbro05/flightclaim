@@ -1752,7 +1752,6 @@ details[open] .faq-question::after { content: '−'; }
   .has-dropdown.open .dropdown-menu { display: block; }
   .nav-cta-item { margin: 8px 0 4px; }
 }
-}
 
 /* ============================================================
    MOBILE NAV DRAWER — slide-in panel system
