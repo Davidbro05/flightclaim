@@ -1,17 +1,61 @@
-<section class="page-hero">
-  <div class="container">
-    <h1><%= article.title %></h1>
-    <% if (article.meta_desc) { %><p><%= article.meta_desc %></p><% } %>
-  </div>
-</section>
+<% /* Inject schema JSON-LD via the layout's `scripts` slot */ %>
+<% scripts = `<script type="application/ld+json">${schemaJson}</script>` %>
 
-<section style="padding: 60px 0;">
-  <div class="container" style="max-width: 780px;">
+<!-- Breadcrumb -->
+<% if (crumbs && crumbs.length > 1) { %>
+<div class="container" style="padding-top:20px;">
+  <nav class="breadcrumb" aria-label="Brödsmulor">
+    <% crumbs.forEach((c, i) => { %>
+      <% if (i < crumbs.length - 1) { %>
+        <a href="<%= c.url %>"><%= c.name %></a>
+        <span class="sep" aria-hidden="true">›</span>
+      <% } else { %>
+        <span><%= c.name %></span>
+      <% } %>
+    <% }) %>
+  </nav>
+</div>
+<% } %>
+
+<!-- Article layout -->
+<div class="container">
+  <div class="article-layout">
+
+    <!-- Main content -->
     <article class="article-body">
-      <%- article.content_html || article.content %>
+      <h1><%= article.title %></h1>
+
+      <%- bodyHtml %>
+
+      <!-- FAQ section -->
+      <% if (faqItems && faqItems.length > 0) { %>
+      <section class="article-faq">
+        <h2>Vanliga frågor</h2>
+        <% faqItems.forEach(f => { %>
+        <details class="faq-item">
+          <summary class="faq-question"><%= f.q %></summary>
+          <div class="faq-answer"><%= f.a %></div>
+        </details>
+        <% }) %>
+      </section>
+      <% } %>
+
+      <!-- Bottom CTA banner -->
+      <div class="cta-banner">
+        <h2>Drabbad av försenat eller inställt flyg?</h2>
+        <p>Ansök om ersättning på 2 minuter — vi sköter hela processen mot flygbolaget.</p>
+        <a href="/#ansokan" class="btn-cta">Ansök om ersättning →</a>
+      </div>
     </article>
-    <div style="margin-top: 50px; padding-top: 30px; border-top: 1px solid var(--gray-200);">
-      <a href="/anmalan" class="btn-primary">Ansök om ersättning</a>
-    </div>
+
+    <!-- Sidebar -->
+    <aside class="article-sidebar">
+      <div class="cta-box">
+        <h3>Få upp till 600€ i ersättning</h3>
+        <p>Vi sköter hela processen mot flygbolaget. Du betalar ingenting om vi inte lyckas.</p>
+        <a href="/#ansokan" class="btn-cta">Ansök nu — gratis</a>
+      </div>
+    </aside>
+
   </div>
-</section>
+</div>

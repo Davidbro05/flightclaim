@@ -1,22 +1,57 @@
+<%
+  const topLevel   = navItems.filter(i => !i.parent_id);
+  const childrenOf = id => navItems.filter(i => i.parent_id === id);
+
+  function isActive(itemUrl) {
+    if (itemUrl === '/') return currentPath === '/';
+    if (itemUrl.startsWith('#') || itemUrl.startsWith('/#')) return false;
+    return currentPath === itemUrl || currentPath.startsWith(itemUrl + '/');
+  }
+%>
 <nav class="navbar">
   <div class="container nav-container">
     <a href="/" class="logo" aria-label="FlightClaim startsida">
       <span class="logo-icon">✈️</span>
       <span class="logo-text">FlightClaim</span>
     </a>
+
     <button class="nav-hamburger" aria-label="Öppna meny" aria-expanded="false">
-      <span></span>
-      <span></span>
-      <span></span>
+      <span></span><span></span><span></span>
     </button>
+
     <ul class="nav-menu" role="list">
-      <li><a href="/" class="<%= currentPath === '/' ? 'active' : '' %>">Hem</a></li>
-      <li><a href="/sa-fungerar-det" class="<%= currentPath === '/sa-fungerar-det' ? 'active' : '' %>">Så fungerar det</a></li>
-      <li><a href="/om-oss" class="<%= currentPath === '/om-oss' ? 'active' : '' %>">Om oss</a></li>
-      <li><a href="/kontakt" class="<%= currentPath === '/kontakt' ? 'active' : '' %>">Kontakt</a></li>
+      <% topLevel.forEach(item => {
+           const children = childrenOf(item.id);
+           const active   = isActive(item.url);
+           // "Ansök nu" gets CTA button treatment
+           const isCta    = item.url === '/#ansokan' || item.label === 'Ansök nu';
+      %>
+        <% if (isCta) { %>
+          <li class="nav-item nav-cta-item">
+            <a href="<%= item.url %>" class="btn-primary btn-small nav-cta-btn"><%= item.label %></a>
+          </li>
+        <% } else if (children.length > 0) { %>
+          <li class="nav-item has-dropdown<%= active ? ' active' : '' %>">
+            <a href="<%= item.url %>" class="nav-link<%= active ? ' active' : '' %>" aria-haspopup="true" aria-expanded="false">
+              <%= item.label %> <span class="chevron" aria-hidden="true">&#9660;</span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+              <% children.forEach(child => { %>
+                <li role="none">
+                  <a href="<%= child.url %>" role="menuitem"
+                     class="<%= currentPath === child.url ? 'active' : '' %>">
+                    <%= child.label %>
+                  </a>
+                </li>
+              <% }) %>
+            </ul>
+          </li>
+        <% } else { %>
+          <li class="nav-item<%= active ? ' active' : '' %>">
+            <a href="<%= item.url %>" class="nav-link<%= active ? ' active' : '' %>"><%= item.label %></a>
+          </li>
+        <% } %>
+      <% }) %>
     </ul>
-    <div class="nav-cta">
-      <a href="/anmalan" class="btn-primary btn-small">Ansök nu</a>
-    </div>
   </div>
 </nav>
