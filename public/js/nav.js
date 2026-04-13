@@ -44,13 +44,23 @@
     });
   });
 
-  // ── Sub-panel: back ────────────────────────────────────────────────────────
+  // ── Sub-panel: back (pil OCH titel) ───────────────────────────────────────
+  function goBack(sub) {
+    if (!sub || !mainPanel) return;
+    sub.classList.remove('slide-in');
+    mainPanel.classList.remove('slide-out');
+  }
+
   document.querySelectorAll('.nav-panel-back').forEach(function (backBtn) {
     backBtn.addEventListener('click', function () {
-      const sub = backBtn.closest('.nav-panel-sub');
-      if (!sub || !mainPanel) return;
-      sub.classList.remove('slide-in');
-      mainPanel.classList.remove('slide-out');
+      goBack(backBtn.closest('.nav-panel-sub'));
+    });
+  });
+
+  document.querySelectorAll('.nav-panel-title').forEach(function (title) {
+    title.style.cursor = 'pointer';
+    title.addEventListener('click', function () {
+      goBack(title.closest('.nav-panel-sub'));
     });
   });
 
