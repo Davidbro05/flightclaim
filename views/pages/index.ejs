@@ -1,18 +1,20 @@
 <% scripts = '<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.2.0/dist/signature_pad.umd.min.js"></script><script src="/js/hero.js?v=' + assetVersion + '"></script><script src="/js/claim-form.js?v=' + assetVersion + '"></script>' %>
 
-<!-- Hero Section — full-bleed photo + frosted glass card -->
+<!-- Hero Section — full-bleed photo + wide frosted card anchored to bottom -->
 <section class="hero">
   <div class="container">
     <div class="hero-card">
       <h1>Ansök om ersättning för ditt flyg</h1>
       <p class="hero-subtitle">Drabbad av försening, inställt flyg eller nekad ombordstigning? Du kan ha rätt till upp till 600€ per person.</p>
 
-      <input type="text" id="hero-departure" class="hero-input" placeholder="✈ Avgångsflygplats (t.ex. ARN)">
-      <input type="text" id="hero-arrival" class="hero-input" placeholder="✈ Destinationsflygplats (t.ex. LHR)">
-      <button type="button" class="btn-primary hero-check-btn">Kontrollera din ersättning</button>
+      <div class="hero-form-row">
+        <input type="text" id="hero-departure" class="hero-input" placeholder="✈ Avgångsflygplats (t.ex. ARN)">
+        <input type="text" id="hero-arrival" class="hero-input" placeholder="✈ Destinationsflygplats (t.ex. LHR)">
+        <button type="button" class="btn-primary hero-check-btn">Kontrollera din ersättning</button>
+      </div>
 
       <div class="hero-badges">
-        <span class="hero-badge"><span>✓</span> Gratis kontroll</span>
+        <span class="hero-badge"><span>✓</span> Gratis och enkel kontroll</span>
         <span class="hero-badge hero-badge-highlight"><span>🇸🇪</span> Svensk support</span>
         <span class="hero-badge"><span>✓</span> Flygningar upp till 3 år</span>
       </div>
