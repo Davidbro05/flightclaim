@@ -12,6 +12,7 @@ const adminApiRouter = require('./routes/adminApi');
 const articlesApiRouter = require('./routes/articlesApi');
 const navApiRouter = require('./routes/navApi');
 const documentsRouter = require('./routes/documents');
+const contentRouter = require('./routes/content');
 
 const app = express();
 
@@ -61,12 +62,15 @@ app.use('/api/articles', articlesApiRouter);
 app.use('/api/nav', navApiRouter);
 app.use('/fullmakt', documentsRouter);
 
-// Serve React admin SPA — must come after API routes
+// Serve React admin SPA — must come before content catch-all
 const adminBuildDir = path.join(__dirname, '../public/admin');
 app.use('/admin', express.static(adminBuildDir));
 app.get(['/admin', '/admin/*splat'], (_req, res) => {
   res.sendFile(path.join(adminBuildDir, 'index.html'));
 });
+
+// Public SSR content pages — must come after all API + admin routes
+app.use('/', contentRouter);
 
 // Global error handler
 app.use((err, req, res, next) => {
