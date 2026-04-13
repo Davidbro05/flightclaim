@@ -16,6 +16,7 @@ import articlesApiRouter from './routes/articlesApi';
 import navApiRouter from './routes/navApi';
 import documentsRouter from './routes/documents';
 import contentRouter from './routes/content';
+import sitemapRouter from './routes/sitemap';
 import siteLocals from './middleware/siteLocals';
 
 const app = express();
@@ -75,6 +76,7 @@ app.get(['/admin', '/admin/*splat'], (_req, res) => {
 });
 
 app.use(express.static(path.join(__dirname, '../public')));
+app.use('/', sitemapRouter);
 app.use('/', contentRouter);
 
 app.use((_req, res) => {
