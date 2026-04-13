@@ -1090,8 +1090,13 @@ a.logo {
   height: 2px;
   background-color: var(--gray-700);
   border-radius: 2px;
-  transition: all 0.25s ease;
+  transition: transform 0.25s ease, opacity 0.2s ease;
 }
+
+/* Hamburger → X when open */
+.nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
 /* ============================================================
    HERO — full-bleed photo + frosted glass card
@@ -1356,16 +1361,18 @@ a.logo {
    RESPONSIVE — MOBILE
    ============================================================ */
 @media (max-width: 768px) {
-  /* Hamburger visible */
+  /* Hamburger visible — larger tap target */
   .nav-hamburger {
     display: flex;
+    padding: 10px;
+    margin-right: -4px;
   }
 
   /* Mobile nav menu hidden by default, shown when .open */
   .nav-menu {
     display: none;
     position: absolute;
-    top: 80px;
+    top: 64px;
     left: 0;
     right: 0;
     background: var(--white);
@@ -1374,15 +1381,21 @@ a.logo {
     box-shadow: var(--shadow-md);
     z-index: 99;
     border-top: 1px solid var(--gray-200);
+    max-height: calc(100vh - 64px);
+    overflow-y: auto;
   }
   .nav-menu.open {
     display: flex;
   }
+
+  /* Regular links — large touch targets */
   .nav-menu li a {
-    display: block;
-    padding: 15px 24px;
+    display: flex;
+    align-items: center;
+    padding: 16px 24px;
     border-bottom: 1px solid var(--gray-200);
     font-size: 16px;
+    min-height: 52px;
   }
   .nav-menu a.active {
     border-bottom-color: var(--gray-200);
@@ -1390,11 +1403,54 @@ a.logo {
     padding-left: 21px;
   }
 
-  /* Hero — card goes full width on mobile */
+  /* CTA "Ansök nu" — full-width button in mobile menu */
+  .nav-menu .nav-cta-item {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .nav-menu .nav-cta-item a.nav-cta-btn {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    padding: 14px 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    min-height: unset;
+  }
+
+  /* Inline dropdown for mobile — no absolute positioning */
+  .dropdown-menu {
+    position: static;
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    box-shadow: none;
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
+    min-width: unset;
+    background: #f4f6f8;
+    border-top: 1px solid var(--gray-200);
+    display: none;
+    transition: none;
+    transition-delay: 0s;
+  }
+  .dropdown-menu::before { display: none; }
+  .has-dropdown.open .dropdown-menu { display: block; }
+  .dropdown-menu a {
+    padding: 14px 24px 14px 36px;
+    font-size: 15px;
+    color: var(--gray-600);
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .dropdown-menu a:last-child { border-bottom: none; }
+
+  /* Hero — card at bottom, taller hero so more photo shows above */
   .hero {
-    padding-bottom: 28px;
-    min-height: 420px;
-    background-position: center 40%;
+    padding-bottom: 20px;
+    min-height: 520px;
+    background-position: center 20%;
     align-items: flex-end;
   }
   .hero-card {
