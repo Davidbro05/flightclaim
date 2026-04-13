@@ -1092,7 +1092,7 @@ a.logo {
     linear-gradient(rgba(0, 0, 15, 0.45), rgba(0, 0, 15, 0.45)),
     url('/images/hero-bg.jpg');
   background-size: cover;
-  background-position: center 45%;
+  background-position: center 15%;
   display: flex;
   align-items: flex-end;
   padding-bottom: 56px;
