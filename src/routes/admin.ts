@@ -1,12 +1,13 @@
-const express = require('express');
-const db = require('../db');
-const logger = require('../logger');
-const authenticate = require('../middleware/auth');
-const affiliatesRouter = require('./affiliates');
+import express from 'express';
+import db from '../db';
+import logger from '../logger';
+import authenticate from '../middleware/auth';
+import affiliatesRouter from './affiliates';
+import type { Claim } from '../types';
 
 const router = express.Router();
 
-const escapeHtml = (unsafe) => {
+function escapeHtml(unsafe: unknown): string {
   if (unsafe == null) return '';
   return String(unsafe)
     .replace(/&/g, '&amp;')
@@ -14,7 +15,7 @@ const escapeHtml = (unsafe) => {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
-};
+}
 
 const ADMIN_NAV = `
   <div class="admin-nav">
@@ -41,15 +42,17 @@ const ADMIN_STYLES = `
   .admin-nav a { margin-right: 20px; color: #1a4b8c; text-decoration: none; font-weight: 500; }
 `;
 
-const ISSUE_MAP = { delay: 'Försening', cancelled: 'Inställt', denied: 'Nekad ombordstigning' };
+const ISSUE_MAP: Record<string, string> = {
+  delay: 'Försening',
+  cancelled: 'Inställt',
+  denied: 'Nekad ombordstigning',
+};
 
-// Mount affiliates sub-router
 router.use('/affiliates', affiliatesRouter);
 
-// GET /admin
-router.get('/', authenticate, async (req, res) => {
+router.get('/', authenticate, async (_req, res) => {
   try {
-    const rows = await db('claims').orderBy('created_at', 'desc');
+    const rows = await db('claims').orderBy('created_at', 'desc').select<Claim[]>();
 
     let html = `<!DOCTYPE html><html><head><title>Admin - Claims</title>
       <style>${ADMIN_STYLES}</style></head><body>
@@ -67,38 +70,26 @@ router.get('/', authenticate, async (req, res) => {
       const signatureImg = row.signature
         ? `<img src="${escapeHtml(row.signature)}" alt="Signatur">`
         : '<span class="no-signature">Ingen signatur</span>';
-
       const termsAccepted = row.terms_accepted
         ? '<span class="accepted-yes">Ja</span>'
         : '<span class="accepted-no">Nej</span>';
-
       const pdfLink = row.signature
         ? `<a href="/fullmakt/${row.id}" class="pdf-link" target="_blank">📄 PDF</a>`
         : '—';
-
-      const issueText = ISSUE_MAP[row.issue] || row.issue;
+      const issueText = ISSUE_MAP[row.issue] ?? row.issue;
 
       html += `<tr>
-        <td>${row.id}</td>
-        <td>${escapeHtml(row.namn)}</td>
-        <td>${escapeHtml(row.street)}</td>
-        <td>${escapeHtml(row.zip)}</td>
-        <td>${escapeHtml(row.city)}</td>
-        <td>${escapeHtml(row.email)}</td>
-        <td>${escapeHtml(row.phone)}</td>
-        <td>${escapeHtml(row.flightNumber)}</td>
+        <td>${row.id}</td><td>${escapeHtml(row.namn)}</td>
+        <td>${escapeHtml(row.street)}</td><td>${escapeHtml(row.zip)}</td>
+        <td>${escapeHtml(row.city)}</td><td>${escapeHtml(row.email)}</td>
+        <td>${escapeHtml(row.phone)}</td><td>${escapeHtml(row.flightNumber)}</td>
         <td>${escapeHtml(row.airline)}</td>
         <td>${escapeHtml(row.bookingReference) || '—'}</td>
-        <td>${escapeHtml(row.departureAirport)}</td>
-        <td>${escapeHtml(row.arrivalAirport)}</td>
-        <td>${escapeHtml(row.flightDate)}</td>
-        <td>${escapeHtml(issueText)}</td>
-        <td>${signatureImg}</td>
-        <td>${termsAccepted}</td>
-        <td>${escapeHtml(row.ip_address) || 'N/A'}</td>
-        <td>${row.created_at}</td>
-        <td>${escapeHtml(row.affiliate_code) || 'main'}</td>
-        <td>${pdfLink}</td>
+        <td>${escapeHtml(row.departureAirport)}</td><td>${escapeHtml(row.arrivalAirport)}</td>
+        <td>${escapeHtml(row.flightDate)}</td><td>${escapeHtml(issueText)}</td>
+        <td>${signatureImg}</td><td>${termsAccepted}</td>
+        <td>${escapeHtml(row.ip_address) || 'N/A'}</td><td>${row.created_at}</td>
+        <td>${escapeHtml(row.affiliate_code) || 'main'}</td><td>${pdfLink}</td>
         <td>
           <form action="/admin/delete/${row.id}" method="POST"
             onsubmit="return confirm('Är du säker på att du vill ta bort detta ärende?');">
@@ -116,10 +107,9 @@ router.get('/', authenticate, async (req, res) => {
   }
 });
 
-// POST /admin/delete/:id
 router.post('/delete/:id', authenticate, async (req, res) => {
-  const id = parseInt(req.params.id, 10);
-  if (!id || isNaN(id)) return res.status(400).send('Ogiltigt ID');
+  const id = parseInt(String(req.params.id), 10);
+  if (!id || isNaN(id)) { res.status(400).send('Ogiltigt ID'); return; }
 
   try {
     await db('claims').where({ id }).delete();
@@ -130,4 +120,4 @@ router.post('/delete/:id', authenticate, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

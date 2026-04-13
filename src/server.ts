@@ -1,13 +1,11 @@
-require('dotenv').config();
+import 'dotenv/config';
+import app from './app';
+import db from './db';
+import logger from './logger';
 
-const app = require('./app');
-const db = require('./db');
-const logger = require('./logger');
+const PORT = parseInt(process.env.PORT ?? '3000', 10);
 
-const PORT = process.env.PORT || 3000;
-
-async function start() {
-  // Run pending migrations on startup
+async function start(): Promise<void> {
   logger.info('Running database migrations...');
   await db.migrate.latest();
   logger.info('Migrations complete');
@@ -16,7 +14,7 @@ async function start() {
     logger.info({ port: PORT }, 'Server started');
   });
 
-  const shutdown = (signal) => {
+  const shutdown = (signal: string): void => {
     logger.info({ signal }, 'Shutting down gracefully...');
     server.close(async () => {
       await db.destroy();
@@ -24,7 +22,6 @@ async function start() {
       process.exit(0);
     });
 
-    // Force exit if graceful shutdown takes too long
     setTimeout(() => {
       logger.error('Forced shutdown after timeout');
       process.exit(1);
@@ -32,10 +29,10 @@ async function start() {
   };
 
   process.on('SIGTERM', () => shutdown('SIGTERM'));
-  process.on('SIGINT', () => shutdown('SIGINT'));
+  process.on('SIGINT',  () => shutdown('SIGINT'));
 }
 
-start().catch((err) => {
+start().catch((err: unknown) => {
   logger.fatal({ err }, 'Startup failed');
   process.exit(1);
 });

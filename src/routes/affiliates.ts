@@ -1,11 +1,12 @@
-const express = require('express');
-const db = require('../db');
-const logger = require('../logger');
-const authenticate = require('../middleware/auth');
+import express from 'express';
+import db from '../db';
+import logger from '../logger';
+import authenticate from '../middleware/auth';
+import type { Claim } from '../types';
 
 const router = express.Router();
 
-const escapeHtml = (unsafe) => {
+function escapeHtml(unsafe: unknown): string {
   if (unsafe == null) return '';
   return String(unsafe)
     .replace(/&/g, '&amp;')
@@ -13,18 +14,16 @@ const escapeHtml = (unsafe) => {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
-};
+}
 
-// GET /admin/affiliates
 router.get('/', authenticate, async (req, res) => {
   try {
-    // Fetch all claims and compute stats in JS — works for both SQLite and PostgreSQL
-    const allClaims = await db('claims').select('affiliate_code', 'created_at');
+    const allClaims = await db('claims').select<Pick<Claim, 'affiliate_code' | 'created_at'>[]>('affiliate_code', 'created_at');
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 
-    const statsMap = {};
+    const statsMap: Record<string, { total: number; last30: number }> = {};
     for (const row of allClaims) {
-      const code = row.affiliate_code || 'main';
+      const code = row.affiliate_code ?? 'main';
       if (!statsMap[code]) statsMap[code] = { total: 0, last30: 0 };
       statsMap[code].total++;
       if (new Date(row.created_at) > thirtyDaysAgo) statsMap[code].last30++;
@@ -79,27 +78,21 @@ router.get('/', authenticate, async (req, res) => {
       <h2>Statistik per affiliate</h2>
       <table>
         <tr>
-          <th>Affiliate-kod</th>
-          <th>Totalt antal ärenden</th>
-          <th>Senaste 30 dagarna</th>
-          <th>Andel</th>
-          <th>Länk</th>
+          <th>Affiliate-kod</th><th>Totalt antal ärenden</th>
+          <th>Senaste 30 dagarna</th><th>Andel</th><th>Länk</th>
         </tr>`;
 
     for (const row of rows) {
       const isMain = row.affiliate_code === 'main';
-      const rowClass = isMain ? 'main-row' : '';
       const percentage = !isMain && affiliateTotal > 0
         ? Math.round((row.total_claims / affiliateTotal) * 100)
         : 0;
-      const affiliateLink = isMain
-        ? '—'
-        : `${baseUrl}/?ref=${encodeURIComponent(row.affiliate_code)}`;
+      const affiliateLink = isMain ? '—' : `${baseUrl}/?ref=${encodeURIComponent(row.affiliate_code)}`;
 
-      html += `<tr class="${rowClass}">
+      html += `<tr class="${isMain ? 'main-row' : ''}">
         <td><strong>${escapeHtml(row.affiliate_code)}</strong></td>
         <td>${row.total_claims}</td>
-        <td>${row.last_30_days || 0}</td>
+        <td>${row.last_30_days ?? 0}</td>
         <td>${!isMain ? percentage + '%' : '—'}</td>
         <td>${!isMain
           ? `<a href="${escapeHtml(affiliateLink)}" target="_blank">🔗 ${escapeHtml(row.affiliate_code)}-länk</a>`
@@ -134,4 +127,4 @@ router.get('/', authenticate, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

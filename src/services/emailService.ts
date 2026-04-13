@@ -1,26 +1,27 @@
-const nodemailer = require('nodemailer');
-const logger = require('../logger');
+import nodemailer from 'nodemailer';
+import logger from '../logger';
+import type { Claim } from '../types';
 
-const ISSUE_MAP = { delay: 'Försening', cancelled: 'Inställt', denied: 'Nekad ombordstigning' };
+const ISSUE_MAP: Record<string, string> = {
+  delay: 'Försening',
+  cancelled: 'Inställt',
+  denied: 'Nekad ombordstigning',
+};
 
-function createTransport() {
+function createTransport(): nodemailer.Transporter | null {
   const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_SECURE } = process.env;
   if (!SMTP_HOST) return null;
 
   return nodemailer.createTransport({
     host: SMTP_HOST,
-    port: parseInt(SMTP_PORT || '587', 10),
+    port: parseInt(SMTP_PORT ?? '587', 10),
     secure: SMTP_SECURE === 'true',
     auth: SMTP_USER ? { user: SMTP_USER, pass: SMTP_PASS } : undefined,
   });
 }
 
-function getTransporter() {
-  return createTransport();
-}
-
-async function sendAdminNotification(claim) {
-  const transporter = getTransporter();
+export async function sendAdminNotification(claim: Claim): Promise<void> {
+  const transporter = createTransport();
   if (!transporter) {
     logger.warn('SMTP not configured — skipping admin notification email');
     return;
@@ -32,10 +33,10 @@ async function sendAdminNotification(claim) {
     return;
   }
 
-  const issueText = ISSUE_MAP[claim.issue] || claim.issue;
+  const issueText = ISSUE_MAP[claim.issue] ?? claim.issue;
 
   await transporter.sendMail({
-    from: process.env.SMTP_FROM || process.env.SMTP_USER,
+    from: process.env.SMTP_FROM ?? process.env.SMTP_USER,
     to,
     subject: `Nytt ärende: ${claim.namn} — ${claim.flightNumber}`,
     text: [
@@ -48,27 +49,27 @@ async function sendAdminNotification(claim) {
       ``,
       `Flygnummer:     ${claim.flightNumber}`,
       `Flygbolag:      ${claim.airline}`,
-      `Bokningsref:    ${claim.bookingReference || '—'}`,
+      `Bokningsref:    ${claim.bookingReference ?? '—'}`,
       `Från/Till:      ${claim.departureAirport} → ${claim.arrivalAirport}`,
       `Datum:          ${claim.flightDate}`,
       `Händelse:       ${issueText}`,
       ``,
-      `Affiliate-kod:  ${claim.affiliate_code || 'main'}`,
-      `IP-adress:      ${claim.ip_address || 'okänd'}`,
+      `Affiliate-kod:  ${claim.affiliate_code ?? 'main'}`,
+      `IP-adress:      ${claim.ip_address ?? 'okänd'}`,
     ].join('\n'),
   });
 
   logger.info({ to, flightNumber: claim.flightNumber }, 'Admin notification email sent');
 }
 
-async function sendCustomerConfirmation(claim) {
-  const transporter = getTransporter();
+export async function sendCustomerConfirmation(claim: Claim): Promise<void> {
+  const transporter = createTransport();
   if (!transporter) return;
 
-  const companyName = process.env.COMPANY_NAME || 'FlightClaim';
+  const companyName = process.env.COMPANY_NAME ?? 'FlightClaim';
 
   await transporter.sendMail({
-    from: process.env.SMTP_FROM || process.env.SMTP_USER,
+    from: process.env.SMTP_FROM ?? process.env.SMTP_USER,
     to: claim.email,
     subject: `Vi har mottagit ditt ärende — ${claim.flightNumber}`,
     text: [
@@ -86,5 +87,3 @@ async function sendCustomerConfirmation(claim) {
 
   logger.info({ to: claim.email, flightNumber: claim.flightNumber }, 'Customer confirmation email sent');
 }
-
-module.exports = { sendAdminNotification, sendCustomerConfirmation };

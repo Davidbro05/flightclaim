@@ -1,31 +1,34 @@
-const express = require('express');
-const db = require('../db');
-const logger = require('../logger');
-const authenticate = require('../middleware/auth');
+import express from 'express';
+import db from '../db';
+import logger from '../logger';
+import authenticate from '../middleware/auth';
+import type { Claim } from '../types';
 
 const router = express.Router();
 
-const ISSUE_MAP = { delay: 'Försening', cancelled: 'Inställt', denied: 'Nekad ombordstigning' };
+const ISSUE_MAP: Record<string, string> = {
+  delay: 'Försening',
+  cancelled: 'Inställt',
+  denied: 'Nekad ombordstigning',
+};
 
-// GET /api/admin/claims
-router.get('/claims', authenticate, async (req, res) => {
+router.get('/claims', authenticate, async (_req, res) => {
   try {
-    const claims = await db('claims').orderBy('created_at', 'desc');
-    res.json({ claims: claims.map((c) => ({ ...c, issueLabel: ISSUE_MAP[c.issue] || c.issue })) });
+    const claims = await db('claims').orderBy('created_at', 'desc').select<Claim[]>();
+    res.json({ claims: claims.map((c) => ({ ...c, issueLabel: ISSUE_MAP[c.issue] ?? c.issue })) });
   } catch (err) {
     logger.error({ err }, 'Admin API: fetch claims failed');
     res.status(500).json({ error: 'Databasfel' });
   }
 });
 
-// DELETE /api/admin/claims/:id
 router.delete('/claims/:id', authenticate, async (req, res) => {
-  const id = parseInt(req.params.id, 10);
-  if (!id || isNaN(id)) return res.status(400).json({ error: 'Ogiltigt ID' });
+  const id = parseInt(String(req.params.id), 10);
+  if (!id || isNaN(id)) { res.status(400).json({ error: 'Ogiltigt ID' }); return; }
 
   try {
     const deleted = await db('claims').where({ id }).delete();
-    if (deleted === 0) return res.status(404).json({ error: 'Ärende hittades inte' });
+    if (deleted === 0) { res.status(404).json({ error: 'Ärende hittades inte' }); return; }
     res.status(204).end();
   } catch (err) {
     logger.error({ err, id }, 'Admin API: delete claim failed');
@@ -33,15 +36,14 @@ router.delete('/claims/:id', authenticate, async (req, res) => {
   }
 });
 
-// GET /api/admin/affiliates
-router.get('/affiliates', authenticate, async (req, res) => {
+router.get('/affiliates', authenticate, async (_req, res) => {
   try {
-    const allClaims = await db('claims').select('affiliate_code', 'created_at');
+    const allClaims = await db('claims').select<Pick<Claim, 'affiliate_code' | 'created_at'>[]>('affiliate_code', 'created_at');
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 
-    const statsMap = {};
+    const statsMap: Record<string, { total: number; last30: number }> = {};
     for (const row of allClaims) {
-      const code = row.affiliate_code || 'main';
+      const code = row.affiliate_code ?? 'main';
       if (!statsMap[code]) statsMap[code] = { total: 0, last30: 0 };
       statsMap[code].total++;
       if (new Date(row.created_at) > thirtyDaysAgo) statsMap[code].last30++;
@@ -58,4 +60,4 @@ router.get('/affiliates', authenticate, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

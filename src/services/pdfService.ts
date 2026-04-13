@@ -1,22 +1,24 @@
-const PDFDocument = require('pdfkit');
+import PDFDocument from 'pdfkit';
+import type { Response } from 'express';
+import type { Claim } from '../types';
 
-function generatePowerOfAttorney(row, res) {
+function getDisruptionText(issue: string): string {
+  const delayChecked     = issue === 'delay'     ? '☒' : '☐';
+  const cancelledChecked = issue === 'cancelled'  ? '☒' : '☐';
+  const deniedChecked    = issue === 'denied'     ? '☒' : '☐';
+  return `${delayChecked} Flight Delay\n${cancelledChecked} Flight Cancellation\n${deniedChecked} Denied Boarding`;
+}
+
+export function generatePowerOfAttorney(row: Claim, res: Response): void {
   const doc = new PDFDocument({ margin: 50 });
 
   res.setHeader('Content-Type', 'application/pdf');
   res.setHeader('Content-Disposition', `attachment; filename=power_of_attorney_${row.id}.pdf`);
   doc.pipe(res);
 
-  const companyName = process.env.COMPANY_NAME || 'FlightClaim AB';
-  const companyReg = process.env.COMPANY_REG || 'XXXXXX-XXXX';
-  const companyAddress = process.env.COMPANY_ADDRESS || 'Exempelgatan 1, 123 45 Stockholm';
-
-  const getDisruptionText = (issue) => {
-    const delayChecked = issue === 'delay' ? '☒' : '☐';
-    const cancelledChecked = issue === 'cancelled' ? '☒' : '☐';
-    const deniedChecked = issue === 'denied' ? '☒' : '☐';
-    return `${delayChecked} Flight Delay\n${cancelledChecked} Flight Cancellation\n${deniedChecked} Denied Boarding`;
-  };
+  const companyName    = process.env.COMPANY_NAME    ?? 'FlightClaim AB';
+  const companyReg     = process.env.COMPANY_REG     ?? 'XXXXXX-XXXX';
+  const companyAddress = process.env.COMPANY_ADDRESS ?? 'Exempelgatan 1, 123 45 Stockholm';
 
   doc.fontSize(20).text('POWER OF ATTORNEY', { align: 'center' });
   doc.moveDown(2);
@@ -53,7 +55,7 @@ function generatePowerOfAttorney(row, res) {
   doc.moveDown(0.5);
   doc.fontSize(12).text(`Airline: ${row.airline}`);
   doc.text(`Flight Number: ${row.flightNumber}`);
-  doc.text(`Booking Reference (PNR): ${row.bookingReference || ''}`);
+  doc.text(`Booking Reference (PNR): ${row.bookingReference ?? ''}`);
   doc.text(`Departure Airport: ${row.departureAirport}`);
   doc.text(`Arrival Airport: ${row.arrivalAirport}`);
   doc.text(`Flight Date: ${row.flightDate}`);
@@ -85,7 +87,7 @@ function generatePowerOfAttorney(row, res) {
       const imageBuffer = Buffer.from(base64Data, 'base64');
       doc.moveDown(0.5);
       doc.image(imageBuffer, { width: 200, height: 100 });
-    } catch (e) {
+    } catch {
       doc.text('(Signature could not be loaded)');
     }
   } else {
@@ -94,5 +96,3 @@ function generatePowerOfAttorney(row, res) {
 
   doc.end();
 }
-
-module.exports = { generatePowerOfAttorney };

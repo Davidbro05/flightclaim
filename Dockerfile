@@ -7,22 +7,37 @@ RUN npm ci
 COPY client/ .
 RUN npm run build
 
-# ── Stage 2: Production server ────────────────────────────────────────────────
+# ── Stage 2: Build TypeScript server ─────────────────────────────────────────
+FROM node:20-alpine AS server-builder
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci
+
+COPY tsconfig.json ./
+COPY src/ ./src/
+RUN npm run build
+
+# ── Stage 3: Production image ─────────────────────────────────────────────────
 FROM node:20-alpine
 
 WORKDIR /app
 
-# Install server dependencies (production only)
+# Install production dependencies only
 COPY package*.json ./
 RUN npm ci --only=production
 
-# Copy server source
-COPY --chown=node:node src/ ./src/
+# Copy compiled server
+COPY --chown=node:node --from=server-builder /app/dist ./dist/
+
+# Copy runtime assets
 COPY --chown=node:node public/ ./public/
 COPY --chown=node:node views/ ./views/
 COPY --chown=node:node knexfile.js ./
+COPY --chown=node:node src/db/migrations ./src/db/migrations/
 
-# Copy built React admin from stage 1 (Vite outputs to /app/public/admin per vite.config.js)
+# Copy built React admin from stage 1
 COPY --from=client-builder --chown=node:node /app/public/admin ./public/admin
 
 # Remove SQLite database — production uses PostgreSQL
@@ -35,4 +50,4 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=20s \
 
 USER node
 
-CMD ["node", "src/server.js"]
+CMD ["node", "dist/server.js"]

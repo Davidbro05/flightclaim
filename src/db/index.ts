@@ -1,5 +1,5 @@
-const knex = require('knex');
-const path = require('path');
+import knex from 'knex';
+import path from 'path';
 
 const migrationsDir = path.join(__dirname, 'migrations');
 
@@ -26,4 +26,4 @@ const db = knex(
       }
 );
 
-module.exports = db;
+export default db;

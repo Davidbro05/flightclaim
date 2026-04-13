@@ -1,20 +1,22 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
-const helmet = require('helmet');
-const pinoHttp = require('pino-http');
-const path = require('path');
-const ejsLayouts = require('express-ejs-layouts');
+import express from 'express';
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
+import pinoHttp from 'pino-http';
+import path from 'path';
 
-const logger = require('./logger');
-const db = require('./db');
-const claimsRouter = require('./routes/claims');
-const adminApiRouter = require('./routes/adminApi');
-const articlesApiRouter = require('./routes/articlesApi');
-const navApiRouter = require('./routes/navApi');
-const documentsRouter = require('./routes/documents');
-const contentRouter = require('./routes/content');
-const siteLocals = require('./middleware/siteLocals');
+import ejsLayouts from 'express-ejs-layouts';
+
+import logger from './logger';
+import db from './db';
+import claimsRouter from './routes/claims';
+import adminRouter from './routes/admin';
+import adminApiRouter from './routes/adminApi';
+import articlesApiRouter from './routes/articlesApi';
+import navApiRouter from './routes/navApi';
+import documentsRouter from './routes/documents';
+import contentRouter from './routes/content';
+import siteLocals from './middleware/siteLocals';
 
 const app = express();
 
@@ -26,7 +28,6 @@ app.set('layout', 'layout');
 
 app.set('trust proxy', true);
 
-// Security headers — allow CDN (signature pad) and Google Fonts used by frontend
 app.use(
   helmet({
     contentSecurityPolicy: {
@@ -42,19 +43,15 @@ app.use(
   })
 );
 
-// HTTP request logging
 app.use(pinoHttp({ logger, autoLogging: { ignore: (req) => req.url === '/health' } }));
 
-// Body parsing — 5 MB limit to accommodate base64 signature images
 app.use(express.json({ limit: '5mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '5mb' }));
 app.use(cookieParser());
 
-// Inject shared template locals (navItems, siteUrl, currentYear, assetVersion, currentPath)
 app.use(siteLocals);
 
-// Health check — used by Docker HEALTHCHECK and Portainer
-app.get('/health', async (req, res) => {
+app.get('/health', async (_req, res) => {
   try {
     await db.raw('SELECT 1');
     res.json({ status: 'ok', db: 'connected', timestamp: new Date().toISOString() });
@@ -64,35 +61,29 @@ app.get('/health', async (req, res) => {
   }
 });
 
-// API + form routes
 app.use('/submit', claimsRouter);
+app.use('/admin', adminRouter);
 app.use('/api/admin', adminApiRouter);
 app.use('/api/articles', articlesApiRouter);
 app.use('/api/nav', navApiRouter);
 app.use('/fullmakt', documentsRouter);
 
-// Serve React admin SPA — must come before content catch-all
 const adminBuildDir = path.join(__dirname, '../public/admin');
 app.use('/admin', express.static(adminBuildDir));
 app.get(['/admin', '/admin/*splat'], (_req, res) => {
   res.sendFile(path.join(adminBuildDir, 'index.html'));
 });
 
-// Static files (CSS, JS, images) — before content router (safe: public/index.html is deleted)
 app.use(express.static(path.join(__dirname, '../public')));
-
-// Public SSR pages — after static so asset requests never hit the catch-all route
 app.use('/', contentRouter);
 
-// 404 handler
-app.use((req, res) => {
+app.use((_req, res) => {
   res.status(404).render('pages/404', { title: 'Sidan hittades inte | FlightClaim' });
 });
 
-// Global error handler
-app.use((err, req, res, next) => {
+app.use((err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
   logger.error({ err }, 'Unhandled error');
   res.status(500).send('Ett oväntat fel uppstod.');
 });
 
-module.exports = app;
+export default app;
