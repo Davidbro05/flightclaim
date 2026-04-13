@@ -311,7 +311,7 @@ form {
 .form-group input,
 .form-group select {
   padding: 9px 12px;
-  border: 2px solid var(--gray-200);
+  border: 2px solid #c6ccd2;
   border-radius: 6px;
   font-size: 14px;
   font-family: var(--font-family);
@@ -352,7 +352,7 @@ form {
 
 .signature-pad-container {
   background: var(--white);
-  border: 2px solid var(--gray-200);
+  border: 2px solid #c6ccd2;
   border-radius: 8px;
   margin-bottom: 10px;
   overflow: hidden;
