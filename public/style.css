@@ -1614,8 +1614,8 @@ a.logo {
   padding: 28px 24px;
   text-align: center;
 }
-.cta-box h3 { font-size: 1.05rem; margin-bottom: 10px; }
-.cta-box p  { font-size: .875rem; opacity: .9; margin-bottom: 20px; line-height: 1.55; }
+.cta-box h3 { font-size: 1.05rem; margin-bottom: 10px; color: #fff; }
+.cta-box p  { font-size: .875rem; opacity: .9; margin-bottom: 20px; line-height: 1.55; color: #fff; }
 .cta-box .btn-cta {
   display: inline-block;
   background: var(--secondary);
@@ -1637,8 +1637,8 @@ a.logo {
   text-align: center;
   margin-top: 48px;
 }
-.cta-banner h2 { font-size: 1.5rem; margin-bottom: 10px; }
-.cta-banner p  { opacity: .9; margin-bottom: 28px; font-size: 1rem; }
+.cta-banner h2 { font-size: 1.5rem; margin-bottom: 10px; color: #fff; }
+.cta-banner p  { opacity: .9; margin-bottom: 28px; font-size: 1rem; color: #fff; }
 .cta-banner .btn-cta {
   display: inline-block;
   background: var(--secondary);
