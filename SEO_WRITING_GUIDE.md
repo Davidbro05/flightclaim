@@ -4,6 +4,162 @@ Denna guide gäller alla artiklar som publiceras på flightclaim.se. Läs igenom
 
 ---
 
+## STANDARDMALL — kopiera denna för varje ny artikel
+
+Nedan visas den exakta strukturen som varje artikel ska följa. Kopiera mallen, fyll i platsmarkörerna och ta aldrig bort en sektion utan giltigt skäl.
+
+### Del 1 — Inställningar i admin-panelen
+
+Fyll i dessa fält i admin under `/admin` innan du börjar skriva:
+
+```
+Titel (H1):        [Primärsökord: konkret fråga eller utfall]
+Slug:              [url-slug utan snedstreck, t.ex. "hur-mycket"]
+Parent slug:       [föräldresidens slug, t.ex. "forsening" — lämna tomt för pillar]
+Typ:               guide / airline / blog
+Status:            draft (byt till published när texten är godkänd)
+Meta title:        [Max 60 tecken] | FlightClaim.se
+Meta description:  [Max 160 tecken. Fakta + vad läsaren får + uppmaning.]
+Schema-typ:        FAQPage (pillar/guide) · Article (blogg) · none (enkel spoke)
+Affiliate ref:     [lämna tomt om ej relevant]
+```
+
+Parent slug är det som skapar brödsmulorna automatiskt. Om du skriver `/forsening/hur-mycket` ska parent slug vara `forsening`. Systemet skapar då brödsmulespåret **Hem › Försenat flyg › Hur mycket kan du få?** utan att du behöver göra något mer.
+
+---
+
+### Del 2 — Innehållsmallen (klistra in i Markdown-editorn)
+
+Ersätt allt inom hakparenteser. Ta inte bort rubrikerna, bara texten under dem.
+
+```markdown
+![Hero-bild: [BESKRIVANDE ALT-TEXT MED SÖKORD]](/images/articles/[SLUG].jpg)
+
+[INGRESS: 2 till 3 meningar. Svara direkt på frågan. Inga uppvärmningar.
+Avsluta med: "Är du redan drabbad? [Ansök om ersättning gratis](/anmalan) så
+sköter vi hela processen åt dig."]
+
+## Vad säger lagen?
+
+[Förklara EU-förordning 261/2004 kopplat till artikelns ämne. Nämn exakta
+belopp och tidsgränser. Länka till EUR-Lex eller Konsumentverket som källa.
+Minst 150 ord.]
+
+## [Rubrik 2 — artikelns kärna]
+
+[Fördjupad förklaring av det som läsaren faktiskt kom hit för. Här ska den
+konkreta situationen beskrivas. Variera meningslängden. Inga bindestreck som
+tankestreck. Minst 200 ord.]
+
+### [Underrubrik om avsnittet är längre än 300 ord]
+
+[Fortsatt text.]
+
+## [Rubrik 3 — praktiska steg eller undantag]
+
+[Gå igenom vad läsaren konkret ska göra, eller förklara de vanligaste
+undantagen/undanflykterna från flygbolagen. Minst 150 ord.]
+
+> **Har du redan väntat länge på svar från flygbolaget?** Många ger upp i
+> det läget. Vi driver ditt ärende vidare utan att du behöver göra något mer.
+> [Starta din ansökan här](/anmalan) — det tar två minuter och kostar ingenting.
+
+## [Rubrik 4 — vanliga missuppfattningar ELLER jämförelse/tabell]
+
+[Korrigera de vanligaste felen folk gör eller tror. Alternativt: visa en
+tabell med ersättningsbelopp, tidsgränser eller flygbolagsrankning.
+Minst 100 ord.]
+
+## Vanliga frågor
+
+[Skriv minst 4 frågor. Formulera dem som en människa faktiskt söker dem,
+inte som läroboksrubriker. Varje svar ska vara komplett i sig, max 4 meningar.]
+
+**Fråga 1?**
+[Svar som inte kräver att man läst resten av artikeln.]
+
+**Fråga 2?**
+[Svar.]
+
+**Fråga 3?**
+[Svar.]
+
+**Fråga 4?**
+[Svar.]
+
+---
+
+*Läs mer: [LÄNK TILL PILLAR-SIDAN MED BESKRIVANDE ANKARTEXT] eller
+[LÄNK TILL SYSTER-SPOKE MED BESKRIVANDE ANKARTEXT].*
+```
+
+---
+
+### Del 3 — Bildkonvention
+
+Varje artikel ska ha en hero-bild längst upp i Markdown-innehållet. Bilden renderas av `marked` och visas som det första elementet under brödsmulespåret.
+
+**Namngivning:** `/images/articles/[SLUG].jpg`
+
+Exempel:
+- `/images/articles/forsening.jpg`
+- `/images/articles/forsening-hur-mycket.jpg`
+- `/images/articles/flygbolag-ryanair.jpg`
+- `/images/articles/blogg-case-study.jpg`
+
+**Alt-text:** Ska alltid innehålla primärsökordet och beskriva bilden. Aldrig `bild1.jpg` eller `hero`. Skriv `Passagerare väntar på försenat flyg på flygplats`.
+
+**Tekniskt format:** JPG, minst 1 200px bred, max 200 kB. Komprimera med squoosh.app eller liknande.
+
+Om ingen specifik bild finns: använd `/images/articles/default-flyg.jpg` som fallback tills en riktig bild läggs till.
+
+---
+
+### Del 4 — CTA-placeringar i varje artikel
+
+Det ska finnas **tre konverteringspunkter** i varje artikel. Ingen mer, ingen mindre.
+
+**CTA 1 — I ingressen (sista meningen):**
+Ska alltid finnas och alltid länka till `/anmalan` eller `/#ansokan`. Formulera det som en naturlig konsekvens av det du precis sagt, inte som en reklamjingel.
+
+Exempel: "Är du redan drabbad? [Ansök om ersättning gratis](/anmalan) så sköter vi hela processen åt dig."
+
+**CTA 2 — Mitt i artikeln (blockquote-format):**
+Placeras efter det tyngsta informationsavsnittet, när läsaren just fått den kunskap de behövde och är redo att agera. Använd blockquote-formateringen från mallen ovan så att den sticker ut visuellt.
+
+Exempel: "Har du redan väntat länge på svar från flygbolaget? Vi driver ditt ärende vidare. [Starta din ansökan här](/anmalan) — det tar två minuter."
+
+**CTA 3 — Artikel-mallens bottenbanner:**
+Renderas automatiskt av systemet. Du behöver inte skriva den. Den finns alltid längst ner på varje artikel-sida.
+
+**Regler för CTA-text:**
+Texten ska aldrig vara identisk i CTA 1 och CTA 2. Variera budskapet: den första kan handla om att "kolla om du har rätt", den andra om att "vi driver ditt ärende nu".
+
+Ord som konverterar bra i detta segment:
+- "gratis"
+- "utan risk"
+- "du betalar ingenting om vi inte vinner"
+- "det tar två minuter"
+- "vi sköter hela kontakten med flygbolaget"
+
+---
+
+### Del 5 — Intern länkstruktur per artikeltyp
+
+**Pillar-sida** (t.ex. `/forsening`):
+Ska länka ut till samtliga sina spoke-artiklar. Länkarna ska vara naturliga i brödtexten, inte en lista i slutet. Pillar-sidan tar emot inkommande länkar från alla sina spokes och från relevanta blogg-artiklar.
+
+**Spoke-sida** (t.ex. `/forsening/hur-mycket`):
+Ska länka upp till sin pillar minst en gång i brödtexten. Det är den enskilt viktigaste interna länken på sidan. Kan länka sidledes till en syster-spoke om det är naturligt, men aldrig forcerat.
+
+**Blogg-artikel** (t.ex. `/blogg/ryanair-nekar-ersattning`):
+Ska länka till minst en pillar. Ska aldrig bara länka till startsidan. Bloggen ska alltid peka uppåt mot guiderna, inte nedåt mot ingenting.
+
+**Flygbolagssida** (t.ex. `/flygbolag/ryanair`):
+Ska länka till `/forsening` eller `/installda-flyg` beroende på kontext. Ska aldrig vara en isolerad ö.
+
+---
+
 ## Vad vi faktiskt konkurrerar om
 
 Vår marknad är informationssökningar kring flygrättigheter på svenska. Konkurrenterna är Flightright, Flyghjälp och AirHelp. Alla tre har samma svaghet: generiskt, tunt och ofta maskinöversatt innehåll. Vår fördel är djupt, välstrukturerat, faktabaserat och mänskligt skrivet innehåll som faktiskt svarar på frågan.
@@ -308,20 +464,31 @@ CTA-texten ska aldrig vara "Klicka här". Använd:
 
 Gå igenom dessa punkter för varje artikel innan du ändrar status till "published":
 
-- [ ] H1 innehåller primärsökordet
+**Admin-inställningar**
+- [ ] Titel (H1) innehåller primärsökordet
+- [ ] Slug är satt korrekt (inga versaler, inga mellanslag)
+- [ ] Parent slug är satt om det är en spoke eller blogg-artikel
+- [ ] Meta title är max 60 tecken och slutar med " | FlightClaim.se"
+- [ ] Meta description är max 160 tecken och innehåller en uppmaning
+- [ ] Schema-typ är satt korrekt (FAQPage för pillar/guide, Article för blogg, none för enkel spoke)
+- [ ] Status satt till "published" (inte "draft")
+
+**Innehåll**
+- [ ] Hero-bild finns längst upp i Markdown (/images/articles/[slug].jpg med beskrivande alt-text)
 - [ ] Ingressen svarar direkt på frågan (inga "i denna artikel" eller uppvärmningar)
+- [ ] CTA 1 finns i ingressen med länk till /anmalan
+- [ ] CTA 2 finns mitt i artikeln som blockquote med länk till /anmalan
 - [ ] Inga bindestreck används som tankestreck
 - [ ] Meningslängden varierar (inga fyra likabent långa meningar i rad)
 - [ ] Inga AI-klyschor ("sammanfattningsvis", "det är viktigt att notera", etc.)
 - [ ] EU 261/2004 nämns med exakt beteckning
 - [ ] Exakta belopp (250/400/600€) och tidsgränser (3 timmar) finns med
-- [ ] Intern länk till pillar-sidan finns (om det är en spoke eller blogg)
-- [ ] Intern länk till minst en spoke-artikel finns (om det är en pillar)
 - [ ] FAQ-sektion med minst 4 frågor (för pillar och guide)
-- [ ] Meta title är max 60 tecken
-- [ ] Meta description är max 160 tecken och innehåller en CTA
-- [ ] Schema-typ är satt korrekt (FAQPage för pillar, Article för blogg)
-- [ ] Status satt till "published" (inte "draft")
+
+**Intern länkning**
+- [ ] Intern länk upp till pillar-sidan finns i brödtexten (om det är en spoke eller blogg)
+- [ ] Intern länk ut till samtliga spokes finns (om det är en pillar)
+- [ ] Ankartexterna är beskrivande och innehåller sökord (aldrig "klicka här")
 
 ---
 
