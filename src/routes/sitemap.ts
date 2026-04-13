@@ -30,11 +30,18 @@ function esc(s: string): string {
     .replace(/'/g, '&apos;');
 }
 
-function url(loc: string, priority: string, changefreq: string, lastmod?: string): string {
+// pg driver returns timestamps as Date objects; sqlite returns strings.
+function toDateStr(d: unknown): string {
+  if (!d) return new Date().toISOString().slice(0, 10);
+  if (d instanceof Date) return d.toISOString().slice(0, 10);
+  return String(d).slice(0, 10);
+}
+
+function url(loc: string, priority: string, changefreq: string, lastmod?: unknown): string {
   return [
     '  <url>',
     `    <loc>${loc}</loc>`,
-    lastmod ? `    <lastmod>${lastmod.slice(0, 10)}</lastmod>` : '',
+    lastmod ? `    <lastmod>${toDateStr(lastmod)}</lastmod>` : '',
     `    <changefreq>${changefreq}</changefreq>`,
     `    <priority>${priority}</priority>`,
     '  </url>',
