@@ -78,11 +78,11 @@ app.get(['/admin', '/admin/*splat'], (_req, res) => {
   res.sendFile(path.join(adminBuildDir, 'index.html'));
 });
 
-// Public SSR pages — must come before express.static so / is not intercepted by index.html
-app.use('/', contentRouter);
-
-// Static files (CSS, JS, images) — after content router
+// Static files (CSS, JS, images) — before content router (safe: public/index.html is deleted)
 app.use(express.static(path.join(__dirname, '../public')));
+
+// Public SSR pages — after static so asset requests never hit the catch-all route
+app.use('/', contentRouter);
 
 // 404 handler
 app.use((req, res) => {
