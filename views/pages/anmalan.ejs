@@ -1,4 +1,4 @@
-<% scripts = '<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.2.0/dist/signature_pad.umd.min.js"></script><script src="/js/claim-form.js?v=' + assetVersion + '"></script>' %>
+<% scripts = '<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.2.0/dist/signature_pad.umd.min.js"></script><script src="/js/claim-form.js?v=' + assetVersion + '"></script><script>(function(){var p=new URLSearchParams(location.search);var d=p.get("dep"),a=p.get("arr");if(d){var df=document.querySelector("[name=departureAirport]");if(df)df.value=d;}if(a){var af=document.querySelector("[name=arrivalAirport]");if(af)af.value=a;}})();</script>' %>
 
 <!-- Page Hero -->
 <section class="page-hero">

@@ -1,21 +1,18 @@
 (function () {
-  // Hero quick-check: pre-fill full form fields from hero inputs, then scroll to form
+  // Hero quick-check: navigate to /anmalan with optional pre-filled query params
   var btn = document.querySelector('.hero-check-btn');
   if (!btn) return;
 
   btn.addEventListener('click', function () {
-    var dep = (document.querySelector('#hero-departure') || {}).value || '';
-    var arr = (document.querySelector('#hero-arrival') || {}).value || '';
+    var dep = ((document.querySelector('#hero-departure') || {}).value || '').trim();
+    var arr = ((document.querySelector('#hero-arrival') || {}).value || '').trim();
 
-    var depField = document.querySelector('[name="departureAirport"]');
-    var arrField = document.querySelector('[name="arrivalAirport"]');
+    var url = '/anmalan';
+    var params = [];
+    if (dep) params.push('dep=' + encodeURIComponent(dep));
+    if (arr) params.push('arr=' + encodeURIComponent(arr));
+    if (params.length) url += '?' + params.join('&');
 
-    if (depField && dep) depField.value = dep;
-    if (arrField && arr) arrField.value = arr;
-
-    var form = document.querySelector('#ansokan');
-    if (form) {
-      form.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    window.location.href = url;
   });
 })();
