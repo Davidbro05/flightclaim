@@ -1087,18 +1087,23 @@ a.logo {
    HERO — full-bleed photo + frosted glass card
    ============================================================ */
 .hero {
-  min-height: 560px;
+  min-height: 620px;
   background-image:
-    linear-gradient(rgba(0, 0, 20, 0.48), rgba(0, 0, 20, 0.48)),
+    linear-gradient(to right, rgba(0, 0, 15, 0.52) 0%, rgba(0, 0, 15, 0.28) 100%),
     url('/images/hero-bg.jpg');
   background-size: cover;
-  background-position: center;
+  background-position: center 25%;
   display: flex;
   align-items: center;
   padding: 60px 0;
-  /* Remove old pseudo-element by resetting */
   position: relative;
   overflow: hidden;
+}
+
+/* Container inside hero — card sits naturally on the left */
+.hero .container {
+  display: flex;
+  align-items: center;
 }
 
 /* Remove old decorative circle on new hero */
@@ -1106,7 +1111,7 @@ a.logo {
   display: none;
 }
 
-/* Card floated left inside hero */
+/* Card left-anchored inside hero */
 .hero-card {
   background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(10px);
