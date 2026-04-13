@@ -24,7 +24,7 @@
            const children = childrenOf(item.id);
            const active   = isActive(item.url);
            // "Ansök nu" gets CTA button treatment
-           const isCta    = item.url === '/#ansokan' || item.label === 'Ansök nu';
+           const isCta    = item.url === '/anmalan' || item.url === '/#ansokan' || item.label === 'Ansök nu';
       %>
         <% if (isCta) { %>
           <li class="nav-item nav-cta-item">

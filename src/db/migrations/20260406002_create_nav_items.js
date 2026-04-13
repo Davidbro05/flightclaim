@@ -23,7 +23,7 @@ exports.up = async function (knex) {
   const installtId  = await insertAndGetId({ label: 'Inställt flyg', url: '/installda-flyg', sort_order: 2 });
   const flygbolagId = await insertAndGetId({ label: 'Flygbolag', url: '/flygbolag', sort_order: 3 });
   await knex('nav_items').insert({ label: 'Blogg', url: '/blogg', sort_order: 4 });
-  await knex('nav_items').insert({ label: 'Ansök nu', url: '/#ansokan', sort_order: 5 });
+  await knex('nav_items').insert({ label: 'Ansök nu', url: '/anmalan', sort_order: 5 });
 
   // Försenat flyg — children
   await knex('nav_items').insert([
