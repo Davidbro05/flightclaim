@@ -120,7 +120,7 @@ Om ingen specifik bild finns: använd `/images/articles/default-flyg.jpg` som fa
 Det ska finnas **tre konverteringspunkter** i varje artikel. Ingen mer, ingen mindre.
 
 **CTA 1 — I ingressen (sista meningen):**
-Ska alltid finnas och alltid länka till `/anmalan` eller `/#ansokan`. Formulera det som en naturlig konsekvens av det du precis sagt, inte som en reklamjingel.
+Ska alltid finnas och alltid länka till `/anmalan`. Formulera det som en naturlig konsekvens av det du precis sagt, inte som en reklamjingel.
 
 Exempel: "Är du redan drabbad? [Ansök om ersättning gratis](/anmalan) så sköter vi hela processen åt dig."
 
