@@ -442,7 +442,8 @@ form {
   margin-bottom: 15px;
 }
 
-.btn-primary {
+.btn-primary,
+a.btn-primary {
   background: var(--primary);
   color: white;
   border: none;
