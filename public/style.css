@@ -1600,8 +1600,44 @@ a.logo {
   padding: 40px 0 64px;
 }
 @media (max-width: 900px) {
-  .article-layout { grid-template-columns: 1fr; }
-  .article-sidebar { order: -1; }
+  .article-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 24px 0 48px;
+  }
+  /* Sidebar goes BELOW article content on mobile, not above */
+  .article-sidebar { order: 2; position: static; }
+  /* Hide sidebar CTA on mobile — bottom banner covers it */
+  .article-sidebar { display: none; }
+}
+
+/* Article images always responsive */
+.article-body img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 600px) {
+  /* Smaller H1 on mobile */
+  .article-body h1 { font-size: 1.5rem; line-height: 1.25; margin-bottom: 16px; }
+  .article-body h2 { font-size: 1.15rem; margin: 28px 0 10px; }
+  .article-body h3 { font-size: 1rem; }
+
+  /* Tighter layout padding */
+  .article-layout { padding: 16px 0 40px; }
+
+  /* CTA banner more compact */
+  .cta-banner { padding: 28px 20px; }
+  .cta-banner h2 { font-size: 1.2rem; }
+
+  /* Blockquote slimmer */
+  .article-body blockquote { padding: 12px 14px; font-size: .9rem; }
+
+  /* Breadcrumb wrap */
+  .breadcrumb { white-space: normal; line-height: 1.8; }
 }
 
 .article-body h1 {
@@ -1631,7 +1667,13 @@ a.logo {
 .article-body a:hover { text-decoration: underline; }
 .article-body strong { color: var(--gray-900); }
 .article-body table {
-  width: 100%; border-collapse: collapse; margin: 24px 0; font-size: .9rem;
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+  font-size: .9rem;
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .article-body th {
   background: var(--primary); color: #fff; padding: 10px 14px; text-align: left;
