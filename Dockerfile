@@ -19,6 +19,7 @@ RUN npm ci --only=production
 # Copy server source
 COPY --chown=node:node src/ ./src/
 COPY --chown=node:node public/ ./public/
+COPY --chown=node:node views/ ./views/
 COPY --chown=node:node knexfile.js ./
 
 # Copy built React admin from stage 1 (Vite outputs to /app/public/admin per vite.config.js)
