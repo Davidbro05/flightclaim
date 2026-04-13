@@ -81,6 +81,7 @@ body {
   display: flex;
   list-style: none;
   gap: 30px;
+  align-items: center;
 }
 
 .nav-menu a {
@@ -1495,7 +1496,7 @@ a.logo {
   z-index: 300;
   /* 0.5s delay before hiding, instant fade-out */
   transition: opacity 0.12s, visibility 0.12s;
-  transition-delay: 0.5s;
+  transition-delay: 0.35s;
 }
 .dropdown-menu a {
   display: block;
