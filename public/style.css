@@ -1869,4 +1869,31 @@ details[open] .faq-question::after { content: '−'; }
     font-weight: 300;
     line-height: 1;
   }
+
+  /* Split row: text link + separate arrow button */
+  .nav-drawer-split-item {
+    display: flex;
+    align-items: stretch;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .nav-drawer-row-text {
+    flex: 1;
+    border-bottom: none;        /* border is on the li */
+    justify-content: flex-start;
+  }
+  .nav-drawer-arrow-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    border-left: 1px solid var(--gray-200);
+    font-size: 22px;
+    color: var(--gray-400);
+    font-weight: 300;
+    cursor: pointer;
+  }
+  .nav-drawer-arrow-btn:active { background: var(--gray-100); }
 }

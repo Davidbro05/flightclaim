@@ -70,11 +70,14 @@
              if (isCta) return;
         %>
           <% if (children.length > 0) { %>
-            <li>
-              <button class="nav-drawer-row nav-drawer-trigger"
-                      data-target="nav-panel-<%= item.id %>">
+            <li class="nav-drawer-split-item">
+              <a href="<%= item.url %>" class="nav-drawer-row nav-drawer-row-text">
                 <%= item.label %>
-                <span class="nav-drawer-arrow">&#8250;</span>
+              </a>
+              <button class="nav-drawer-arrow-btn nav-drawer-trigger"
+                      data-target="nav-panel-<%= item.id %>"
+                      aria-label="Visa underkategorier för <%= item.label %>">
+                &#8250;
               </button>
             </li>
           <% } else { %>
