@@ -1074,6 +1074,10 @@ a.logo {
 }
 
 /* Hamburger button */
+.nav-cta-mobile {
+  display: none; /* shown only on mobile */
+}
+
 .nav-hamburger {
   display: none;
   flex-direction: column;
@@ -1361,6 +1365,16 @@ a.logo {
    RESPONSIVE — MOBILE
    ============================================================ */
 @media (max-width: 768px) {
+  /* Mobile CTA always visible in header */
+  .nav-cta-mobile {
+    display: inline-flex;
+    align-items: center;
+    font-size: 13px;
+    padding: 8px 14px;
+    margin-right: 6px;
+    white-space: nowrap;
+  }
+
   /* Hamburger visible — larger tap target */
   .nav-hamburger {
     display: flex;
@@ -1368,7 +1382,7 @@ a.logo {
     margin-right: -4px;
   }
 
-  /* Mobile nav menu hidden by default, shown when .open */
+  /* Mobile nav menu */
   .nav-menu {
     display: none;
     position: absolute;
@@ -1384,42 +1398,47 @@ a.logo {
     max-height: calc(100vh - 64px);
     overflow-y: auto;
   }
-  .nav-menu.open {
-    display: flex;
-  }
+  .nav-menu.open { display: flex; }
 
-  /* Regular links — large touch targets */
+  /* Hide "Ansök nu" from inside menu — it lives in header now */
+  .nav-menu .nav-cta-item { display: none; }
+
+  /* All menu rows — left-aligned, large touch target */
   .nav-menu li a {
     display: flex;
     align-items: center;
-    padding: 16px 24px;
+    padding: 18px 24px;
     border-bottom: 1px solid var(--gray-200);
-    font-size: 16px;
-    min-height: 52px;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--gray-800);
+    min-height: 56px;
+    text-decoration: none;
   }
   .nav-menu a.active {
-    border-bottom-color: var(--gray-200);
+    color: var(--primary);
     border-left: 3px solid var(--primary);
     padding-left: 21px;
   }
 
-  /* CTA "Ansök nu" — full-width button in mobile menu */
-  .nav-menu .nav-cta-item {
-    padding: 14px 20px;
-    border-bottom: 1px solid var(--gray-200);
+  /* Dropdown trigger row — hide ▼ chevron, show › on right */
+  .nav-menu .has-dropdown > .nav-link .chevron { display: none; }
+  .nav-menu .has-dropdown > .nav-link {
+    justify-content: space-between;
   }
-  .nav-menu .nav-cta-item a.nav-cta-btn {
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
-    text-align: center;
-    padding: 14px 20px;
-    font-size: 16px;
-    border-radius: 8px;
-    min-height: unset;
+  .nav-menu .has-dropdown > .nav-link::after {
+    content: '›';
+    font-size: 22px;
+    color: var(--gray-400);
+    line-height: 1;
+    font-weight: 300;
+    transition: transform 0.2s;
+  }
+  .nav-menu .has-dropdown.open > .nav-link::after {
+    transform: rotate(90deg);
   }
 
-  /* Inline dropdown for mobile — no absolute positioning */
+  /* Inline dropdown — shaded, indented */
   .dropdown-menu {
     position: static;
     visibility: visible;
@@ -1439,10 +1458,12 @@ a.logo {
   .dropdown-menu::before { display: none; }
   .has-dropdown.open .dropdown-menu { display: block; }
   .dropdown-menu a {
-    padding: 14px 24px 14px 36px;
+    padding: 15px 24px 15px 32px;
     font-size: 15px;
+    font-weight: 400;
     color: var(--gray-600);
     border-bottom: 1px solid var(--gray-200);
+    min-height: unset;
   }
   .dropdown-menu a:last-child { border-bottom: none; }
 
