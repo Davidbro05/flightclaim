@@ -1372,15 +1372,17 @@ a.logo {
    RESPONSIVE — MOBILE
    ============================================================ */
 @media (max-width: 768px) {
-  /* Mobile CTA always visible in header — same look as desktop, no shadow */
+  /* Mobile CTA always visible in header — compact, no shadow, no underline */
   .nav-cta-mobile {
     display: inline-flex;
     align-items: center;
-    font-size: 12px;
-    padding: 6px 11px;
-    margin-right: 4px;
+    font-size: 11px;
+    padding: 5px 10px;
+    margin-left: auto;
+    margin-right: 8px;
     white-space: nowrap;
     box-shadow: none;
+    text-decoration: none;
   }
 
   /* Hamburger visible — larger tap target */
