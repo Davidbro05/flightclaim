@@ -1,0 +1,170 @@
+<% scripts = '<script src="/js/checker.js?v=1" defer></script>' %>
+
+<section class="page-hero page-hero--sm">
+  <div class="container">
+    <h1>Beräkna din ersättning</h1>
+    <p>Svar på 2 minuter — fyll i dina flyguppgifter så räknar vi ut om du har rätt till upp till 600&nbsp;€.</p>
+  </div>
+</section>
+
+<div class="container">
+  <div class="checker-wrap">
+
+    <!-- Steg-indikator -->
+    <div class="checker-progress">
+      <div class="step-dot current" data-step="1"><span>1</span><label>Rutt</label></div>
+      <div class="step-line"></div>
+      <div class="step-dot" data-step="2"><span>2</span><label>Vad hände?</label></div>
+      <div class="step-line"></div>
+      <div class="step-dot" data-step="3"><span>3</span><label>Detaljer</label></div>
+      <div class="step-line"></div>
+      <div class="step-dot" data-step="4"><span>4</span><label>Resultat</label></div>
+    </div>
+
+    <!-- ── Steg 1: Rutt ── -->
+    <div class="checker-step active" data-step="1">
+      <h2 class="step-title">Vilket flyg gäller det?</h2>
+      <p class="step-sub">Ange avgångs- och destinationsflygplats.</p>
+
+      <div class="airport-row">
+        <div class="airport-field">
+          <label for="dep-input">Avgång från</label>
+          <div class="airport-input-wrap">
+            <input id="dep-input" type="text" placeholder="Stad eller IATA-kod, t.ex. ARN" autocomplete="off" />
+            <div id="dep-drop" class="airport-dropdown"></div>
+          </div>
+        </div>
+        <div class="airport-arrow">✈</div>
+        <div class="airport-field">
+          <label for="arr-input">Destination</label>
+          <div class="airport-input-wrap">
+            <input id="arr-input" type="text" placeholder="Stad eller IATA-kod, t.ex. BCN" autocomplete="off" />
+            <div id="arr-drop" class="airport-dropdown"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-actions">
+        <button id="step1-next" class="btn-cta" disabled>Nästa →</button>
+      </div>
+    </div>
+
+    <!-- ── Steg 2: Vad hände? ── -->
+    <div class="checker-step" data-step="2">
+      <h2 class="step-title">Vad hände med ditt flyg?</h2>
+      <p class="step-sub">Välj det alternativ som stämmer bäst.</p>
+
+      <input type="radio" id="issue-delay"    name="issue" value="delay"    style="display:none">
+      <input type="radio" id="issue-cancelled" name="issue" value="cancelled" style="display:none">
+      <input type="radio" id="issue-denied"   name="issue" value="denied"   style="display:none">
+
+      <div class="issue-grid">
+        <div class="issue-card" data-value="delay">
+          <div class="issue-icon">⏱</div>
+          <div class="issue-label">Försenat flyg</div>
+          <div class="issue-desc">Flyget avgick eller anlände sent</div>
+        </div>
+        <div class="issue-card" data-value="cancelled">
+          <div class="issue-icon">✕</div>
+          <div class="issue-label">Inställt flyg</div>
+          <div class="issue-desc">Flyget ställdes in helt</div>
+        </div>
+        <div class="issue-card" data-value="denied">
+          <div class="issue-icon">🚫</div>
+          <div class="issue-label">Nekad ombordstigning</div>
+          <div class="issue-desc">Du nekades plats trots giltig biljett</div>
+        </div>
+      </div>
+
+      <div class="step-actions">
+        <button class="btn-back" data-back="1">← Tillbaka</button>
+      </div>
+    </div>
+
+    <!-- ── Steg 3: Detaljer ── -->
+    <div class="checker-step" data-step="3">
+      <h2 class="step-title">Lite mer information</h2>
+
+      <!-- Delay -->
+      <div id="step3-delay">
+        <p class="step-sub">Hur lång var förseningen vid ankomst?</p>
+        <input type="radio" id="delay-under3" name="delay" value="under3" style="display:none">
+        <input type="radio" id="delay-3to4"   name="delay" value="3to4"   style="display:none">
+        <input type="radio" id="delay-over4"  name="delay" value="over4"  style="display:none">
+        <div class="detail-grid">
+          <div class="delay-card" data-value="under3">
+            <div class="detail-icon">🕐</div>
+            <div class="detail-label">Under 3 timmar</div>
+          </div>
+          <div class="delay-card" data-value="3to4">
+            <div class="detail-icon">🕓</div>
+            <div class="detail-label">3–4 timmar</div>
+          </div>
+          <div class="delay-card" data-value="over4">
+            <div class="detail-icon">🕔</div>
+            <div class="detail-label">Mer än 4 timmar</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cancelled -->
+      <div id="step3-cancelled" style="display:none">
+        <p class="step-sub">Hur lång tid i förväg fick du besked om inställningen?</p>
+        <input type="radio" id="notice-over14" name="notice" value="over14" style="display:none">
+        <input type="radio" id="notice-7to14"  name="notice" value="7to14"  style="display:none">
+        <input type="radio" id="notice-under7" name="notice" value="under7" style="display:none">
+        <div class="detail-grid">
+          <div class="notice-card" data-value="over14">
+            <div class="detail-icon">📅</div>
+            <div class="detail-label">Mer än 14 dagar</div>
+          </div>
+          <div class="notice-card" data-value="7to14">
+            <div class="detail-icon">📆</div>
+            <div class="detail-label">7–14 dagar</div>
+          </div>
+          <div class="notice-card" data-value="under7">
+            <div class="detail-icon">⚡</div>
+            <div class="detail-label">Mindre än 7 dagar</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Denied (visas ej, hoppas över direkt) -->
+      <div id="step3-denied" style="display:none"></div>
+
+      <div class="step-actions">
+        <button class="btn-back" data-back="2">← Tillbaka</button>
+      </div>
+    </div>
+
+    <!-- ── Steg 4: Resultat ── -->
+    <div class="checker-step" data-step="4">
+      <div id="result-box"></div>
+      <div class="step-actions" style="margin-top:24px">
+        <button class="btn-back" data-back="1">← Börja om</button>
+      </div>
+    </div>
+
+  </div><!-- .checker-wrap -->
+
+  <!-- Info-sektion under wizarden -->
+  <div class="checker-info">
+    <div class="checker-info-grid">
+      <div class="checker-info-item">
+        <div class="ci-icon">⚖️</div>
+        <h3>EU 261/2004</h3>
+        <p>Förordningen ger passagerare rätt till 250–600 € vid försening, inställning eller nekad ombordstigning.</p>
+      </div>
+      <div class="checker-info-item">
+        <div class="ci-icon">💶</div>
+        <h3>Ingen risk</h3>
+        <p>Vi tar bara betalt om du vinner — 25 % av utbetalad kompensation. Ingen vinst, ingen avgift.</p>
+      </div>
+      <div class="checker-info-item">
+        <div class="ci-icon">🕐</div>
+        <h3>Upp till 3 år tillbaka</h3>
+        <p>I Sverige är preskriptionstiden 3 år. Gamla ärenden kan drivas — kontrollera ditt flyg nu.</p>
+      </div>
+    </div>
+  </div>
+</div>

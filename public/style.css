@@ -2026,3 +2026,242 @@ details[open] .faq-question::after { content: '−'; }
   .blog-cta-strip { padding: 20px; }
   .blog-cta-strip-inner { flex-direction: column; align-items: flex-start; }
 }
+
+/* ── Ersättningskalkylator ─────────────────────────────────────────────────── */
+
+.checker-wrap {
+  max-width: 720px;
+  margin: 48px auto 0;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 32px rgba(0,0,0,.10);
+  padding: 40px 48px 48px;
+}
+
+/* Progress */
+.checker-progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 40px;
+}
+.step-dot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+}
+.step-dot span {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: #e8edf5;
+  color: #8a9ab5;
+  font-weight: 700;
+  font-size: .9rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .25s, color .25s;
+}
+.step-dot label {
+  font-size: .72rem;
+  color: #8a9ab5;
+  white-space: nowrap;
+  transition: color .25s;
+}
+.step-dot.current span { background: var(--primary); color: #fff; }
+.step-dot.current label { color: var(--primary); font-weight: 600; }
+.step-dot.done span { background: #22c55e; color: #fff; }
+.step-dot.done label { color: #22c55e; }
+.step-line {
+  flex: 1;
+  height: 2px;
+  background: #e8edf5;
+  min-width: 40px;
+  max-width: 80px;
+  margin-bottom: 22px;
+}
+
+/* Steg-paneler */
+.checker-step { display: none; }
+.checker-step.active { display: block; }
+
+.step-title { font-size: 1.4rem; margin: 0 0 8px; color: var(--primary-dark); }
+.step-sub   { color: #4b5e7a; margin: 0 0 28px; }
+
+/* Flygplats-inputs */
+.airport-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 16px;
+  align-items: end;
+  margin-bottom: 32px;
+}
+.airport-field label {
+  display: block;
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--primary-dark);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.airport-input-wrap { position: relative; }
+.airport-input-wrap input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #d4dce9;
+  border-radius: 10px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color .2s;
+  box-sizing: border-box;
+}
+.airport-input-wrap input:focus { border-color: var(--primary); }
+.airport-arrow {
+  font-size: 1.4rem;
+  color: var(--primary);
+  padding-bottom: 10px;
+  text-align: center;
+}
+.airport-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0; right: 0;
+  background: #fff;
+  border: 1.5px solid #d4dce9;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  z-index: 200;
+  display: none;
+  overflow: hidden;
+}
+.airport-dropdown.open { display: block; }
+.airport-option {
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: .93rem;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  transition: background .15s;
+}
+.airport-option:hover { background: #f0f4fa; }
+.airport-option .iata {
+  font-weight: 700;
+  color: var(--primary);
+  min-width: 36px;
+}
+.airport-option .aname { color: #2d3e56; }
+
+/* Issue-grid (steg 2) */
+.issue-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.issue-card {
+  border: 2px solid #d4dce9;
+  border-radius: 12px;
+  padding: 24px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color .2s, background .2s, transform .1s;
+}
+.issue-card:hover { border-color: var(--primary); background: #f4f7fd; }
+.issue-card.selected { border-color: var(--primary); background: #eef3fb; }
+.issue-icon { font-size: 2rem; margin-bottom: 10px; }
+.issue-label { font-weight: 700; color: var(--primary-dark); margin-bottom: 4px; font-size: .95rem; }
+.issue-desc  { font-size: .8rem; color: #5a7090; }
+
+/* Detail-grid (steg 3) */
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.delay-card, .notice-card {
+  border: 2px solid #d4dce9;
+  border-radius: 12px;
+  padding: 24px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+}
+.delay-card:hover, .notice-card:hover { border-color: var(--primary); background: #f4f7fd; }
+.delay-card.selected, .notice-card.selected { border-color: var(--primary); background: #eef3fb; }
+.detail-icon  { font-size: 1.8rem; margin-bottom: 10px; }
+.detail-label { font-weight: 600; color: var(--primary-dark); font-size: .9rem; }
+
+/* Knappar */
+.step-actions { display: flex; align-items: center; gap: 16px; }
+.btn-back {
+  background: none;
+  border: none;
+  color: #5a7090;
+  font-size: .9rem;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+.btn-back:hover { color: var(--primary); }
+
+/* Resultat */
+.result-eligible, .result-not-eligible {
+  text-align: center;
+  padding: 16px 0 8px;
+}
+.result-icon {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background: #22c55e;
+  color: #fff;
+  font-size: 2rem;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 24px;
+  font-weight: 700;
+}
+.result-icon--no { background: #ef4444; }
+.result-eligible h2 { font-size: 1.6rem; color: var(--primary-dark); margin: 0 0 12px; }
+.result-not-eligible h2 { font-size: 1.4rem; color: var(--primary-dark); margin: 0 0 12px; }
+.result-eligible h2 strong { color: #22c55e; }
+.result-sub { color: #4b5e7a; margin: 0 0 12px; }
+.result-disclaimer { font-size: .8rem; color: #7a90aa; margin: 0 0 24px; }
+.result-cta { display: inline-block; margin-bottom: 12px; }
+.result-fine { font-size: .8rem; color: #7a90aa; margin: 0; }
+
+/* Info-ruta under wizarden */
+.checker-info {
+  max-width: 720px;
+  margin: 40px auto 64px;
+}
+.checker-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.checker-info-item {
+  background: #f4f7fd;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+}
+.ci-icon { font-size: 1.8rem; margin-bottom: 12px; }
+.checker-info-item h3 { font-size: 1rem; color: var(--primary-dark); margin: 0 0 8px; }
+.checker-info-item p  { font-size: .85rem; color: #4b5e7a; margin: 0; line-height: 1.6; }
+
+/* Mobil */
+@media (max-width: 700px) {
+  .checker-wrap { padding: 24px 20px 32px; margin: 24px 0 0; border-radius: 12px; }
+  .airport-row { grid-template-columns: 1fr; }
+  .airport-arrow { display: none; }
+  .issue-grid { grid-template-columns: 1fr; }
+  .detail-grid { grid-template-columns: 1fr; }
+  .checker-info-grid { grid-template-columns: 1fr; gap: 16px; }
+  .checker-progress { gap: 0; }
+  .step-dot label { display: none; }
+  .step-line { min-width: 24px; }
+  .step-title { font-size: 1.2rem; }
+}

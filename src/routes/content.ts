@@ -129,6 +129,14 @@ router.get('/anmalan', (_req, res) => {
   });
 });
 
+router.get('/berakna-ersattning', (_req, res) => {
+  res.render('pages/berakna-ersattning', {
+    title: 'Beräkna din ersättning | FlightClaim',
+    metaDesc: 'Kolla om du har rätt till upp till 600 € för ditt försenade eller inställda flyg. Gratis beräkning på 2 minuter.',
+    canonical: '/berakna-ersattning',
+  });
+});
+
 router.get('/tack', (_req, res) => {
   res.render('pages/tack', {
     title: 'Tack för din ansökan | FlightClaim',

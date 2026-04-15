@@ -49,7 +49,7 @@ const ARTICLES = [
     title: 'Vi fick 1\u00a0200\u00a0\u20ac i ers\u00e4ttning f\u00f6r ett f\u00f6rsenat SAS-flyg: s\u00e5 gick det till',
     meta_title: 'Vi fick 1 200\u20ac av SAS f\u00f6r f\u00f6rsenat flyg | FlightClaim.se',
     meta_desc: 'En verklig ber\u00e4ttelse om hur ett par kr\u00e4vde och fick 1\u00a0200\u00a0\u20ac av SAS. Steg f\u00f6r steg \u2014 fr\u00e5n f\u00f6rsenad avg\u00e5ng till utbetalning.',
-    content: `![Passagerare v\u00e4ntar p\u00e5 f\u00f6rsenat SAS-flyg p\u00e5 Arlanda](/images/articles/flygbolag-sas.jpg)
+    content: `![SAS A321 vid Arlanda \u2014 f\u00f6rsenat flyg och r\u00e4tt till ers\u00e4ttning](/images/articles/flygbolag/sas-a321.jpg)
 
 Flyget skulle g\u00e5 07:25 fr\u00e5n Arlanda. Det gick till slut 11:10, en f\u00f6rsening p\u00e5 tre timmar och 45 minuter. Den h\u00e4ndelsen kostade SAS 1\u00a0200\u00a0\u20ac i kompensation. \u00c4r du drabbad av n\u00e5got liknande? [Ans\u00f6k om ers\u00e4ttning gratis](/anmalan) s\u00e5 sk\u00f6ter vi hela processen \u00e5t dig.
 
@@ -112,7 +112,7 @@ Ja. Preskriptionstiden f\u00f6r flygkompensations\u00e4renden \u00e4r tre \u00e5
     title: '5 misstag som kostar dig ers\u00e4ttningen f\u00f6r f\u00f6rsenat flyg',
     meta_title: '5 misstag vid krav p\u00e5 flygers\u00e4ttning | FlightClaim.se',
     meta_desc: 'De flesta tappar pengar de har r\u00e4tt till p\u00e5 grund av enkla misstag. H\u00e4r \u00e4r de fem vanligaste och hur du undviker dem.',
-    content: `![Frustrerad resa\u00e4r tittar p\u00e5 informationsk\u00e4rm p\u00e5 flygplats](/images/articles/forsening.jpg)
+    content: `![Avg\u00e5ngstavla p\u00e5 flygplats visar f\u00f6rsenat flyg](/images/articles/flygplats/avgangstavla.jpg)
 
 Nio av tio som har r\u00e4tt till ers\u00e4ttning f\u00f6r ett f\u00f6rsenat flyg ans\u00f6ker aldrig om den. Av de som faktiskt f\u00f6rs\u00f6ker tappar m\u00e5nga pengar i on\u00f6dan p\u00e5 grund av enkla misstag som g\u00e5r att undvika. \u00c4r du os\u00e4ker p\u00e5 om du har r\u00e4tt? [Kontrollera gratis via oss](/anmalan) \u2014 det tar tv\u00e5 minuter.
 
@@ -286,7 +286,7 @@ Ja, du kan anm\u00e4la till ARN i Sverige eller till tillsynsmyndigheten i avg\u
     title: 'Inst\u00e4llt flyg dagen f\u00f6re avresa: exakt vad du har r\u00e4tt till',
     meta_title: 'Inst\u00e4llt flyg dagen f\u00f6re: dina r\u00e4ttigheter | FlightClaim.se',
     meta_desc: 'Fick du besked om inst\u00e4llt flyg bara timmar eller en dag innan avg\u00e5ng? Du har r\u00e4tt till mer \u00e4n du tror. Konkret genomg\u00e5ng.',
-    content: `![Passagerare vid informationsk\u00e4rmar p\u00e5 flygplats](/images/articles/installda-flyg.jpg)
+    content: `![Flyginformationsk\u00e4rm p\u00e5 terminal visar inst\u00e4llt flyg](/images/articles/flygplats/flyginformation-skarm.jpg)
 
 Beskedet kom kv\u00e4llen f\u00f6re avresan: ditt flyg \u00e4r inst\u00e4llt. Det \u00e4r en av de mest stressande situationerna en resenär kan hamna i. Men det ger dig ocks\u00e5 starka r\u00e4ttigheter. Vet du vad du kan kr\u00e4va? [Ans\u00f6k om ers\u00e4ttning gratis](/anmalan) och vi ser till att du f\u00e5r allt du har r\u00e4tt till.
 
@@ -336,7 +336,7 @@ Tre \u00e5r i Sverige fr\u00e5n flygdatumet.
     title: '\u00c5terbetalning eller kompensation f\u00f6r inst\u00e4llt flyg? Det \u00e4r inte samma sak',
     meta_title: '\u00c5terbetalning vs kompensation: skillnaden | FlightClaim.se',
     meta_desc: 'M\u00e5nga n\u00f6jer sig med \u00e5terbetalning av biljettpriset och missar kompensationen de har r\u00e4tt till. H\u00e4r \u00e4r skillnaden.',
-    content: `![Resa\u00e4r med mobiltelefon vid flygplats](/images/articles/installda-flyg.jpg)
+    content: `![Kabinint\u00f6r\u00f6r p\u00e5 flygplan \u2014 passagerarens r\u00e4ttigheter vid inst\u00e4llt flyg](/images/articles/flygplan/kabin-interior.jpg)
 
 Flygbolaget \u00e5terbetalar biljettpriset. Du \u00e4r n\u00f6jd och t\u00e4nker att det l\u00f6st sig. Men du har kanske just missat 400\u00a0\u20ac till. \u00c5terbetalning och kompensation \u00e4r tv\u00e5 skilda r\u00e4ttigheter enligt EU\u00a0261/2004, och m\u00e5nga flygbolag hoppas att du inte vet det. \u00c4r du os\u00e4ker? [Kontrollera om du har mer att kr\u00e4va](/anmalan) \u2014 det kostar ingenting.
 
@@ -396,7 +396,7 @@ Komplicerat. Tillg\u00e5ngarna i konkursboet kan ha krav p\u00e5 sig, men utbeta
     title: 'Vilket flygbolag betalar ut ers\u00e4ttning snabbast?',
     meta_title: 'Flygbolag som betalar snabbast: ranking | FlightClaim.se',
     meta_desc: 'SAS, Norwegian eller Ryanair \u2014 vem betalar kompensation snabbast och vem drar ut p\u00e5 det? V\u00e5r genomg\u00e5ng av de vanligaste bolagen.',
-    content: `![Flygplan p\u00e5 startbana vid solnedg\u00e5ng](/images/articles/flygbolag-sas.jpg)
+    content: `![Boeing 737 p\u00e5 startbana \u2014 j\u00e4mf\u00f6relse av flygbolag och utbetalningstid](/images/articles/flygbolag/klm-boeing-737.jpg)
 
 Det finns en utbredd missuppfattning om att flygkompensation alltid tar evigheter. Verkligheten \u00e4r mer nyanserad. Vissa flygbolag betalar relativt snabbt. Andra drar ut p\u00e5 processen i hopp om att du ger upp. H\u00e4r \u00e4r vad vi sett i faktiska \u00e4renden. [Ans\u00f6k om ers\u00e4ttning gratis](/anmalan) och vi hanterar hela kontakten \u00e5t dig.
 
@@ -462,7 +462,7 @@ Ja. EU\u00a0261/2004 specificerar inte kontotyp eller land.
     title: 'Ryanairs extraordin\u00e4ra omst\u00e4ndigheter: n\u00e4r h\u00e5ller det och n\u00e4r h\u00e5ller det inte?',
     meta_title: 'Ryanair och extraordin\u00e4ra omst\u00e4ndigheter | FlightClaim.se',
     meta_desc: 'Ryanair h\u00e4nvisar ofta till extraordin\u00e4ra omst\u00e4ndigheter f\u00f6r att slippa betala. H\u00e4r \u00e4r fallen d\u00e4r det h\u00e5ller och n\u00e4r det inte g\u00f6r det.',
-    content: `![Ryanair-plan under avf\u00e4rd](/images/articles/flygbolag-ryanair.jpg)
+    content: `![Flygplan under landning \u2014 extraordin\u00e4ra omst\u00e4ndigheter och ers\u00e4ttningsr\u00e4tt](/images/articles/flygplan/flygplan-landning.jpg)
 
 "Extraordin\u00e4r omst\u00e4ndighet" \u00e4r Ryanairs vanligaste sk\u00e4l f\u00f6r att avvisa ers\u00e4ttningskrav. Bolaget h\u00e4nvisar till den mer frekvent \u00e4n de flesta andra flygbolag. Men det betyder inte att de har r\u00e4tt. ARN och EU-domstolen har upprepade g\u00e5nger konstaterat att Ryanairs anv\u00e4ndning av begreppet ibland \u00e4r felaktig. [Ans\u00f6k om ers\u00e4ttning gratis](/anmalan) om Ryanair avvisat ditt krav \u2014 vi bed\u00f6mer om det h\u00e5ller.
 
@@ -518,7 +518,7 @@ Nej. ARN \u00e4r ett rekommendationsorgan, inte en domstol.
     title: 'SAS-konkursen: vad h\u00e4nde med passagerarnas r\u00e4ttigheter?',
     meta_title: 'SAS-konkursen och passagerares r\u00e4ttigheter | FlightClaim.se',
     meta_desc: 'SAS gick igenom konkurs 2022. Vi reder ut vad det innebar f\u00f6r dig som hade biljetter och vilka r\u00e4ttigheter du fortfarande har.',
-    content: `![SAS-flygplan vid gate p\u00e5 skandinavisk flygplats](/images/articles/flygbolag-sas.jpg)
+    content: `![SAS-flygplan i Kiruna \u2014 skandinavisk luftfart och passagerares r\u00e4ttigheter](/images/articles/flygbolag/sas-kiruna.jpg)
 
 SAS ans\u00f6kte om konkursf\u00f6rfarande i USA 2022. Nyheten skapade oro bland resa\u00e4r med bokade biljetter och p\u00e5g\u00e5ende ers\u00e4ttnings\u00e4renden. Vad innebar det egentligen? Och vad g\u00e4ller f\u00f6r dig som har ett \u00e4rende mot SAS idag? [Kontrollera dina r\u00e4ttigheter gratis](/anmalan) \u2014 vi hj\u00e4lper dig bed\u00f6ma din situation.
 
