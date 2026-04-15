@@ -74,12 +74,40 @@
             </div>
             <div class="form-group full-width">
               <label>Vad hände?</label>
-              <select name="issue" required>
+              <select name="issue" id="issueSelect" required>
                 <option value="" disabled selected>Välj typ av störning</option>
                 <option value="delay">Försening över 3 timmar</option>
                 <option value="cancelled">Inställt flyg</option>
                 <option value="denied">Nekad ombordstigning (overbooking)</option>
+                <option value="rebooked">Ombokning / ändrad resväg utan info</option>
               </select>
+            </div>
+          </div>
+
+          <!-- Extra fields shown only for rebooked -->
+          <div id="rebooked-fields" style="display:none;">
+            <div class="rebooked-info-box">
+              <strong>EU-förordning 261/2004</strong> skyddar dig även när ett EU-registrerat flygbolag (t.ex. KLM, SAS, Lufthansa) ändrar din resväg utan att meddela dig i förväg — även på flyg utanför Europa. Du kan ha rätt till upp till <strong>600 € per person</strong>.
+            </div>
+            <div class="form-grid" style="margin-top: 16px;">
+              <div class="form-group full-width">
+                <label>Original resväg</label>
+                <input type="text" name="original_route" id="originalRoute" placeholder="t.ex. ARN – AMS – NRT">
+              </div>
+              <div class="form-group full-width">
+                <label>Ny resväg efter ändringen</label>
+                <input type="text" name="new_route" id="newRoute" placeholder="t.ex. ARN – AMS – ICN – NRT">
+              </div>
+              <div class="form-group full-width">
+                <label>När fick du veta om ändringen?</label>
+                <select name="change_notice" id="changeNotice">
+                  <option value="" disabled selected>Välj alternativ</option>
+                  <option value="never">Aldrig / Fick veta vid incheckning</option>
+                  <option value="less7">Mindre än 7 dagar innan avgång</option>
+                  <option value="7to14">7–14 dagar innan avgång</option>
+                  <option value="more14">Mer än 14 dagar innan avgång</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>

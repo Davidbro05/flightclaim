@@ -153,7 +153,7 @@ export default function NavManager({ creds, onUnauth }) {
                 </tr>
                 {childrenOf(item.id).map((child) => (
                   <tr key={child.id}>
-                    <td style={{ paddingLeft: 32 }}>↳ {child.label}</td>
+                    <td style={{ paddingLeft: 32 }}>↳ <strong>{child.label}</strong></td>
                     <td><code style={{ fontSize: '.75rem' }}>{child.url}</code></td>
                     <td>{item.label}</td>
                     <td>{child.sort_order}</td>

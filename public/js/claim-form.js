@@ -31,6 +31,26 @@
     });
   }
 
+  // Show/hide rebooked extra fields
+  var issueSelect = document.getElementById('issueSelect');
+  var rebookedFields = document.getElementById('rebooked-fields');
+  var originalRouteInput = document.getElementById('originalRoute');
+  var newRouteInput = document.getElementById('newRoute');
+  var changeNoticeSelect = document.getElementById('changeNotice');
+
+  function toggleRebookedFields() {
+    var isRebooked = issueSelect && issueSelect.value === 'rebooked';
+    if (rebookedFields) rebookedFields.style.display = isRebooked ? 'block' : 'none';
+    if (originalRouteInput) originalRouteInput.required = isRebooked;
+    if (newRouteInput) newRouteInput.required = isRebooked;
+    if (changeNoticeSelect) changeNoticeSelect.required = isRebooked;
+  }
+
+  if (issueSelect) {
+    issueSelect.addEventListener('change', toggleRebookedFields);
+    toggleRebookedFields();
+  }
+
   // Signature Pad
   var canvas = document.getElementById('signature-pad');
   if (canvas) {

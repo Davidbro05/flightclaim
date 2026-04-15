@@ -20,7 +20,8 @@ router.post('/', submitLimiter, async (req, res) => {
     namn, street, zip, city, email, phone,
     flightNumber, airline, bookingReference,
     departureAirport, arrivalAirport, flightDate,
-    issue, signature, terms_accepted,
+    issue, original_route, new_route, change_notice,
+    signature, terms_accepted,
   } = req.body as Record<string, string>;
 
   const userIp = req.ip ?? req.socket?.remoteAddress;
@@ -57,7 +58,11 @@ router.post('/', submitLimiter, async (req, res) => {
       flightNumber, airline,
       bookingReference: bookingReference || null,
       departureAirport, arrivalAirport, flightDate,
-      issue, signature,
+      issue,
+      original_route: original_route || null,
+      new_route: new_route || null,
+      change_notice: change_notice || null,
+      signature,
       ip_address: userIp ?? null,
       terms_accepted: true,
       affiliate_code: affiliateCode,

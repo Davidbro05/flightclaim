@@ -15,6 +15,9 @@ export interface Claim {
   arrivalAirport: string;
   flightDate: string;
   issue: string;
+  original_route: string | null;
+  new_route: string | null;
+  change_notice: string | null;
   signature: string | null;
   ip_address: string | null;
   terms_accepted: boolean;

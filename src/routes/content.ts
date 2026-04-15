@@ -16,13 +16,24 @@ function parseFaq(faq_json: string | null): FaqItem[] | null {
   }
 }
 
+const STATIC_PARENTS: Record<string, { name: string; url: string }> = {
+  blogg:     { name: 'Blogg',         url: '/blogg' },
+  flygbolag: { name: 'Flygbolag',     url: '/flygbolag' },
+  forsening: { name: 'Försenat flyg', url: '/forsening' },
+  'installda-flyg': { name: 'Inställt flyg', url: '/installda-flyg' },
+};
+
 async function buildBreadcrumbs(article: Article, siteUrl: string): Promise<Breadcrumb[]> {
   const crumbs: Breadcrumb[] = [{ name: 'Hem', url: '/' }];
   if (article.parent_slug) {
     const parent = await db('articles')
       .where({ slug: article.parent_slug, status: 'published' })
       .first<Article>();
-    if (parent) crumbs.push({ name: parent.title, url: `/${parent.slug}` });
+    if (parent) {
+      crumbs.push({ name: parent.title, url: `/${parent.slug}` });
+    } else if (STATIC_PARENTS[article.parent_slug]) {
+      crumbs.push(STATIC_PARENTS[article.parent_slug]);
+    }
   }
   crumbs.push({ name: article.title, url: `/${article.slug}` });
   return crumbs;
@@ -132,6 +143,27 @@ router.get('/integritetspolicy', (_req, res) => {
     metaDesc: 'Hur FlightClaim hanterar dina personuppgifter enligt GDPR.',
     canonical: '/integritetspolicy',
   });
+});
+
+// ── Blog index ─────────────────────────────────────────────────────────────
+
+router.get('/blogg', async (_req, res) => {
+  try {
+    const posts = await db('articles')
+      .where({ type: 'blog', status: 'published' })
+      .orderBy('created_at', 'desc')
+      .select('id', 'slug', 'title', 'meta_desc', 'created_at');
+
+    res.render('pages/blogg', {
+      title: 'Blogg om flygrättigheter | FlightClaim.se',
+      metaDesc: 'Guider, case studies och nyheter om flygkompensation och EU 261/2004. Lär dig kräva ersättning för försenat eller inställt flyg.',
+      canonical: '/blogg',
+      posts,
+    });
+  } catch (err) {
+    logger.error({ err }, 'Blogg index error');
+    res.status(500).render('pages/404', { title: 'Serverfel | FlightClaim', metaDesc: '' });
+  }
 });
 
 // ── CMS article catch-all (must stay LAST) ─────────────────────────────────

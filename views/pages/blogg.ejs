@@ -1,0 +1,47 @@
+<!-- Blog index page -->
+<div class="blog-hero">
+  <div class="container">
+    <h1>Blogg om flygrättigheter</h1>
+    <p class="blog-hero-sub">Case studies, guider och nyheter om flygkompensation och EU 261/2004</p>
+  </div>
+</div>
+
+<div class="container">
+
+  <% if (posts && posts.length > 0) { %>
+  <div class="blog-grid">
+    <% posts.forEach(function(post) { %>
+    <article class="blog-card">
+      <a href="/<%= post.slug %>" class="blog-card-link" aria-label="<%= post.title %>">
+        <div class="blog-card-body">
+          <time class="blog-card-date" datetime="<%= new Date(post.created_at).toISOString().slice(0,10) %>">
+            <%= new Date(post.created_at).toLocaleDateString('sv-SE', { year: 'numeric', month: 'long', day: 'numeric' }) %>
+          </time>
+          <h2 class="blog-card-title"><%= post.title %></h2>
+          <% if (post.meta_desc) { %>
+          <p class="blog-card-excerpt"><%= post.meta_desc %></p>
+          <% } %>
+          <span class="blog-card-read">Läs artikel →</span>
+        </div>
+      </a>
+    </article>
+    <% }) %>
+  </div>
+
+  <% } else { %>
+  <div class="blog-empty">
+    <p>Inga blogginlägg publicerade ännu. Kom tillbaka snart.</p>
+  </div>
+  <% } %>
+
+  <div class="blog-cta-strip">
+    <div class="blog-cta-strip-inner">
+      <div>
+        <strong>Drabbad av försenat eller inställt flyg?</strong>
+        <span>Du kan ha rätt till upp till 600€ per person.</span>
+      </div>
+      <a href="/anmalan" class="btn-cta">Ansök gratis nu →</a>
+    </div>
+  </div>
+
+</div>
