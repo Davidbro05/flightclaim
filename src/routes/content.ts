@@ -153,6 +153,28 @@ router.get('/integritetspolicy', (_req, res) => {
   });
 });
 
+// ── Flygbolag index ────────────────────────────────────────────────────────
+
+const AIRLINES = [
+  { slug: 'sas',       name: 'SAS',       img: 'sas-a321.jpg',                        tagline: 'Skandinaviens största flygbolag' },
+  { slug: 'klm',       name: 'KLM',       img: 'klm-boeing-737.jpg',                  tagline: 'EU-registrerat — gäller även flyg utanför Europa' },
+  { slug: 'norwegian', name: 'Norwegian', img: 'norwegian-boeing.jpg',                tagline: 'Vanliga förseningar på Europalinjer' },
+  { slug: 'ryanair',   name: 'Ryanair',   img: 'ryanair-boeing.jpg',                  tagline: 'Nekar ofta ersättning — vi driver ärendet' },
+  { slug: 'lufthansa', name: 'Lufthansa', img: 'lufthansa-incheckning-frankfurt.jpg', tagline: 'Tyskt EU-bolag med hög kompensationsutfall' },
+  { slug: 'wizz-air',  name: 'Wizz Air',  img: 'wizz-air-airbus.jpg',                 tagline: 'Ungersk lågprisflygare inom EU' },
+  { slug: 'easyjet',   name: 'EasyJet',   img: 'easyjet-airbus.jpg',                  tagline: 'Europeiskt lågprisbolag med EU-täckning' },
+  { slug: 'finnair',   name: 'Finnair',   img: 'finnair-airbus.jpg',                  tagline: 'Nordisk EU-flygare via Helsingfors' },
+];
+
+router.get('/flygbolag', (_req, res) => {
+  res.render('pages/flygbolag', {
+    title: 'Flygbolag — ersättning vid försening & inställt flyg | FlightClaim',
+    metaDesc: 'Hitta ditt flygbolag och läs om dina rättigheter enligt EU 261/2004. Vi driver ersättningsärenden mot SAS, Ryanair, KLM, Norwegian och fler.',
+    canonical: '/flygbolag',
+    airlines: AIRLINES,
+  });
+});
+
 // ── Blog index ─────────────────────────────────────────────────────────────
 
 const BLOG_CATEGORIES: Record<string, string> = {

@@ -1,0 +1,40 @@
+<!-- Flygbolag index -->
+<div class="airline-hero">
+  <div class="container">
+    <h1>Ersättning från ditt flygbolag</h1>
+    <p class="airline-hero-sub">Välj ditt flygbolag nedan och läs om dina rättigheter enligt EU 261/2004 — upp till 600€ per person vid försening eller inställt flyg.</p>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="airline-grid">
+    <% airlines.forEach(function(airline) { %>
+    <a href="/flygbolag/<%= airline.slug %>" class="airline-card">
+      <div class="airline-card-img-wrap">
+        <img
+          src="/images/articles/flygbolag/<%= airline.img %>"
+          alt="<%= airline.name %> flygplan"
+          class="airline-card-img"
+          loading="lazy">
+      </div>
+      <div class="airline-card-body">
+        <h2 class="airline-card-name"><%= airline.name %></h2>
+        <p class="airline-card-tagline"><%= airline.tagline %></p>
+        <span class="airline-card-link">Läs om dina rättigheter →</span>
+      </div>
+    </a>
+    <% }) %>
+  </div>
+
+  <div class="blog-cta-strip">
+    <div class="blog-cta-strip-inner">
+      <div>
+        <strong>Vet du inte vilket flygbolag det var?</strong>
+        <span>Fyll i formuläret så hjälper vi dig oavsett bolag.</span>
+      </div>
+      <a href="/anmalan" class="btn-cta">Ansök gratis nu →</a>
+    </div>
+  </div>
+
+</div>
