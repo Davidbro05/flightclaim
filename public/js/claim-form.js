@@ -100,6 +100,35 @@
     setTimeout(resizeCanvas, 10);
   }
 
+  // ── Generisk autocomplete-hjälp ─────────────────────────────────────────
+  function renderDropdown(results, dropEl, labelFn, onSelect) {
+    dropEl.innerHTML = '';
+    if (!results.length) { dropEl.classList.remove('open'); return; }
+    results.forEach(function (a) {
+      var item = document.createElement('div');
+      item.className = 'airport-option';
+      item.innerHTML = labelFn(a);
+      item.addEventListener('mousedown', function (e) {
+        e.preventDefault();
+        onSelect(a);
+      });
+      dropEl.appendChild(item);
+    });
+    dropEl.classList.add('open');
+  }
+
+  function setupAutocomplete(inputEl, dropEl, searchFn, labelFn, valueFn) {
+    function doSearch() {
+      renderDropdown(searchFn(inputEl.value), dropEl, labelFn, function (a) {
+        inputEl.value = valueFn(a);
+        dropEl.classList.remove('open');
+      });
+    }
+    inputEl.addEventListener('input', doSearch);
+    inputEl.addEventListener('focus', function () { if (this.value.length >= 2) doSearch(); });
+    inputEl.addEventListener('blur',  function () { setTimeout(function () { dropEl.classList.remove('open'); }, 150); });
+  }
+
   // ── Flygplats-autocomplete ───────────────────────────────────────────────
   var depInput  = document.getElementById('form-dep-input');
   var depDrop   = document.getElementById('form-dep-drop');
@@ -110,55 +139,40 @@
     fetch('/data/airports.json')
       .then(function (r) { return r.json(); })
       .then(function (airports) {
-
         function searchAirports(query) {
           if (!query || query.length < 2) return [];
           var q = query.toLowerCase();
           return airports.filter(function (a) {
-            return a[0].toLowerCase().startsWith(q) ||
-                   a[1].toLowerCase().includes(q);
+            return a[0].toLowerCase().startsWith(q) || a[1].toLowerCase().includes(q);
           }).slice(0, 8);
         }
-
-        function renderDropdown(results, dropEl, onSelect) {
-          dropEl.innerHTML = '';
-          if (!results.length) { dropEl.classList.remove('open'); return; }
-          results.forEach(function (a) {
-            var item = document.createElement('div');
-            item.className = 'airport-option';
-            item.innerHTML = '<span class="iata">' + a[0] + '</span> <span class="aname">' + a[1] + '</span>';
-            item.addEventListener('mousedown', function (e) {
-              e.preventDefault();
-              onSelect(a);
-            });
-            dropEl.appendChild(item);
-          });
-          dropEl.classList.add('open');
-        }
-
-        function setupAutocomplete(inputEl, dropEl) {
-          inputEl.addEventListener('input', function () {
-            renderDropdown(searchAirports(this.value), dropEl, function (a) {
-              inputEl.value = a[1] + ' (' + a[0] + ')';
-              dropEl.classList.remove('open');
-            });
-          });
-          inputEl.addEventListener('blur', function () {
-            setTimeout(function () { dropEl.classList.remove('open'); }, 150);
-          });
-          inputEl.addEventListener('focus', function () {
-            if (this.value.length >= 2) {
-              renderDropdown(searchAirports(this.value), dropEl, function (a) {
-                inputEl.value = a[1] + ' (' + a[0] + ')';
-                dropEl.classList.remove('open');
-              });
-            }
-          });
-        }
-
-        setupAutocomplete(depInput, depDrop);
-        setupAutocomplete(arrInput, arrDrop);
+        var airportLabel = function (a) { return '<span class="iata">' + a[0] + '</span> <span class="aname">' + a[1] + '</span>'; };
+        var airportValue = function (a) { return a[1] + ' (' + a[0] + ')'; };
+        setupAutocomplete(depInput, depDrop, searchAirports, airportLabel, airportValue);
+        setupAutocomplete(arrInput, arrDrop, searchAirports, airportLabel, airportValue);
       })
-      .catch(function () { /* autocomplete ej tillgänglig — fälten fungerar ändå */ });
+      .catch(function () {});
+  }
+
+  // ── Flygbolag-autocomplete ───────────────────────────────────────────────
+  var airlineInput = document.getElementById('form-airline-input');
+  var airlineDrop  = document.getElementById('form-airline-drop');
+
+  if (airlineInput) {
+    fetch('/data/airlines.json')
+      .then(function (r) { return r.json(); })
+      .then(function (airlines) {
+        function searchAirlines(query) {
+          if (!query || query.length < 2) return [];
+          var q = query.toLowerCase();
+          return airlines.filter(function (a) {
+            return a[0].toLowerCase().startsWith(q) || a[1].toLowerCase().includes(q);
+          }).slice(0, 8);
+        }
+        var airlineLabel = function (a) { return '<span class="iata">' + a[0] + '</span> <span class="aname">' + a[1] + '</span>'; };
+        var airlineValue = function (a) { return a[1]; };
+        setupAutocomplete(airlineInput, airlineDrop, searchAirlines, airlineLabel, airlineValue);
+      })
+      .catch(function () {});
   }
 })();

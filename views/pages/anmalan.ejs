@@ -50,7 +50,10 @@
           <div class="form-grid">
             <div class="form-group">
               <label>Flygbolag</label>
-              <input type="text" name="airline" required placeholder="t.ex. SAS, Norwegian">
+              <div class="form-airport-wrap">
+                <input type="text" name="airline" id="form-airline-input" required placeholder="t.ex. SAS, Norwegian" autocomplete="off">
+                <div id="form-airline-drop" class="airport-dropdown"></div>
+              </div>
             </div>
             <div class="form-group">
               <label>Flygnummer</label>
