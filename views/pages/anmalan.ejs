@@ -62,11 +62,17 @@
             </div>
             <div class="form-group">
               <label>Avgångsflygplats</label>
-              <input type="text" name="departureAirport" required placeholder="t.ex. ARN, CPH">
+              <div class="form-airport-wrap">
+                <input type="text" name="departureAirport" id="form-dep-input" required placeholder="Stad eller IATA-kod, t.ex. ARN" autocomplete="off">
+                <div id="form-dep-drop" class="airport-dropdown"></div>
+              </div>
             </div>
             <div class="form-group">
               <label>Landningsflygplats</label>
-              <input type="text" name="arrivalAirport" required placeholder="t.ex. LHR, CDG">
+              <div class="form-airport-wrap">
+                <input type="text" name="arrivalAirport" id="form-arr-input" required placeholder="Stad eller IATA-kod, t.ex. LHR" autocomplete="off">
+                <div id="form-arr-drop" class="airport-dropdown"></div>
+              </div>
             </div>
             <div class="form-group">
               <label>Flygdatum</label>

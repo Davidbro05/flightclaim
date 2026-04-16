@@ -99,4 +99,66 @@
     });
     setTimeout(resizeCanvas, 10);
   }
+
+  // ── Flygplats-autocomplete ───────────────────────────────────────────────
+  var depInput  = document.getElementById('form-dep-input');
+  var depDrop   = document.getElementById('form-dep-drop');
+  var arrInput  = document.getElementById('form-arr-input');
+  var arrDrop   = document.getElementById('form-arr-drop');
+
+  if (depInput && arrInput) {
+    fetch('/data/airports.json')
+      .then(function (r) { return r.json(); })
+      .then(function (airports) {
+
+        function searchAirports(query) {
+          if (!query || query.length < 2) return [];
+          var q = query.toLowerCase();
+          return airports.filter(function (a) {
+            return a[0].toLowerCase().startsWith(q) ||
+                   a[1].toLowerCase().includes(q);
+          }).slice(0, 8);
+        }
+
+        function renderDropdown(results, dropEl, onSelect) {
+          dropEl.innerHTML = '';
+          if (!results.length) { dropEl.classList.remove('open'); return; }
+          results.forEach(function (a) {
+            var item = document.createElement('div');
+            item.className = 'airport-option';
+            item.innerHTML = '<span class="iata">' + a[0] + '</span> <span class="aname">' + a[1] + '</span>';
+            item.addEventListener('mousedown', function (e) {
+              e.preventDefault();
+              onSelect(a);
+            });
+            dropEl.appendChild(item);
+          });
+          dropEl.classList.add('open');
+        }
+
+        function setupAutocomplete(inputEl, dropEl) {
+          inputEl.addEventListener('input', function () {
+            renderDropdown(searchAirports(this.value), dropEl, function (a) {
+              inputEl.value = a[1] + ' (' + a[0] + ')';
+              dropEl.classList.remove('open');
+            });
+          });
+          inputEl.addEventListener('blur', function () {
+            setTimeout(function () { dropEl.classList.remove('open'); }, 150);
+          });
+          inputEl.addEventListener('focus', function () {
+            if (this.value.length >= 2) {
+              renderDropdown(searchAirports(this.value), dropEl, function (a) {
+                inputEl.value = a[1] + ' (' + a[0] + ')';
+                dropEl.classList.remove('open');
+              });
+            }
+          });
+        }
+
+        setupAutocomplete(depInput, depDrop);
+        setupAutocomplete(arrInput, arrDrop);
+      })
+      .catch(function () { /* autocomplete ej tillgänglig — fälten fungerar ändå */ });
+  }
 })();

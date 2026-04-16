@@ -301,6 +301,11 @@ form {
   flex-direction: column;
 }
 
+/* Airport autocomplete wrapper inside claim form */
+.form-airport-wrap {
+  position: relative;
+}
+
 .form-group label {
   font-size: 14px;
   font-weight: 600;
