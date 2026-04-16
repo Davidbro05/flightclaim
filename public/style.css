@@ -454,8 +454,8 @@ form {
 
 .btn-primary,
 a.btn-primary {
-  background: var(--primary);
-  color: white;
+  background: var(--secondary);
+  color: var(--gray-900);
   border: none;
   padding: 15px 30px;
   border-radius: 40px;
@@ -468,17 +468,10 @@ a.btn-primary {
 
 .btn-primary:hover,
 a.btn-primary:hover {
-  background: var(--primary-dark);
-  color: white;
+  background: var(--secondary-dark);
+  color: var(--gray-900);
   transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
-}
-
-/* Nav CTA "Ansök nu" — gul hover */
-.nav-cta-item a.btn-primary:hover {
-  background: var(--secondary);
-  color: var(--gray-900);
-  transform: translateY(-1px);
 }
 
 .btn-large {
@@ -1089,9 +1082,9 @@ a.logo {
   display: none; /* shown only on mobile */
 }
 
-/* Yellow hover — same as desktop nav CTA */
+/* Mobile CTA hover — mörkare gul */
 .nav-cta-mobile:hover {
-  background: var(--secondary) !important;
+  background: var(--secondary-dark) !important;
   color: var(--gray-900) !important;
   transform: translateY(-1px);
 }
@@ -1328,6 +1321,12 @@ a.logo {
 .comp-amount {
   font-weight: 700;
   color: var(--primary);
+}
+.comp-sek {
+  display: block;
+  font-size: 0.75em;
+  font-weight: 400;
+  color: var(--gray-600);
 }
 
 /* ============================================================
@@ -2329,6 +2328,12 @@ details[open] .faq-question::after { content: '−'; }
    ============================================================ */
 .hero-amount {
   color: var(--primary);
+}
+.hero-amount-sub {
+  font-size: 0.55em;
+  font-weight: 400;
+  color: var(--gray-600);
+  vertical-align: middle;
 }
 
 /* ============================================================

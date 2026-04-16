@@ -1,6 +1,6 @@
 {
   "name": "flightclaim",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Flight compensation claim management — EU Regulation 261/2004",
   "main": "dist/server.js",
   "scripts": {
