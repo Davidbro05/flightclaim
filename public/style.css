@@ -239,7 +239,6 @@ body {
   background: var(--white);
   border-radius: 12px;
   box-shadow: var(--shadow-lg);
-  overflow: hidden;
 }
 
 .form-header {
@@ -247,6 +246,7 @@ body {
   color: white;
   padding: 22px 30px;
   text-align: center;
+  border-radius: 12px 12px 0 0;
 }
 
 .form-header h2 {
@@ -268,7 +268,7 @@ form {
   margin-bottom: 16px;
   border: 1px solid var(--gray-200);
   border-radius: 8px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .form-panel h3 {
@@ -279,6 +279,7 @@ form {
   font-weight: 600;
   color: var(--gray-800);
   border-bottom: 1px solid var(--gray-200);
+  border-radius: 8px 8px 0 0;
 }
 
 .panel-icon {
