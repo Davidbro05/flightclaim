@@ -112,7 +112,6 @@ body {
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   padding: 60px 0 80px;
   position: relative;
-  overflow: hidden;
 }
 
 .hero::before {
@@ -1150,6 +1149,8 @@ a.logo {
   padding: 32px 36px 28px;
   width: 100%;
   box-shadow: 0 8px 40px rgba(0, 0, 0, 0.22);
+  position: relative;
+  z-index: 10;
 }
 
 .hero-card h1 {
