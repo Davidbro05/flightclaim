@@ -49,6 +49,10 @@
       return { eligible: true, amount: base };
     }
 
+    if (issueType === 'rerouted') {
+      return { eligible: true, amount: base };
+    }
+
     return { eligible: false, amount: 0 };
   }
 
@@ -205,7 +209,7 @@
             document.getElementById('step3-cancelled').style.display = '';
             document.getElementById('step3-denied').style.display = 'none';
           } else {
-            // Nekad ombordstigning → direkt till resultat
+            // Nekad ombordstigning / ombokning → direkt till resultat
             showResult();
           }
         }, 200);

@@ -2157,7 +2157,7 @@ details[open] .faq-question::after { content: '−'; }
 /* Issue-grid (steg 2) */
 .issue-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 16px;
   margin-bottom: 32px;
 }

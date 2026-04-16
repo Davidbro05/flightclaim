@@ -54,9 +54,10 @@
       <h2 class="step-title">Vad hände med ditt flyg?</h2>
       <p class="step-sub">Välj det alternativ som stämmer bäst.</p>
 
-      <input type="radio" id="issue-delay"    name="issue" value="delay"    style="display:none">
+      <input type="radio" id="issue-delay"     name="issue" value="delay"     style="display:none">
       <input type="radio" id="issue-cancelled" name="issue" value="cancelled" style="display:none">
-      <input type="radio" id="issue-denied"   name="issue" value="denied"   style="display:none">
+      <input type="radio" id="issue-denied"    name="issue" value="denied"    style="display:none">
+      <input type="radio" id="issue-rerouted"  name="issue" value="rerouted"  style="display:none">
 
       <div class="issue-grid">
         <div class="issue-card" data-value="delay">
@@ -73,6 +74,11 @@
           <div class="issue-icon">🚫</div>
           <div class="issue-label">Nekad ombordstigning</div>
           <div class="issue-desc">Du nekades plats trots giltig biljett</div>
+        </div>
+        <div class="issue-card" data-value="rerouted">
+          <div class="issue-icon">🔄</div>
+          <div class="issue-label">Ombokning utan info</div>
+          <div class="issue-desc">Du ombokades eller fick ändrad resväg utan ditt samtycke</div>
         </div>
       </div>
 
