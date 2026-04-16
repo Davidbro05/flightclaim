@@ -47,6 +47,7 @@ export interface Article {
   schema_type: 'FAQPage' | 'Article' | 'none';
   faq_json: string | null;
   affiliate_ref: string | null;
+  category: string | null;
   created_at: string;
   updated_at: string | null;
 }

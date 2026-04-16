@@ -155,18 +155,36 @@ router.get('/integritetspolicy', (_req, res) => {
 
 // ── Blog index ─────────────────────────────────────────────────────────────
 
-router.get('/blogg', async (_req, res) => {
+const BLOG_CATEGORIES: Record<string, string> = {
+  'forsening':      'Förseningar',
+  'installda-flyg': 'Inställda flyg',
+  'flygbolag':      'Flygbolag',
+  'rattigheter':    'Dina rättigheter',
+  'case-study':     'Case studies',
+};
+
+router.get('/blogg', async (req, res) => {
+  const aktiv = typeof req.query.kategori === 'string' && BLOG_CATEGORIES[req.query.kategori]
+    ? req.query.kategori
+    : null;
+
   try {
-    const posts = await db('articles')
+    const query = db('articles')
       .where({ type: 'blog', status: 'published' })
       .orderBy('created_at', 'desc')
-      .select('id', 'slug', 'title', 'meta_desc', 'created_at');
+      .select('id', 'slug', 'title', 'meta_desc', 'created_at', 'category');
+
+    if (aktiv) query.where({ category: aktiv });
+
+    const posts = await query;
 
     res.render('pages/blogg', {
       title: 'Blogg om flygrättigheter | FlightClaim.se',
       metaDesc: 'Guider, case studies och nyheter om flygkompensation och EU 261/2004. Lär dig kräva ersättning för försenat eller inställt flyg.',
       canonical: '/blogg',
       posts,
+      kategorier: BLOG_CATEGORIES,
+      aktiv,
     });
   } catch (err) {
     logger.error({ err }, 'Blogg index error');

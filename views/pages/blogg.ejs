@@ -8,11 +8,25 @@
 
 <div class="container">
 
+  <!-- Kategorifilter -->
+  <nav class="blog-filter" aria-label="Filtrera artiklar per kategori">
+    <a href="/blogg" class="blog-filter-btn<%= !aktiv ? ' active' : '' %>">Alla</a>
+    <% Object.entries(kategorier).forEach(function([slug, namn]) { %>
+    <a href="/blogg?kategori=<%= slug %>"
+       class="blog-filter-btn<%= aktiv === slug ? ' active' : '' %>">
+      <%= namn %>
+    </a>
+    <% }) %>
+  </nav>
+
   <% if (posts && posts.length > 0) { %>
   <div class="blog-grid">
     <% posts.forEach(function(post) { %>
     <article class="blog-card">
       <a href="/<%= post.slug %>" class="blog-card-link" aria-label="<%= post.title %>">
+        <% if (post.category && kategorier[post.category]) { %>
+        <span class="blog-card-category"><%= kategorier[post.category] %></span>
+        <% } %>
         <div class="blog-card-body">
           <time class="blog-card-date" datetime="<%= new Date(post.created_at).toISOString().slice(0,10) %>">
             <%= new Date(post.created_at).toLocaleDateString('sv-SE', { year: 'numeric', month: 'long', day: 'numeric' }) %>
@@ -30,7 +44,7 @@
 
   <% } else { %>
   <div class="blog-empty">
-    <p>Inga blogginlägg publicerade ännu. Kom tillbaka snart.</p>
+    <p>Inga artiklar i den här kategorin ännu.</p>
   </div>
   <% } %>
 
