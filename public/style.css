@@ -1515,7 +1515,7 @@ a.logo {
   list-style: none;
   z-index: 300;
   transition: opacity 0.12s, visibility 0.12s;
-  transition-delay: 0.35s;
+  transition-delay: 0.25s;
 }
 /* Invisible bridge above dropdown so gap doesn't break hover */
 .dropdown-menu::before {
@@ -2260,7 +2260,34 @@ details[open] .faq-question::after { content: '−'; }
 .detail-label { font-weight: 600; color: var(--primary-dark); font-size: .9rem; }
 
 /* Knappar */
-.step-actions { display: flex; align-items: center; gap: 16px; }
+.step-actions { display: flex; align-items: center; justify-content: flex-end; gap: 16px; }
+
+.btn-cta {
+  display: inline-block;
+  background: var(--secondary);
+  color: var(--gray-900);
+  border: none;
+  padding: 13px 32px;
+  border-radius: 40px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+  box-shadow: var(--shadow-md);
+}
+.btn-cta:hover {
+  background: var(--secondary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+.btn-cta:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 .btn-back {
   background: none;
   border: none;
