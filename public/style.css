@@ -1572,8 +1572,10 @@ a.logo {
 
 /* Article images always responsive */
 .article-body img {
-  max-width: 100%;
-  height: auto;
+  width: 100%;
+  max-height: 520px;
+  object-fit: cover;
+  object-position: center;
   display: block;
   border-radius: 8px;
   margin-bottom: 24px;
