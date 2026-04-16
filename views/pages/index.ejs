@@ -8,8 +8,14 @@
       <p class="hero-subtitle">Vi sköter allt mot flygbolaget — du betalar ingenting om vi inte vinner.</p>
 
       <div class="hero-form-row">
-        <input type="text" id="hero-departure" class="hero-input" placeholder="✈ Avgångsflygplats (t.ex. ARN)">
-        <input type="text" id="hero-arrival"   class="hero-input" placeholder="✈ Destination (t.ex. LHR)">
+        <div class="hero-input-wrap">
+          <input type="text" id="hero-departure" class="hero-input" placeholder="✈ Avgångsflygplats (t.ex. ARN)" autocomplete="off">
+          <div id="hero-dep-drop" class="airport-dropdown"></div>
+        </div>
+        <div class="hero-input-wrap">
+          <input type="text" id="hero-arrival" class="hero-input" placeholder="✈ Destination (t.ex. LHR)" autocomplete="off">
+          <div id="hero-arr-drop" class="airport-dropdown"></div>
+        </div>
         <button type="button" class="btn-primary hero-check-btn">Beräkna min ersättning</button>
       </div>
 

@@ -1174,10 +1174,16 @@ a.logo {
   align-items: center;
 }
 
-/* Pill-shaped inputs inside hero card */
-.hero-input {
+/* Wrapper takes the flex slot so dropdown can overflow */
+.hero-input-wrap {
   flex: 1;
   min-width: 0;
+  position: relative;
+}
+
+/* Pill-shaped inputs inside hero card */
+.hero-input {
+  width: 100%;
   padding: 13px 20px;
   border: 1.5px solid var(--gray-300);
   border-radius: 50px;
