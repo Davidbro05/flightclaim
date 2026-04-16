@@ -156,14 +156,23 @@ router.get('/integritetspolicy', (_req, res) => {
 // ── Flygbolag index ────────────────────────────────────────────────────────
 
 const AIRLINES = [
-  { slug: 'sas',       name: 'SAS',       img: 'sas-a321.jpg',                        tagline: 'Skandinaviens största flygbolag' },
-  { slug: 'klm',       name: 'KLM',       img: 'klm-boeing-737.jpg',                  tagline: 'EU-registrerat — gäller även flyg utanför Europa' },
-  { slug: 'norwegian', name: 'Norwegian', img: 'norwegian-boeing.jpg',                tagline: 'Vanliga förseningar på Europalinjer' },
-  { slug: 'ryanair',   name: 'Ryanair',   img: 'ryanair-boeing.jpg',                  tagline: 'Nekar ofta ersättning — vi driver ärendet' },
-  { slug: 'lufthansa', name: 'Lufthansa', img: 'lufthansa-incheckning-frankfurt.jpg', tagline: 'Tyskt EU-bolag med hög kompensationsutfall' },
-  { slug: 'wizz-air',  name: 'Wizz Air',  img: 'wizz-air-airbus.jpg',                 tagline: 'Ungersk lågprisflygare inom EU' },
-  { slug: 'easyjet',   name: 'EasyJet',   img: 'easyjet-airbus.jpg',                  tagline: 'Europeiskt lågprisbolag med EU-täckning' },
-  { slug: 'finnair',   name: 'Finnair',   img: 'finnair-airbus.jpg',                  tagline: 'Nordisk EU-flygare via Helsingfors' },
+  { slug: 'sas',               name: 'SAS',               img: 'sas-a321.jpg',                        tagline: 'Skandinaviens största flygbolag' },
+  { slug: 'norwegian',         name: 'Norwegian',         img: 'norwegian-boeing.jpg',                tagline: 'Vanliga förseningar på Europalinjer' },
+  { slug: 'ryanair',           name: 'Ryanair',           img: 'ryanair-boeing.jpg',                  tagline: 'Nekar ofta ersättning — vi driver ärendet' },
+  { slug: 'wizz-air',          name: 'Wizz Air',          img: 'wizz-air-airbus.jpg',                 tagline: 'Snabbväxande lågprisflygare inom EU' },
+  { slug: 'easyjet',           name: 'EasyJet',           img: 'easyjet-airbus.jpg',                  tagline: 'Europeiskt lågprisbolag med EU-täckning' },
+  { slug: 'finnair',           name: 'Finnair',           img: 'finnair-airbus.jpg',                  tagline: 'Nordisk EU-flygare via Helsingfors' },
+  { slug: 'klm',               name: 'KLM',               img: 'klm-boeing-737.jpg',                  tagline: 'Gäller även flyg utanför Europa' },
+  { slug: 'lufthansa',         name: 'Lufthansa',         img: 'lufthansa-incheckning-frankfurt.jpg', tagline: 'Europas största flygbolag' },
+  { slug: 'eurowings',         name: 'Eurowings',         img: 'eurowings-airbus.jpg',                tagline: 'Lufthansas budget-arm inom EU' },
+  { slug: 'turkish-airlines',  name: 'Turkish Airlines',  img: 'turkish-airlines-airbus.jpg',         tagline: 'Gäller vid avgångar från EU' },
+  { slug: 'air-france',        name: 'Air France',        img: 'air-france-airbus.jpg',               tagline: 'Interkontinentala rutter via Paris CDG' },
+  { slug: 'british-airways',   name: 'British Airways',   img: 'british-airways-boeing.jpg',          tagline: 'EU 261 vid avgångar från EU' },
+  { slug: 'vueling',           name: 'Vueling',           img: 'vueling-airbus.jpg',                  tagline: 'Dominerande på Spanien-rutter' },
+  { slug: 'transavia',         name: 'Transavia',         img: 'transavia-boeing.jpg',                tagline: 'KLM-gruppens semesterflygbolag' },
+  { slug: 'tap-air-portugal',  name: 'TAP Air Portugal',  img: 'tap-air-portugal-airbus.jpg',         tagline: 'Europas gateway till Latinamerika' },
+  { slug: 'iberia',            name: 'Iberia',            img: 'iberia-airbus.jpg',                   tagline: 'Spaniens nationella bolag via Madrid' },
+  { slug: 'brussels-airlines', name: 'Brussels Airlines', img: 'brussels-airlines-airbus.jpg',        tagline: 'Lufthansa-gruppen, hubbar i Bryssel' },
 ];
 
 router.get('/flygbolag', (_req, res) => {
