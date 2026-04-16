@@ -1133,7 +1133,6 @@ a.logo {
   align-items: flex-end;
   padding-bottom: 56px;
   position: relative;
-  overflow: hidden;
 }
 
 /* Remove old decorative circle on new hero */
