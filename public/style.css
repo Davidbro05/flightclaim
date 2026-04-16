@@ -1720,11 +1720,11 @@ a.logo {
 .faq-item {
   border: 1px solid var(--gray-200);
   border-radius: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
   overflow: hidden;
 }
 .faq-question {
-  padding: 14px 18px;
+  padding: 10px 18px;
   font-weight: 500;
   cursor: pointer;
   font-size: .95rem;
@@ -2322,4 +2322,173 @@ details[open] .faq-question::after { content: '−'; }
   .step-dot label { display: none; }
   .step-line { min-width: 24px; }
   .step-title { font-size: 1.2rem; }
+}
+
+/* ============================================================
+   HOMEPAGE — hero amount highlight
+   ============================================================ */
+.hero-amount {
+  color: var(--primary);
+}
+
+/* ============================================================
+   HOMEPAGE — Eligibility section
+   ============================================================ */
+.eligibility-section {
+  padding: 80px 0;
+  background: var(--gray-100);
+}
+.eligibility-section h2 {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: 10px;
+}
+.section-sub {
+  text-align: center;
+  color: var(--gray-600);
+  font-size: 16px;
+  margin-bottom: 40px;
+}
+.eligibility-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.eligibility-card {
+  background: var(--white);
+  border-radius: 14px;
+  padding: 28px 22px 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.07);
+  text-align: center;
+  transition: transform .2s, box-shadow .2s;
+}
+.eligibility-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,.11);
+}
+.eli-icon {
+  font-size: 2.2rem;
+  margin-bottom: 14px;
+}
+.eligibility-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 8px;
+}
+.eligibility-card p {
+  font-size: .85rem;
+  color: var(--gray-600);
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+.eli-amount {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: var(--white);
+  font-weight: 700;
+  font-size: .9rem;
+  padding: 6px 16px;
+  border-radius: 20px;
+}
+@media (max-width: 900px) {
+  .eligibility-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 500px) {
+  .eligibility-grid { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   HOMEPAGE — Zero-risk section
+   ============================================================ */
+.zero-risk-section {
+  padding: 80px 0;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: var(--white);
+}
+.zero-risk-inner {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 60px;
+  align-items: center;
+}
+.zero-risk-text h2 {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 14px;
+}
+.zero-risk-text p {
+  font-size: 1rem;
+  opacity: .9;
+  line-height: 1.65;
+  margin-bottom: 20px;
+  color: var(--white);
+}
+.zero-risk-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.zero-risk-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: .95rem;
+  opacity: .92;
+  color: var(--white);
+}
+.zero-risk-list li::before {
+  content: '✓';
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .75rem;
+  font-weight: 700;
+}
+.zero-risk-box {
+  background: rgba(255,255,255,.12);
+  border: 2px solid rgba(255,255,255,.25);
+  border-radius: 20px;
+  padding: 36px 44px;
+  text-align: center;
+  min-width: 220px;
+}
+.zr-label {
+  font-size: .85rem;
+  opacity: .8;
+  color: var(--white);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.zr-amount {
+  font-size: 3.8rem;
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 10px;
+}
+.zr-sub {
+  font-size: .8rem;
+  opacity: .75;
+  color: var(--white);
+}
+@media (max-width: 768px) {
+  .zero-risk-inner {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  .zero-risk-box { min-width: 0; padding: 28px 24px; }
+  .zr-amount { font-size: 3rem; }
 }

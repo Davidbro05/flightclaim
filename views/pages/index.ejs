@@ -1,28 +1,92 @@
 <% scripts = '<script src="/js/hero.js?v=' + assetVersion + '"></script>' %>
 
-<!-- Hero Section — full-bleed photo + wide frosted card anchored to bottom -->
+<!-- Hero Section -->
 <section class="hero">
   <div class="container">
     <div class="hero-card">
-      <h1>Ansök om ersättning för ditt flyg</h1>
-      <p class="hero-subtitle">Drabbad av försening, inställt flyg eller nekad ombordstigning? Du kan ha rätt till upp till 600€ per person.</p>
+      <h1>Försenat eller inställt flyg?<br>Du kan ha rätt till upp till <span class="hero-amount">600&nbsp;€</span></h1>
+      <p class="hero-subtitle">Vi sköter allt mot flygbolaget — du betalar ingenting om vi inte vinner.</p>
 
       <div class="hero-form-row">
         <input type="text" id="hero-departure" class="hero-input" placeholder="✈ Avgångsflygplats (t.ex. ARN)">
-        <input type="text" id="hero-arrival" class="hero-input" placeholder="✈ Destinationsflygplats (t.ex. LHR)">
-        <button type="button" class="btn-primary hero-check-btn">Kontrollera din ersättning</button>
+        <input type="text" id="hero-arrival"   class="hero-input" placeholder="✈ Destination (t.ex. LHR)">
+        <button type="button" class="btn-primary hero-check-btn">Beräkna min ersättning</button>
       </div>
 
       <div class="hero-badges">
-        <span class="hero-badge"><span>✓</span> Gratis och enkel kontroll</span>
-        <span class="hero-badge hero-badge-highlight"><span>🇸🇪</span> Svensk support</span>
-        <span class="hero-badge"><span>✓</span> Flygningar upp till 3 år</span>
+        <span class="hero-badge"><span>✓</span> 100% gratis att kontrollera</span>
+        <span class="hero-badge hero-badge-highlight"><span>✓</span> Ingen avgift om vi förlorar</span>
+        <span class="hero-badge"><span>✓</span> Flygningar upp till 3 år tillbaka</span>
+        <span class="hero-badge"><span>🇸🇪</span> Svensk support</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- How It Works — summary -->
+<!-- Qualifying situations -->
+<section class="eligibility-section">
+  <div class="container">
+    <h2>Vad ger rätt till ersättning?</h2>
+    <p class="section-sub">EU-förordning 261/2004 ger passagerare rätt till 250–600&nbsp;€ i dessa situationer:</p>
+    <div class="eligibility-grid">
+      <div class="eligibility-card">
+        <div class="eli-icon">⏱</div>
+        <h3>Försening 3+ timmar</h3>
+        <p>Anlände du mer än 3 timmar sent till din slutdestination?</p>
+        <span class="eli-amount">250–600 €</span>
+      </div>
+      <div class="eligibility-card">
+        <div class="eli-icon">✕</div>
+        <h3>Inställt flyg</h3>
+        <p>Ställdes ditt flyg in med kort varsel — under 14 dagar?</p>
+        <span class="eli-amount">250–600 €</span>
+      </div>
+      <div class="eligibility-card">
+        <div class="eli-icon">🚫</div>
+        <h3>Nekad ombordstigning</h3>
+        <p>Nekades du boarding trots giltig biljett och incheckning?</p>
+        <span class="eli-amount">250–600 €</span>
+      </div>
+      <div class="eligibility-card">
+        <div class="eli-icon">🔄</div>
+        <h3>Ombokning utan info</h3>
+        <p>Ombokades du till annan rutt eller tid utan ditt samtycke?</p>
+        <span class="eli-amount">250–600 €</span>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:36px;">
+      <a href="/berakna-ersattning" class="btn-primary">Beräkna din ersättning gratis →</a>
+    </div>
+  </div>
+</section>
+
+<!-- Zero-risk section -->
+<section class="zero-risk-section">
+  <div class="container">
+    <div class="zero-risk-inner">
+      <div class="zero-risk-text">
+        <h2>Du betalar ingenting om vi förlorar</h2>
+        <p>Vi arbetar på provisionsbasis — vi tar bara betalt om du faktiskt får din ersättning. Ingen förskottsavgift, inga dolda kostnader.</p>
+        <ul class="zero-risk-list">
+          <li>Gratis initial kontroll av ditt ärende</li>
+          <li>Vi driver ärendet mot flygbolaget på egna resurser</li>
+          <li>Du får 75&nbsp;% av ersättningen — vi tar 25&nbsp;%</li>
+          <li>Vinner vi ingenting betalar du ingenting</li>
+        </ul>
+        <a href="/anmalan" class="btn-cta" style="margin-top:24px; display:inline-block;">Ansök kostnadsfritt →</a>
+      </div>
+      <div class="zero-risk-visual">
+        <div class="zero-risk-box">
+          <div class="zr-label">Om vi förlorar betalar du</div>
+          <div class="zr-amount">0 kr</div>
+          <div class="zr-sub">Ingen risk. Inga dolda avgifter.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works -->
 <section id="how-it-works" class="how-it-works">
   <div class="container">
     <h2>Så här enkelt är det</h2>
@@ -49,47 +113,18 @@
   </div>
 </section>
 
-<!-- About teaser -->
-<section class="about-section">
-  <div class="container">
-    <h2>Om FlightClaim</h2>
-    <div class="about-content">
-      <div class="about-text">
-        <p>FlightClaim har en enkel mission: att hjälpa resenärer att få den ersättning de har rätt till enligt EU-förordning 261/2004. Vi kombinerar gedigen juridisk expertis med modern teknik för att göra processen enkel och smidig.</p>
-        <p>Vi tar endast betalt om du får din ersättning — ingen seger, ingen avgift.</p>
-        <div style="margin-top:24px;">
-          <a href="/om-oss" class="btn-secondary">Läs mer om oss →</a>
-        </div>
-      </div>
-      <div class="about-stats">
-        <div class="about-stat">
-          <span class="about-number">Gedigen</span>
-          <span class="about-label">erfarenhet</span>
-        </div>
-        <div class="about-stat">
-          <span class="about-number">Juridisk</span>
-          <span class="about-label">expertis</span>
-        </div>
-        <div class="about-stat">
-          <span class="about-number">100%</span>
-          <span class="about-label">Transparens</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FAQ (2 items) -->
+<!-- FAQ -->
 <section class="faq">
   <div class="container">
     <h2>Vanliga frågor</h2>
     <div class="faq-grid">
-      <%- include('../components/faq-item', { faqQuestion: 'Vad kostar det?', faqAnswer: 'Vi tar endast provision om vi vinner ditt ärende (25% + moms på ersättningen). Inga dolda avgifter.' }) %>
-      <%- include('../components/faq-item', { faqQuestion: 'Vilka flygningar gäller?', faqAnswer: 'Alla flygningar inom EU, samt flygningar till/från EU med EU-baserade flygbolag.' }) %>
+      <%- include('../components/faq-item', { faqQuestion: 'Vad kostar det?', faqAnswer: 'Det kostar ingenting att ansöka eller kontrollera. Vi tar 25 % provision på utbetald ersättning — vinner vi ingenting betalar du ingenting.' }) %>
+      <%- include('../components/faq-item', { faqQuestion: 'Vilka flygningar gäller?', faqAnswer: 'Alla flygningar inom EU samt flygningar till/från EU med EU-baserade flygbolag. Preskriptionstiden är 3 år, så äldre ärenden kan fortfarande drivas.' }) %>
+      <%- include('../components/faq-item', { faqQuestion: 'Hur lång tid tar det?', faqAnswer: 'De flesta ärenden löses inom 4–8 veckor. Komplicerade fall som kräver rättslig prövning kan ta längre tid — vi håller dig uppdaterad längs vägen.' }) %>
+      <%- include('../components/faq-item', { faqQuestion: 'Vad behöver jag skicka in?', faqAnswer: 'Bokningsbekräftelse och, om du har kvar det, boardingkortet. Vi guidar dig genom hela processen steg för steg.' }) %>
     </div>
     <div style="text-align:center; margin-top:28px;">
       <a href="/sa-fungerar-det#faq" class="btn-secondary">Se alla frågor →</a>
     </div>
   </div>
 </section>
-
