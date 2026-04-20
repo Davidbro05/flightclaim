@@ -1,0 +1,153 @@
+<%
+const faqSchema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Vad räknas som ett inställt flyg?', acceptedAnswer: { '@type': 'Answer', text: 'Ett flyg räknas som inställt om det aldrig lyfter. Ombokningar mer än 14 dagar i förväg räknas inte som inställning. Om du fick besked kortare tid än 14 dagar före avgång kan du ha rätt till ersättning.' } },
+    { '@type': 'Question', name: 'Hur mycket ersättning får jag för ett inställt flyg?', acceptedAnswer: { '@type': 'Answer', text: 'Ersättningen är 250€ för flyg under 1 500 km, 400€ för 1 500–3 500 km, och 600€ för flyg över 3 500 km utanför EU. Beloppet kan halveras om du erbjöds ombokning och anlände inom rimlig tid.' } },
+    { '@type': 'Question', name: 'Har jag rätt till ersättning om flyget ställdes in med kort varsel?', acceptedAnswer: { '@type': 'Answer', text: 'Ja. Om flygbolaget meddelade dig färre än 14 dagar före avgång kan du ha rätt till ersättning. Ju kortare varsel, desto svårare för flygbolaget att undvika ersättningsskyldighet.' } },
+    { '@type': 'Question', name: 'Kan jag välja mellan återbetalning och ombokning?', acceptedAnswer: { '@type': 'Answer', text: 'Ja. Du har alltid rätt att välja om du vill ha pengarna tillbaka (full återbetalning) eller bli ombokad på nästa möjliga avgång. Den rätten är oberoende av eventuell EU261-kompensation.' } },
+    { '@type': 'Question', name: 'Gäller ersättningen om orsaken var strejk?', acceptedAnswer: { '@type': 'Answer', text: 'Det beror på vems strejk det handlar om. Strejk bland flygbolagets egen personal räknas vanligtvis inte som extraordinär omständighet. Strejk bland flygledare eller säkerhetspersonal på flygplatsen kan däremot undanta från ersättning.' } },
+    { '@type': 'Question', name: 'Kostar det något att ansöka?', acceptedAnswer: { '@type': 'Answer', text: 'Nej. FlightClaim tar ingen förskottsbetalning. Vi tar 25% + moms av ersättningen om vi vinner — betalar vi inget om vi förlorar.' } },
+  ],
+});
+scripts = `<script type="application/ld+json">${faqSchema}</script>`;
+%>
+
+<!-- Page Hero -->
+<section class="page-hero">
+  <div class="container">
+    <h1>Inställt flyg – dina rättigheter och rätt till ersättning</h1>
+    <p>Har ditt flyg ställts in? Du har rätt till både återbetalning och upp till 600€ i kompensation per person — beroende på hur kort varsel du fick.</p>
+    <a href="/anmalan" class="btn-cta" style="display:inline-block;margin-top:20px;">Kontrollera din rätt gratis →</a>
+  </div>
+</section>
+
+<!-- Vad gäller -->
+<section style="padding: 70px 0;">
+  <div class="container">
+    <h2>Dina rättigheter vid inställt flyg</h2>
+    <p style="font-size:17px; color:var(--gray-600); max-width:750px; margin-bottom:32px; line-height:1.7;">
+      Enligt EU-förordning 261/2004 har du alltid rätt till <strong>full återbetalning</strong> av biljetten vid inställt flyg. Du kan också ha rätt till <strong>ekonomisk kompensation</strong> beroende på hur lång tid i förväg du fick besked om inställningen.
+    </p>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Varsel om inställning</th>
+          <th>Din rätt</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Mer än 14 dagar innan</td>
+          <td>Återbetalning eller ombokning — ingen kompensation</td>
+        </tr>
+        <tr>
+          <td>7–14 dagar innan</td>
+          <td>Återbetalning + kompensation (om ombokning inte erbjuds inom rimlig tid)</td>
+        </tr>
+        <tr>
+          <td>Kortare än 7 dagar</td>
+          <td>Full rätt till kompensation 250–600€ + återbetalning</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin-top:48px; margin-bottom:16px;">Kompensationsnivåer</h3>
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Flygsträcka</th>
+          <th>Ersättning</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Upp till 1 500 km</td>
+          <td class="comp-amount">250€ <span class="comp-sek">≈ 2 700 kr</span></td>
+        </tr>
+        <tr>
+          <td>1 500–3 500 km</td>
+          <td class="comp-amount">400€ <span class="comp-sek">≈ 4 300 kr</span></td>
+        </tr>
+        <tr>
+          <td>Över 3 500 km (utanför EU)</td>
+          <td class="comp-amount">600€ <span class="comp-sek">≈ 6 500 kr</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:13px; color:var(--gray-500); margin-top:12px;">SEK-belopp är ungefärliga. Kompensation kan halveras om flygbolaget erbjöd ombokning med rimlig ankomsttid.</p>
+  </div>
+</section>
+
+<!-- Artiklar om inställda flyg -->
+<% if (articles && articles.length > 0) { %>
+<section style="background: var(--gray-100); padding: 70px 0;">
+  <div class="container">
+    <h2>Guider och case om inställda flyg</h2>
+    <p style="color:var(--gray-600); margin-bottom:32px;">Läs om verkliga fall och hur vi hjälpt resenärer att få ersättning för inställda flyg.</p>
+    <div class="blog-grid">
+      <% articles.forEach(function(post) { %>
+      <article class="blog-card">
+        <a href="/<%= post.slug %>" class="blog-card-link" aria-label="<%= post.title %>">
+          <div class="blog-card-body">
+            <time class="blog-card-date" datetime="<%= new Date(post.created_at).toISOString().slice(0,10) %>">
+              <%= new Date(post.created_at).toLocaleDateString('sv-SE', { year: 'numeric', month: 'long', day: 'numeric' }) %>
+            </time>
+            <h2 class="blog-card-title"><%= post.title %></h2>
+            <% if (post.meta_desc) { %>
+            <p class="blog-card-excerpt"><%= post.meta_desc %></p>
+            <% } %>
+            <span class="blog-card-read">Läs artikel →</span>
+          </div>
+        </a>
+      </article>
+      <% }) %>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<!-- Flygbolagsguider -->
+<% if (airlineArticles && airlineArticles.length > 0) { %>
+<section style="padding: 70px 0;">
+  <div class="container">
+    <h2>Ersättning per flygbolag</h2>
+    <p style="color:var(--gray-600); margin-bottom:32px;">Läs specifik guide för ditt flygbolag och se hur de brukar hantera inställda flyg.</p>
+    <div class="airline-link-grid">
+      <% airlineArticles.forEach(function(a) { %>
+      <a href="/<%= a.slug %>" class="airline-link-card">
+        <span class="airline-link-name"><%= a.title %></span>
+        <% if (a.meta_desc) { %><span class="airline-link-desc"><%= a.meta_desc %></span><% } %>
+        <span class="airline-link-arrow">→</span>
+      </a>
+      <% }) %>
+    </div>
+    <p style="margin-top:24px;"><a href="/flygbolag" style="color:var(--primary); font-weight:600;">Se alla flygbolag →</a></p>
+  </div>
+</section>
+<% } %>
+
+<!-- FAQ -->
+<section id="faq" class="faq" style="padding: 70px 0; background: var(--gray-100);">
+  <div class="container">
+    <h2>Vanliga frågor om inställt flyg</h2>
+    <div class="faq-grid">
+      <%- include('../components/faq-item', { faqQuestion: 'Vad räknas som ett inställt flyg?', faqAnswer: 'Ett flyg räknas som inställt om det aldrig lyfter. Ombokningar mer än 14 dagar i förväg räknas inte som inställning. Om du fick besked kortare tid än 14 dagar före avgång kan du ha rätt till ersättning.' }) %>
+      <%- include('../components/faq-item', { faqQuestion: 'Hur mycket ersättning får jag för ett inställt flyg?', faqAnswer: 'Ersättningen är 250€ för flyg under 1 500 km, 400€ för 1 500–3 500 km, och 600€ för flyg över 3 500 km utanför EU. Beloppet kan halveras om du erbjöds ombokning och anlände inom rimlig tid.' }) %>
+      <%- include('../components/faq-item', { faqQuestion: 'Har jag rätt till ersättning om flyget ställdes in med kort varsel?', faqAnswer: 'Ja. Om flygbolaget meddelade dig färre än 14 dagar före avgång kan du ha rätt till ersättning. Ju kortare varsel, desto svårare för flygbolaget att undvika ersättningsskyldighet.' }) %>
+      <%- include('../components/faq-item', { faqQuestion: 'Kan jag välja mellan återbetalning och ombokning?', faqAnswer: 'Ja. Du har alltid rätt att välja om du vill ha pengarna tillbaka (full återbetalning) eller bli ombokad på nästa möjliga avgång. Den rätten är oberoende av eventuell EU261-kompensation.' }) %>
+      <%- include('../components/faq-item', { faqQuestion: 'Gäller ersättningen om orsaken var strejk?', faqAnswer: 'Det beror på vems strejk det handlar om. Strejk bland flygbolagets egen personal räknas vanligtvis inte som extraordinär omständighet. Strejk bland flygledare eller säkerhetspersonal på flygplatsen kan däremot undanta från ersättning.' }) %>
+      <%- include('../components/faq-item', { faqQuestion: 'Kostar det något att ansöka?', faqAnswer: 'Nej. FlightClaim tar ingen förskottsbetalning. Vi tar 25% + moms av ersättningen om vi vinner — betalar vi inget om vi förlorar.' }) %>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<%- include('../components/cta-block', {
+  ctaTitle: 'Ställdes ditt flyg in med kort varsel?',
+  ctaText: 'Kontrollera om du har rätt till upp till 600€ per person — gratis på 2 minuter.',
+  ctaUrl: '/anmalan',
+  ctaLabel: 'Ansök om ersättning'
+}) %>

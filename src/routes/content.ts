@@ -2,7 +2,7 @@ import express from 'express';
 import db from '../db';
 import logger from '../logger';
 import { render as renderMarkdown } from '../services/markdownService';
-import type { Article, FaqItem, Breadcrumb } from '../types';
+import type { Article, FaqItem, Breadcrumb, Route } from '../types';
 
 const router = express.Router();
 
@@ -223,6 +223,112 @@ router.get('/blogg', async (req, res) => {
   }
 });
 
+// ── Försenat flyg pillar page ──────────────────────────────────────────────
+
+router.get('/forsening', async (_req, res) => {
+  try {
+    const [articles, airlineArticles] = await Promise.all([
+      db('articles')
+        .where({ type: 'blog', status: 'published', category: 'forsening' })
+        .orderBy('created_at', 'desc')
+        .select('slug', 'title', 'meta_desc', 'created_at', 'category'),
+      db('articles')
+        .where({ type: 'airline', status: 'published' })
+        .orderBy('title', 'asc')
+        .limit(6)
+        .select('slug', 'title', 'meta_desc'),
+    ]);
+
+    res.render('pages/forsening', {
+      title: 'Försenat flyg – rätt till upp till 600€ ersättning | FlightClaim',
+      metaDesc: 'Har ditt flyg landat mer än 3 timmar försenat? Enligt EU 261/2004 kan du ha rätt till 250–600€ per person. Läs om dina rättigheter och ansök gratis.',
+      canonical: '/forsening',
+      articles,
+      airlineArticles,
+    });
+  } catch (err) {
+    logger.error({ err }, 'Forsening page error');
+    res.status(500).render('pages/404', { title: 'Serverfel | FlightClaim', metaDesc: '' });
+  }
+});
+
+// ── Inställt flyg pillar page ──────────────────────────────────────────────
+
+router.get('/installda-flyg', async (_req, res) => {
+  try {
+    const [articles, airlineArticles] = await Promise.all([
+      db('articles')
+        .where({ type: 'blog', status: 'published', category: 'installda-flyg' })
+        .orderBy('created_at', 'desc')
+        .select('slug', 'title', 'meta_desc', 'created_at', 'category'),
+      db('articles')
+        .where({ type: 'airline', status: 'published' })
+        .orderBy('title', 'asc')
+        .limit(6)
+        .select('slug', 'title', 'meta_desc'),
+    ]);
+
+    res.render('pages/installda-flyg', {
+      title: 'Inställt flyg – få ersättning och dina rättigheter | FlightClaim',
+      metaDesc: 'Inställt flyg? Enligt EU 261/2004 kan du ha rätt till 250–600€ per person. Läs om vad som gäller och ansök om ersättning kostnadsfritt.',
+      canonical: '/installda-flyg',
+      articles,
+      airlineArticles,
+    });
+  } catch (err) {
+    logger.error({ err }, 'Installda-flyg page error');
+    res.status(500).render('pages/404', { title: 'Serverfel | FlightClaim', metaDesc: '' });
+  }
+});
+
+// ── Rutt-specifika landningssidor ─────────────────────────────────────────
+
+router.get('/rutter/:slug', async (req, res) => {
+  const { slug } = req.params;
+
+  try {
+    const routeRaw = await db('routes').where({ slug, published: true }).first<Route & { airlines: string | string[] | null }>();
+
+    if (!routeRaw) {
+      res.status(404).render('pages/404', { title: 'Sidan hittades inte | FlightClaim', metaDesc: '' });
+      return;
+    }
+
+    const rawAirlines = routeRaw.airlines;
+    let airlineList: string[] = [];
+    if (Array.isArray(rawAirlines)) {
+      airlineList = rawAirlines;
+    } else if (typeof rawAirlines === 'string') {
+      try { airlineList = JSON.parse(rawAirlines); }
+      catch { airlineList = (rawAirlines as string).split(',').map((s: string) => s.trim()); }
+    }
+
+    const route: Route = { ...routeRaw, airlines: airlineList };
+
+    const faqSchema = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        { '@type': 'Question', name: `Hur lång försening krävs för flyg ${route.dep_city}–${route.arr_city}?`, acceptedAnswer: { '@type': 'Answer', text: `Du måste anlända till ${route.arr_city} minst 3 timmar försenat för att ha rätt till ersättning enligt EU 261/2004.` } },
+        { '@type': 'Question', name: `Hur mycket ersättning kan jag få för flyg ${route.dep_city}–${route.arr_city}?`, acceptedAnswer: { '@type': 'Answer', text: `Rutten ${route.dep_city}–${route.arr_city} är ca ${route.distance_km ?? '?'} km. Det innebär att du kan ha rätt till ${route.comp_amount ?? '250–600'}€ per person enligt EU 261/2004.` } },
+        { '@type': 'Question', name: 'Vilka flygbolag flyger den här rutten?', acceptedAnswer: { '@type': 'Answer', text: `Vanliga flygbolag på ${route.dep_city}–${route.arr_city} inkluderar ${airlineList.join(', ')}.` } },
+        { '@type': 'Question', name: 'Kostar det något att ansöka?', acceptedAnswer: { '@type': 'Answer', text: 'Nej. FlightClaim tar ingen förskottsbetalning. Vi tar 25% + moms av ersättningen om vi vinner — betalar vi inget om vi förlorar.' } },
+      ],
+    });
+
+    res.render('pages/rutt', {
+      route,
+      title:    route.meta_title ?? `Försenat flyg ${route.dep_city}–${route.arr_city}? Kräv ${route.comp_amount ?? '250–600'}€ | FlightClaim`,
+      metaDesc: route.meta_desc  ?? '',
+      canonical: `/rutter/${route.slug}`,
+      scripts:  `<script type="application/ld+json">${faqSchema}</script>`,
+    });
+  } catch (err) {
+    logger.error({ err, slug }, 'Rutt page error');
+    res.status(500).render('pages/404', { title: 'Serverfel | FlightClaim', metaDesc: '' });
+  }
+});
+
 // ── CMS article catch-all (must stay LAST) ─────────────────────────────────
 
 router.get('/:slug{/*path}', async (req, res) => {
@@ -242,15 +348,26 @@ router.get('/:slug{/*path}', async (req, res) => {
     const bodyHtml   = renderMarkdown(article.content ?? '');
     const schemaJson = buildSchemaJson(article, faqItems, crumbs, siteUrl);
 
+    const relatedArticles = article.category
+      ? await db('articles')
+          .where({ status: 'published', category: article.category })
+          .whereNot({ slug })
+          .orderBy('created_at', 'desc')
+          .limit(3)
+          .select('slug', 'title', 'meta_desc')
+      : [];
+
     res.render('pages/artikel', {
       article,
       bodyHtml,
       faqItems,
       crumbs,
       schemaJson,
+      relatedArticles,
       title:    article.meta_title ?? `${article.title} | FlightClaim.se`,
       metaDesc: article.meta_desc  ?? '',
       canonical: `/${article.slug}`,
+      ogType: 'article',
     });
   } catch (err) {
     logger.error({ err, slug }, 'Content route error');

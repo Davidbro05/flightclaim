@@ -54,6 +54,23 @@ export interface Article {
   updated_at: string | null;
 }
 
+export interface Route {
+  id: number;
+  slug: string;
+  dep_city: string;
+  arr_city: string;
+  dep_airport: string;
+  arr_airport: string;
+  distance_km: string | null;
+  comp_amount: string | null;
+  airlines: string[] | null;
+  meta_title: string | null;
+  meta_desc: string | null;
+  published: boolean;
+  created_at: string;
+  updated_at: string | null;
+}
+
 export interface FaqItem {
   q: string;
   a: string;

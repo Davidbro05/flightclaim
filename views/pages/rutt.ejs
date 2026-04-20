@@ -1,0 +1,97 @@
+<!-- Page Hero -->
+<section class="page-hero">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Brödsmulor" style="margin-bottom:16px; font-size:.85rem;">
+      <a href="/">Hem</a>
+      <span class="sep" aria-hidden="true">›</span>
+      <a href="/forsening">Försenat flyg</a>
+      <span class="sep" aria-hidden="true">›</span>
+      <span><%= route.dep_city %>–<%= route.arr_city %></span>
+    </nav>
+    <h1>Försenat flyg <%= route.dep_city %>–<%= route.arr_city %>? Kräv ersättning</h1>
+    <p>Drabbades ditt flyg från <%= route.dep_airport %> till <%= route.arr_airport %> av försening eller ställdes det in? Du kan ha rätt till <strong><%= route.comp_amount ?? '250–600' %>€ per person</strong> enligt EU 261/2004.</p>
+    <a href="/anmalan?dep=<%= route.dep_airport.split('/')[0] %>&arr=<%= route.arr_airport.split('/')[0] %>"
+       class="btn-cta" style="display:inline-block;margin-top:20px;">
+      Ansök om ersättning — gratis →
+    </a>
+  </div>
+</section>
+
+<!-- Rutteinfo -->
+<section style="padding: 60px 0;">
+  <div class="container">
+    <div class="rutt-info-grid">
+      <div class="rutt-info-card">
+        <span class="rutt-info-label">Avgång</span>
+        <span class="rutt-info-value"><%= route.dep_city %> (<%= route.dep_airport %>)</span>
+      </div>
+      <div class="rutt-info-card">
+        <span class="rutt-info-label">Destination</span>
+        <span class="rutt-info-value"><%= route.arr_city %> (<%= route.arr_airport %>)</span>
+      </div>
+      <% if (route.distance_km) { %>
+      <div class="rutt-info-card">
+        <span class="rutt-info-label">Avstånd</span>
+        <span class="rutt-info-value">ca <%= route.distance_km %> km</span>
+      </div>
+      <% } %>
+      <div class="rutt-info-card rutt-info-card--highlight">
+        <span class="rutt-info-label">Möjlig ersättning</span>
+        <span class="rutt-info-value"><%= route.comp_amount ?? '250–600' %>€ per person</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Dina rättigheter -->
+<section style="background: var(--gray-100); padding: 60px 0;">
+  <div class="container">
+    <h2>Dina rättigheter på <%= route.dep_city %>–<%= route.arr_city %></h2>
+    <p style="font-size:17px; color:var(--gray-600); max-width:750px; margin-bottom:32px; line-height:1.7;">
+      Rutten <%= route.dep_city %>–<%= route.arr_city %> (<%= route.dep_airport %>–<%= route.arr_airport %>) är ca <%= route.distance_km ?? '?' %> km
+      och faller under EU-förordning 261/2004. Det innebär att du kan ha rätt till
+      <strong><%= route.comp_amount ?? '250–600' %>€ per person</strong> om ditt flyg:
+    </p>
+    <ul class="rutt-rights-list">
+      <li>Anlände till <%= route.arr_city %> mer än <strong>3 timmar</strong> försenat</li>
+      <li>Ställdes in med kortare än <strong>14 dagars</strong> varsel</li>
+      <li>Nekade dig ombordstigning (overbooking)</li>
+    </ul>
+
+    <% if (route.airlines && route.airlines.length > 0) { %>
+    <h3 style="margin-top:40px; margin-bottom:16px;">Vanliga flygbolag på rutten</h3>
+    <div class="rutt-airlines">
+      <% route.airlines.forEach(function(a) { %>
+      <span class="rutt-airline-tag"><%= a %></span>
+      <% }) %>
+    </div>
+    <% } %>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="faq" style="padding: 70px 0;">
+  <div class="container">
+    <h2>Vanliga frågor — <%= route.dep_city %>–<%= route.arr_city %></h2>
+    <div class="faq-grid">
+      <%- include('../components/faq-item', {
+        faqQuestion: `Hur lång försening krävs för flyg ${route.dep_city}–${route.arr_city}?`,
+        faqAnswer: `Du måste anlända till ${route.arr_city} minst 3 timmar försenat (räknat från dörrens öppning vid ankomst) för att ha rätt till ersättning enligt EU 261/2004.`
+      }) %>
+      <%- include('../components/faq-item', {
+        faqQuestion: `Hur mycket ersättning kan jag få?`,
+        faqAnswer: `Rutten ${route.dep_city}–${route.arr_city} är ca ${route.distance_km ?? '?'} km. Det innebär att du kan ha rätt till ${route.comp_amount ?? '250–600'}€ per person.`
+      }) %>
+      <%- include('../components/faq-item', { faqQuestion: 'Kostar det något att ansöka?', faqAnswer: 'Nej. FlightClaim tar ingen förskottsbetalning. Vi tar 25% + moms av ersättningen om vi vinner — betalar vi inget om vi förlorar.' }) %>
+      <%- include('../components/faq-item', { faqQuestion: 'Hur lång är preskriptionstiden?', faqAnswer: 'I Sverige kan du kräva ersättning för flyg upp till tre år tillbaka i tiden.' }) %>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<%- include('../components/cta-block', {
+  ctaTitle: `Försenat flyg ${route.dep_city}–${route.arr_city}?`,
+  ctaText: 'Ansök om ersättning på 2 minuter — vi sköter resten mot flygbolaget.',
+  ctaUrl: `/anmalan?dep=${route.dep_airport.split('/')[0]}&arr=${route.arr_airport.split('/')[0]}`,
+  ctaLabel: 'Ansök nu — gratis'
+}) %>

@@ -51,11 +51,20 @@ router.get('/sitemap.xml', async (req, res) => {
   const today = new Date().toISOString().slice(0, 10);
 
   try {
-    const articles = await db('articles')
-      .where({ status: 'published' })
-      .orderBy('sitemap_priority', 'desc')
-      .orderBy('created_at', 'asc')
-      .select<Article[]>();
+    const [articles, routes] = await Promise.all([
+      db('articles')
+        .where({ status: 'published' })
+        .orderBy('sitemap_priority', 'desc')
+        .orderBy('created_at', 'asc')
+        .select<Article[]>(),
+      db('routes')
+        .where({ published: true })
+        .select('slug', 'updated_at'),
+    ]);
+
+    const routeUrls: string[] = routes.map((r: { slug: string; updated_at: string | null }) =>
+      url(`${siteUrl}/rutter/${esc(r.slug)}`, '0.8', 'monthly', r.updated_at)
+    );
 
     const urls: string[] = articles.map(a => {
       const { priority, changefreq } = articlePriority(a);
@@ -64,9 +73,22 @@ router.get('/sitemap.xml', async (req, res) => {
       return url(loc, priority, changefreq, a.updated_at ?? a.created_at);
     });
 
+    const staticUrls = [
+      url(`${siteUrl}/`,                '1.0', 'weekly',   today),
+      url(`${siteUrl}/forsening`,       '0.9', 'weekly',   today),
+      url(`${siteUrl}/installda-flyg`,  '0.9', 'weekly',   today),
+      url(`${siteUrl}/sa-fungerar-det`, '0.7', 'monthly',  today),
+      url(`${siteUrl}/flygbolag`,       '0.7', 'monthly',  today),
+      url(`${siteUrl}/blogg`,           '0.7', 'weekly',   today),
+      url(`${siteUrl}/om-oss`,          '0.5', 'monthly',  today),
+      url(`${siteUrl}/kontakt`,         '0.5', 'monthly',  today),
+    ];
+
     const xml = [
       '<?xml version="1.0" encoding="UTF-8"?>',
       '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+      ...staticUrls,
+      ...routeUrls,
       ...urls,
       '</urlset>',
     ].join('\n');
@@ -78,6 +100,15 @@ router.get('/sitemap.xml', async (req, res) => {
     logger.error({ err }, 'Sitemap generation failed');
     res.status(500).send('<?xml version="1.0"?><error>Serverfel</error>');
   }
+});
+
+router.get('/robots.txt', (_req, res) => {
+  const siteUrl = (res.locals.siteUrl as string | undefined) ?? 'https://flightclaim.se';
+  res.set('Content-Type', 'text/plain; charset=utf-8');
+  res.set('Cache-Control', 'public, max-age=86400'); // 24 h
+  res.send(
+    `User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /api/admin\nDisallow: /api/articles\nDisallow: /api/nav\n\nSitemap: ${siteUrl}/sitemap.xml\n`
+  );
 });
 
 export default router;

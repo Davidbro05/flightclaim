@@ -1,0 +1,133 @@
+<%
+const faqSchema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Hur lång försening krävs för att få ersättning?', acceptedAnswer: { '@type': 'Answer', text: 'Du måste anlända till din slutdestination minst 3 timmar försenat (4 timmar för interkontinentala flyg över 3 500 km). Förseningen räknas från faktisk landning och dörröppning, inte från avgångstiden.' } },
+    { '@type': 'Question', name: 'Hur mycket kan jag få i ersättning för försenat flyg?', acceptedAnswer: { '@type': 'Answer', text: 'Ersättningen är 250€ för flyg under 1 500 km, 400€ för 1 500–3 500 km, och 600€ för flyg över 3 500 km utanför EU. Beloppet kan halveras om du erbjuds ombokning och anlände inom viss tid.' } },
+    { '@type': 'Question', name: 'Gäller EU 261 bara inom Europa?', acceptedAnswer: { '@type': 'Answer', text: 'Nej. EU 261/2004 gäller alla flyg som avgår från ett EU-land (oavsett flygbolag), samt flyg som anländer till EU med ett EU-baserat flygbolag.' } },
+    { '@type': 'Question', name: 'Vad händer om flygbolaget hänvisar till "extraordinära omständigheter"?', acceptedAnswer: { '@type': 'Answer', text: 'Flygbolag kan undkomma ersättning vid händelser utanför deras kontroll, som extremt väder eller politiska kriser. Tekniska fel räknas i de flesta fall INTE som extraordinärt. Vi granskar alltid om hänvisningen håller.' } },
+    { '@type': 'Question', name: 'Hur lång är preskriptionstiden?', acceptedAnswer: { '@type': 'Answer', text: 'I Sverige kan du kräva ersättning för flyg upp till tre år tillbaka i tiden. Ansök så snart som möjligt för att säkra din dokumentation.' } },
+    { '@type': 'Question', name: 'Kostar det något att ansöka?', acceptedAnswer: { '@type': 'Answer', text: 'Nej. FlightClaim tar ingen förskottsbetalning. Vi tar 25% + moms av ersättningen om vi vinner — betalar vi inget om vi förlorar.' } },
+  ],
+});
+scripts = `<script type="application/ld+json">${faqSchema}</script>`;
+%>
+
+<!-- Page Hero -->
+<section class="page-hero">
+  <div class="container">
+    <h1>Försenat flyg – din rätt till upp till 600€ ersättning</h1>
+    <p>Landade ditt flyg mer än 3 timmar försenat? Enligt EU-förordning 261/2004 kan du ha rätt till mellan 250€ och 600€ per person — helt kostnadsfritt att ansöka.</p>
+    <a href="/anmalan" class="btn-cta" style="display:inline-block;margin-top:20px;">Kontrollera din rätt gratis →</a>
+  </div>
+</section>
+
+<!-- Vad gäller -->
+<section style="padding: 70px 0;">
+  <div class="container">
+    <h2>Vad säger lagen om försenat flyg?</h2>
+    <p style="font-size:17px; color:var(--gray-600); max-width:750px; margin-bottom:32px; line-height:1.7;">
+      EU-förordning 261/2004 ger passagerare rätt till ekonomisk kompensation när ett flyg landar mer än 3 timmar försenat vid slutdestinationen. Lagen gäller för <strong>alla flygningar som avgår från EU</strong> (oavsett flygbolag) och för ankomster till EU med EU-baserade flygbolag.
+    </p>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Flygsträcka</th>
+          <th>Minsta försening vid ankomst</th>
+          <th>Ersättning</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Upp till 1 500 km</td>
+          <td>3 timmar</td>
+          <td class="comp-amount">250€ <span class="comp-sek">≈ 2 700 kr</span></td>
+        </tr>
+        <tr>
+          <td>1 500–3 500 km (inom EU)</td>
+          <td>3 timmar</td>
+          <td class="comp-amount">400€ <span class="comp-sek">≈ 4 300 kr</span></td>
+        </tr>
+        <tr>
+          <td>Över 3 500 km (utanför EU)</td>
+          <td>4 timmar</td>
+          <td class="comp-amount">600€ <span class="comp-sek">≈ 6 500 kr</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:13px; color:var(--gray-500); margin-top:12px;">SEK-belopp är ungefärliga. Beloppet kan halveras om du erbjöds ombokning och anlände inom rimlig tid.</p>
+  </div>
+</section>
+
+<!-- Artiklar om förseningar -->
+<% if (articles && articles.length > 0) { %>
+<section style="background: var(--gray-100); padding: 70px 0;">
+  <div class="container">
+    <h2>Guider och case om försenade flyg</h2>
+    <p style="color:var(--gray-600); margin-bottom:32px;">Läs våra djupguider och verkliga case om hur vi hjälpt resenärer att få ersättning för försenade flyg.</p>
+    <div class="blog-grid">
+      <% articles.forEach(function(post) { %>
+      <article class="blog-card">
+        <a href="/<%= post.slug %>" class="blog-card-link" aria-label="<%= post.title %>">
+          <div class="blog-card-body">
+            <time class="blog-card-date" datetime="<%= new Date(post.created_at).toISOString().slice(0,10) %>">
+              <%= new Date(post.created_at).toLocaleDateString('sv-SE', { year: 'numeric', month: 'long', day: 'numeric' }) %>
+            </time>
+            <h2 class="blog-card-title"><%= post.title %></h2>
+            <% if (post.meta_desc) { %>
+            <p class="blog-card-excerpt"><%= post.meta_desc %></p>
+            <% } %>
+            <span class="blog-card-read">Läs artikel →</span>
+          </div>
+        </a>
+      </article>
+      <% }) %>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<!-- Flygbolagsguider -->
+<% if (airlineArticles && airlineArticles.length > 0) { %>
+<section style="padding: 70px 0;">
+  <div class="container">
+    <h2>Ersättning per flygbolag</h2>
+    <p style="color:var(--gray-600); margin-bottom:32px;">Olika flygbolag hanterar ersättningskrav på olika sätt. Läs vår guide för ditt flygbolag.</p>
+    <div class="airline-link-grid">
+      <% airlineArticles.forEach(function(a) { %>
+      <a href="/<%= a.slug %>" class="airline-link-card">
+        <span class="airline-link-name"><%= a.title %></span>
+        <% if (a.meta_desc) { %><span class="airline-link-desc"><%= a.meta_desc %></span><% } %>
+        <span class="airline-link-arrow">→</span>
+      </a>
+      <% }) %>
+    </div>
+    <p style="margin-top:24px;"><a href="/flygbolag" style="color:var(--primary); font-weight:600;">Se alla flygbolag →</a></p>
+  </div>
+</section>
+<% } %>
+
+<!-- FAQ -->
+<section id="faq" class="faq" style="padding: 70px 0; background: var(--gray-100);">
+  <div class="container">
+    <h2>Vanliga frågor om försenat flyg</h2>
+    <div class="faq-grid">
+      <%- include('../components/faq-item', { faqQuestion: 'Hur lång försening krävs för att få ersättning?', faqAnswer: 'Du måste anlända till din slutdestination minst 3 timmar försenat (4 timmar för interkontinentala flyg över 3 500 km). Förseningen räknas från faktisk landning och dörröppning, inte från avgångstiden.' }) %>
+      <%- include('../components/faq-item', { faqQuestion: 'Hur mycket kan jag få i ersättning för försenat flyg?', faqAnswer: 'Ersättningen är 250€ för flyg under 1 500 km, 400€ för 1 500–3 500 km, och 600€ för flyg över 3 500 km utanför EU. Beloppet kan halveras om du erbjuds ombokning och anlände inom viss tid.' }) %>
+      <%- include('../components/faq-item', { faqQuestion: 'Gäller EU 261 bara inom Europa?', faqAnswer: 'Nej. EU 261/2004 gäller alla flyg som avgår från ett EU-land (oavsett flygbolag), samt flyg som anländer till EU med ett EU-baserat flygbolag.' }) %>
+      <%- include('../components/faq-item', { faqQuestion: 'Vad händer om flygbolaget hänvisar till "extraordinära omständigheter"?', faqAnswer: 'Flygbolag kan undkomma ersättning vid händelser utanför deras kontroll, som extremt väder eller politiska kriser. Tekniska fel räknas i de flesta fall INTE som extraordinärt. Vi granskar alltid om hänvisningen håller.' }) %>
+      <%- include('../components/faq-item', { faqQuestion: 'Hur lång är preskriptionstiden?', faqAnswer: 'I Sverige kan du kräva ersättning för flyg upp till tre år tillbaka i tiden. Ansök så snart som möjligt för att säkra din dokumentation.' }) %>
+      <%- include('../components/faq-item', { faqQuestion: 'Kostar det något att ansöka?', faqAnswer: 'Nej. FlightClaim tar ingen förskottsbetalning. Vi tar 25% + moms av ersättningen om vi vinner — betalar vi inget om vi förlorar.' }) %>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<%- include('../components/cta-block', {
+  ctaTitle: 'Hade ditt flyg mer än 3 timmars försening?',
+  ctaText: 'Kontrollera om du har rätt till ersättning på 2 minuter — helt gratis.',
+  ctaUrl: '/anmalan',
+  ctaLabel: 'Ansök om ersättning'
+}) %>

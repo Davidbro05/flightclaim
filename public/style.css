@@ -1721,6 +1721,20 @@ a.logo {
 }
 .cta-box .btn-cta:hover { background: var(--secondary-dark); }
 
+/* Related articles (sidebar) */
+.related-articles {
+  margin-top: 24px;
+  background: var(--gray-50);
+  border-radius: 12px;
+  padding: 20px 20px 16px;
+}
+.related-articles h3 { font-size: .95rem; margin-bottom: 12px; color: var(--gray-900); }
+.related-articles ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.related-articles li { border-top: 1px solid var(--gray-200); padding-top: 8px; }
+.related-articles li:first-child { border-top: none; padding-top: 0; }
+.related-articles a { font-size: .875rem; color: var(--primary); text-decoration: none; line-height: 1.4; display: block; }
+.related-articles a:hover { text-decoration: underline; }
+
 /* CTA banner (bottom of article) */
 .cta-banner {
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
@@ -2145,12 +2159,65 @@ details[open] .faq-question::after { content: '−'; }
   color: var(--primary);
 }
 
+/* Airline link grid (used on pillar pages) */
+.airline-link-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.airline-link-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 10px;
+  padding: 16px 18px;
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow .2s, border-color .2s;
+}
+.airline-link-card:hover { box-shadow: var(--shadow-sm); border-color: var(--primary); }
+.airline-link-name { font-weight: 600; font-size: .95rem; color: var(--gray-900); }
+.airline-link-desc { font-size: .8rem; color: var(--gray-500); line-height: 1.4; }
+.airline-link-arrow { font-size: .85rem; color: var(--primary); margin-top: auto; padding-top: 8px; }
+
+@media (max-width: 900px) { .airline-link-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .airline-link-grid { grid-template-columns: 1fr; } }
+
 @media (max-width: 1024px) {
   .airline-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 480px) {
   .airline-grid { grid-template-columns: 1fr; }
 }
+
+/* Rutt page */
+.rutt-info-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.rutt-info-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 10px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.rutt-info-card--highlight { border-color: var(--primary); background: var(--primary-lightest, #f0f4ff); }
+.rutt-info-label { font-size: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--gray-500); }
+.rutt-info-value { font-size: 1.1rem; font-weight: 700; color: var(--gray-900); }
+.rutt-rights-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 12px; max-width: 600px; }
+.rutt-rights-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 1rem; color: var(--gray-700); }
+.rutt-rights-list li::before { content: '✓'; color: var(--primary); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+.rutt-airlines { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+.rutt-airline-tag { background: var(--white); border: 1px solid var(--gray-200); border-radius: 20px; padding: 6px 14px; font-size: .875rem; font-weight: 500; color: var(--gray-800); }
+
+@media (max-width: 900px) { .rutt-info-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .rutt-info-grid { grid-template-columns: 1fr; } }
 
 /* CTA strip at bottom of blog listing */
 .blog-cta-strip {

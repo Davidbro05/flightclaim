@@ -55,6 +55,17 @@
         <p>Vi sköter hela processen mot flygbolaget. Du betalar ingenting om vi inte lyckas.</p>
         <a href="/anmalan" class="btn-cta">Ansök nu — gratis</a>
       </div>
+
+      <% if (relatedArticles && relatedArticles.length > 0) { %>
+      <div class="related-articles">
+        <h3>Relaterade artiklar</h3>
+        <ul>
+          <% relatedArticles.forEach(r => { %>
+          <li><a href="/<%= r.slug %>"><%= r.title %></a></li>
+          <% }) %>
+        </ul>
+      </div>
+      <% } %>
     </aside>
 
   </div>
