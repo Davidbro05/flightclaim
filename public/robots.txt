@@ -1,9 +1,11 @@
 User-agent: *
 Allow: /
 
+Disallow: /admin
 Disallow: /admin/
 Disallow: /api/
 Disallow: /fullmakt/
 Disallow: /health
+Disallow: /tack
 
 Sitemap: https://flightclaim.se/sitemap.xml

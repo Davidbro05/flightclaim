@@ -5,19 +5,17 @@ import type { Article } from '../types';
 
 const router = express.Router();
 
-// Priority config by article type and position
+// Use explicit sitemap columns if set; otherwise fall back to type-based defaults.
 function articlePriority(article: Article): { priority: string; changefreq: string } {
-  if (article.parent_slug === null) {
-    // Top-level pillar articles
-    return { priority: '0.8', changefreq: 'weekly' };
+  if (article.sitemap_priority) {
+    return {
+      priority: article.sitemap_priority,
+      changefreq: article.sitemap_changefreq ?? 'monthly',
+    };
   }
-  if (article.type === 'guide') {
-    return { priority: '0.7', changefreq: 'monthly' };
-  }
-  if (article.type === 'airline') {
-    return { priority: '0.6', changefreq: 'monthly' };
-  }
-  // blog
+  if (article.parent_slug === null) return { priority: '0.8', changefreq: 'weekly' };
+  if (article.type === 'guide')     return { priority: '0.7', changefreq: 'monthly' };
+  if (article.type === 'airline')   return { priority: '0.6', changefreq: 'monthly' };
   return { priority: '0.5', changefreq: 'monthly' };
 }
 
@@ -55,33 +53,16 @@ router.get('/sitemap.xml', async (req, res) => {
   try {
     const articles = await db('articles')
       .where({ status: 'published' })
+      .orderBy('sitemap_priority', 'desc')
       .orderBy('created_at', 'asc')
       .select<Article[]>();
 
-    const staticPages = [
-      // Conversion page — highest priority
-      { path: '/anmalan',            priority: '1.0', changefreq: 'monthly'  },
-      // Homepage
-      { path: '/',                   priority: '0.9', changefreq: 'weekly'   },
-      // Supporting static pages
-      { path: '/sa-fungerar-det',    priority: '0.6', changefreq: 'monthly'  },
-      { path: '/om-oss',             priority: '0.4', changefreq: 'yearly'   },
-      { path: '/kontakt',            priority: '0.4', changefreq: 'yearly'   },
-      { path: '/integritetspolicy',  priority: '0.3', changefreq: 'yearly'   },
-    ];
-
-    const urls: string[] = [
-      ...staticPages.map(p => url(`${siteUrl}${p.path}`, p.priority, p.changefreq, today)),
-      ...articles.map(a => {
-        const { priority, changefreq } = articlePriority(a);
-        return url(
-          `${siteUrl}/${esc(a.slug)}`,
-          priority,
-          changefreq,
-          a.updated_at ?? a.created_at,
-        );
-      }),
-    ];
+    const urls: string[] = articles.map(a => {
+      const { priority, changefreq } = articlePriority(a);
+      // slug '' = homepage, produces https://flightclaim.se/
+      const loc = a.slug === '' ? siteUrl + '/' : `${siteUrl}/${esc(a.slug)}`;
+      return url(loc, priority, changefreq, a.updated_at ?? a.created_at);
+    });
 
     const xml = [
       '<?xml version="1.0" encoding="UTF-8"?>',

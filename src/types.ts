@@ -48,6 +48,8 @@ export interface Article {
   faq_json: string | null;
   affiliate_ref: string | null;
   category: string | null;
+  sitemap_priority: string | null;
+  sitemap_changefreq: string | null;
   created_at: string;
   updated_at: string | null;
 }
