@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 80" width="340" height="80" role="img" aria-label="FlightClaim">
+  <!-- Check stroke 1: down-right -->
+  <line x1="7" y1="36" x2="26" y2="58"
+        stroke="#f8b81f" stroke-width="7" stroke-linecap="round"/>
+
+  <!-- Check stroke 2: up-right, leads into airplane tail -->
+  <line x1="26" y1="58" x2="44" y2="40"
+        stroke="#f8b81f" stroke-width="7" stroke-linecap="round"/>
+
+  <!-- Airplane: tail at (44,40), nose pointing upper-right (-45°) -->
+  <g transform="translate(44,40) rotate(-45)">
+    <!-- Fuselage: needle shape, tail at origin, nose at x=28 -->
+    <path d="M 28,0 C 25,-4 14,-5 0,-3 L 0,3 C 14,5 25,4 28,0 Z"
+          fill="#f8b81f"/>
+    <!-- Main swept wing -->
+    <path d="M 14,-3 L 10,-21 L 0,-18 L 4,-3 Z"
+          fill="#f8b81f"/>
+    <!-- Horizontal tail stabilizer -->
+    <path d="M 2,-3 L 0,-10 L -4,-3 Z"
+          fill="#f8b81f"/>
+  </g>
+
+  <!-- "Flight" light + "Claim" bold -->
+  <text y="57"
+        font-family="'Inter', 'Segoe UI', system-ui, sans-serif"
+        font-size="40"
+        letter-spacing="-0.5">
+    <tspan x="92" fill="#1a4b8c" font-weight="300">Flight</tspan><tspan fill="#1a4b8c" font-weight="800">Claim</tspan>
+  </text>
+</svg>

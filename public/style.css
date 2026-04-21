@@ -61,20 +61,12 @@ body {
 .logo {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 24px;
-  font-weight: 700;
 }
 
-.logo-icon {
-  font-size: 28px;
-}
-
-.logo-text {
-  background: linear-gradient(135deg, var(--primary), var(--primary-light));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.logo img {
+  display: block;
+  height: 40px;
+  width: auto;
 }
 
 .nav-menu {
@@ -753,16 +745,10 @@ a.btn-primary:hover {
   gap: 8px;
 }
 
-.footer-logo .logo-icon {
-  font-size: 24px;
-}
-
-.footer-logo .logo-text {
-  color: var(--white);
-  font-size: 20px;
-  font-weight: 600;
-  background: none;
-  -webkit-text-fill-color: var(--white);
+.footer-logo img {
+  display: block;
+  height: 32px;
+  width: auto;
 }
 
 .footer-links {
@@ -886,17 +872,8 @@ a.btn-primary:hover {
     display: none;
   }
   
-  .logo {
-    font-size: 20px;
-    gap: 6px;
-  }
-  
-  .logo-icon {
-    font-size: 24px;
-  }
-  
-  .logo-text {
-    font-size: 18px;
+  .logo img {
+    height: 30px;
   }
   
   .nav-cta .badge {

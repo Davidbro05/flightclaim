@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="FlightClaim">
+  <!-- Check stroke 1: down-right -->
+  <line x1="6" y1="30" x2="22" y2="50"
+        stroke="#f8b81f" stroke-width="9" stroke-linecap="round"/>
+
+  <!-- Check stroke 2: up-right, leads into airplane tail -->
+  <line x1="22" y1="50" x2="38" y2="34"
+        stroke="#f8b81f" stroke-width="9" stroke-linecap="round"/>
+
+  <!-- Airplane: tail at (38,34), nose pointing upper-right (-45°) -->
+  <g transform="translate(38,34) rotate(-45)">
+    <!-- Fuselage -->
+    <path d="M 24,0 C 21,-4 12,-5 0,-3 L 0,3 C 12,5 21,4 24,0 Z"
+          fill="#f8b81f"/>
+    <!-- Main swept wing -->
+    <path d="M 12,-3 L 8,-18 L 0,-15 L 3,-3 Z"
+          fill="#f8b81f"/>
+    <!-- Horizontal tail stabilizer -->
+    <path d="M 2,-3 L 0,-9 L -3,-3 Z"
+          fill="#f8b81f"/>
+  </g>
+</svg>
