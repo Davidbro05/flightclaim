@@ -58,11 +58,15 @@
       <li>Nekade dig ombordstigning (overbooking)</li>
     </ul>
 
-    <% if (route.airlines && route.airlines.length > 0) { %>
+    <% if (airlineLinks && airlineLinks.length > 0) { %>
     <h3 style="margin-top:40px; margin-bottom:16px;">Vanliga flygbolag på rutten</h3>
     <div class="rutt-airlines">
-      <% route.airlines.forEach(function(a) { %>
-      <span class="rutt-airline-tag"><%= a %></span>
+      <% airlineLinks.forEach(function(a) { %>
+        <% if (a.slug) { %>
+        <a href="/flygbolag/<%= a.slug %>" class="rutt-airline-tag rutt-airline-tag--link"><%= a.name %></a>
+        <% } else { %>
+        <span class="rutt-airline-tag"><%= a.name %></span>
+        <% } %>
       <% }) %>
     </div>
     <% } %>

@@ -87,3 +87,39 @@ export async function sendCustomerConfirmation(claim: Claim): Promise<void> {
 
   logger.info({ to: claim.email, flightNumber: claim.flightNumber }, 'Customer confirmation email sent');
 }
+
+export async function sendContactNotification(params: {
+  name: string;
+  email: string;
+  message: string;
+}): Promise<void> {
+  const transporter = createTransport();
+  if (!transporter) {
+    logger.warn('SMTP not configured — skipping contact notification email');
+    return;
+  }
+
+  const to = process.env.NOTIFY_EMAIL;
+  if (!to) {
+    logger.warn('NOTIFY_EMAIL not set — skipping contact notification email');
+    return;
+  }
+
+  await transporter.sendMail({
+    from: process.env.SMTP_FROM ?? process.env.SMTP_USER,
+    to,
+    replyTo: params.email,
+    subject: `Kontaktformulär: ${params.name}`,
+    text: [
+      `Nytt meddelande via kontaktformuläret på FlightClaim.se.`,
+      ``,
+      `Namn:    ${params.name}`,
+      `E-post:  ${params.email}`,
+      ``,
+      `Meddelande:`,
+      params.message,
+    ].join('\n'),
+  });
+
+  logger.info({ to, from: params.email }, 'Contact notification email sent');
+}

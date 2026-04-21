@@ -109,6 +109,25 @@ scripts = `<script type="application/ld+json">${faqSchema}</script>`;
 </section>
 <% } %>
 
+<!-- Populära rutter -->
+<% if (topRoutes && topRoutes.length > 0) { %>
+<section style="padding: 70px 0;">
+  <div class="container">
+    <h2>Populära rutter — kräv ersättning</h2>
+    <p style="color:var(--gray-600); margin-bottom:32px;">Drabbades du på en av dessa rutter? Klicka för att läsa om dina rättigheter och ansök direkt.</p>
+    <div class="rutt-link-grid">
+      <% topRoutes.forEach(function(r) { %>
+      <a href="/rutter/<%= r.slug %>" class="rutt-link-card">
+        <span class="rutt-link-route"><%= r.dep_city %> → <%= r.arr_city %></span>
+        <span class="rutt-link-amount">upp till <%= r.comp_amount %>€</span>
+      </a>
+      <% }) %>
+    </div>
+    <p style="margin-top:24px;"><a href="/rutter" style="color:var(--primary); font-weight:600;">Se alla rutter →</a></p>
+  </div>
+</section>
+<% } %>
+
 <!-- FAQ -->
 <section id="faq" class="faq" style="padding: 70px 0; background: var(--gray-100);">
   <div class="container">

@@ -2,6 +2,7 @@ import express from 'express';
 import db from '../db';
 import logger from '../logger';
 import { render as renderMarkdown } from '../services/markdownService';
+import { sendContactNotification } from '../services/emailService';
 import type { Article, FaqItem, Breadcrumb, Route } from '../types';
 
 const router = express.Router();
@@ -21,6 +22,35 @@ const STATIC_PARENTS: Record<string, { name: string; url: string }> = {
   flygbolag: { name: 'Flygbolag',     url: '/flygbolag' },
   forsening: { name: 'Försenat flyg', url: '/forsening' },
   'installda-flyg': { name: 'Inställt flyg', url: '/installda-flyg' },
+};
+
+const AIRLINE_SLUG_MAP: Record<string, string> = {
+  'SAS':                 'sas',
+  'Norwegian':           'norwegian',
+  'Ryanair':             'ryanair',
+  'Wizz Air':            'wizz-air',
+  'EasyJet':             'easyjet',
+  'Finnair':             'finnair',
+  'KLM':                 'klm',
+  'Lufthansa':           'lufthansa',
+  'Eurowings':           'eurowings',
+  'Turkish Airlines':    'turkish-airlines',
+  'Air France':          'air-france',
+  'British Airways':     'british-airways',
+  'Vueling':             'vueling',
+  'Transavia':           'transavia',
+  'TAP Air Portugal':    'tap-air-portugal',
+  'Iberia':              'iberia',
+  'Brussels Airlines':   'brussels-airlines',
+  'Aer Lingus':          'aer-lingus',
+  'Austrian Airlines':   'austrian-airlines',
+  'LOT Polish Airlines': 'lot-polish-airlines',
+  'Aegean Airlines':     'aegean-airlines',
+  'Condor':              'condor',
+  'TUI fly':             'tui-fly',
+  'airBaltic':           'airbaltic',
+  'Icelandair':          'icelandair',
+  'ITA Airways':         'ita-airways',
 };
 
 async function buildBreadcrumbs(article: Article, siteUrl: string): Promise<Breadcrumb[]> {
@@ -115,9 +145,33 @@ router.get('/kontakt', (req, res) => {
   });
 });
 
-router.post('/kontakt', (req, res) => {
-  const { contact_name, contact_email } = req.body as { contact_name?: string; contact_email?: string };
-  logger.info({ contact_name, contact_email }, 'Contact form submitted');
+router.post('/kontakt', async (req, res) => {
+  const { contact_name, contact_email, contact_message } = req.body as {
+    contact_name?: string;
+    contact_email?: string;
+    contact_message?: string;
+  };
+
+  const name    = (contact_name    ?? '').trim();
+  const email   = (contact_email   ?? '').trim();
+  const message = (contact_message ?? '').trim();
+
+  if (!name || !email || !message) {
+    return res.redirect('/kontakt?fel=1');
+  }
+
+  logger.info({ name, email }, 'Contact form submitted');
+
+  await db('contact_messages').insert({
+    name,
+    email,
+    message,
+    created_at: new Date().toISOString(),
+  }).catch((err: unknown) => logger.error({ err }, 'Failed to save contact message'));
+
+  sendContactNotification({ name, email, message })
+    .catch((err: unknown) => logger.error({ err }, 'Failed to send contact notification email'));
+
   res.redirect('/kontakt?skickat=1');
 });
 
@@ -172,7 +226,16 @@ const AIRLINES = [
   { slug: 'transavia',         name: 'Transavia',         img: 'transavia-boeing.jpg',                tagline: 'KLM-gruppens semesterflygbolag' },
   { slug: 'tap-air-portugal',  name: 'TAP Air Portugal',  img: 'tap-air-portugal-airbus.jpg',         tagline: 'Europas gateway till Latinamerika' },
   { slug: 'iberia',            name: 'Iberia',            img: 'iberia-airbus.jpg',                   tagline: 'Spaniens nationella bolag via Madrid' },
-  { slug: 'brussels-airlines', name: 'Brussels Airlines', img: 'brussels-airlines-airbus.jpg',        tagline: 'Lufthansa-gruppen, hubbar i Bryssel' },
+  { slug: 'brussels-airlines',    name: 'Brussels Airlines',    img: 'brussels-airlines-airbus.jpg',     tagline: 'Lufthansa-gruppen, hubbar i Bryssel' },
+  { slug: 'aer-lingus',           name: 'Aer Lingus',           img: 'aer-lingus-airbus.jpg',            tagline: 'IAG-gruppen, transatlantisk hubb Dublin' },
+  { slug: 'austrian-airlines',    name: 'Austrian Airlines',    img: 'austrian-airlines-airbus.jpg',     tagline: 'Lufthansa-gruppen, hubbar i Wien' },
+  { slug: 'lot-polish-airlines',  name: 'LOT Polish Airlines',  img: 'lot-polish-airlines-boeing.jpg',   tagline: 'Polens nationella bolag via Warszawa' },
+  { slug: 'aegean-airlines',      name: 'Aegean Airlines',      img: 'aegean-airlines-airbus.jpg',       tagline: 'Star Alliance, populär på Grekland-rutter' },
+  { slug: 'condor',               name: 'Condor',               img: 'condor-airbus.jpg',                tagline: 'Charterflygare på långdistansrutter' },
+  { slug: 'tui-fly',              name: 'TUI fly',              img: 'tui-fly-boeing.jpg',               tagline: 'Semesterflygare — EU 261 gäller ändå' },
+  { slug: 'airbaltic',            name: 'airBaltic',            img: 'airbaltic-airbus.jpg',             tagline: 'Lettlands nationella bolag via Riga' },
+  { slug: 'icelandair',           name: 'Icelandair',           img: 'icelandair-boeing.jpg',            tagline: 'EES-bolag — täcks av EU 261' },
+  { slug: 'ita-airways',          name: 'ITA Airways',          img: 'ita-airways-airbus.jpg',           tagline: 'Italiens nationella bolag, Lufthansa-gruppen' },
 ];
 
 router.get('/flygbolag', (_req, res) => {
@@ -227,7 +290,7 @@ router.get('/blogg', async (req, res) => {
 
 router.get('/forsening', async (_req, res) => {
   try {
-    const [articles, airlineArticles] = await Promise.all([
+    const [articles, airlineArticles, topRoutes] = await Promise.all([
       db('articles')
         .where({ type: 'blog', status: 'published', category: 'forsening' })
         .orderBy('created_at', 'desc')
@@ -235,8 +298,12 @@ router.get('/forsening', async (_req, res) => {
       db('articles')
         .where({ type: 'airline', status: 'published' })
         .orderBy('title', 'asc')
-        .limit(6)
         .select('slug', 'title', 'meta_desc'),
+      db('routes')
+        .where({ published: true })
+        .orderBy('comp_amount', 'desc')
+        .limit(9)
+        .select('slug', 'dep_city', 'arr_city', 'comp_amount'),
     ]);
 
     res.render('pages/forsening', {
@@ -245,6 +312,7 @@ router.get('/forsening', async (_req, res) => {
       canonical: '/forsening',
       articles,
       airlineArticles,
+      topRoutes,
     });
   } catch (err) {
     logger.error({ err }, 'Forsening page error');
@@ -256,7 +324,7 @@ router.get('/forsening', async (_req, res) => {
 
 router.get('/installda-flyg', async (_req, res) => {
   try {
-    const [articles, airlineArticles] = await Promise.all([
+    const [articles, airlineArticles, topRoutes] = await Promise.all([
       db('articles')
         .where({ type: 'blog', status: 'published', category: 'installda-flyg' })
         .orderBy('created_at', 'desc')
@@ -264,8 +332,12 @@ router.get('/installda-flyg', async (_req, res) => {
       db('articles')
         .where({ type: 'airline', status: 'published' })
         .orderBy('title', 'asc')
-        .limit(6)
         .select('slug', 'title', 'meta_desc'),
+      db('routes')
+        .where({ published: true })
+        .orderBy('comp_amount', 'desc')
+        .limit(9)
+        .select('slug', 'dep_city', 'arr_city', 'comp_amount'),
     ]);
 
     res.render('pages/installda-flyg', {
@@ -274,6 +346,7 @@ router.get('/installda-flyg', async (_req, res) => {
       canonical: '/installda-flyg',
       articles,
       airlineArticles,
+      topRoutes,
     });
   } catch (err) {
     logger.error({ err }, 'Installda-flyg page error');
@@ -305,6 +378,11 @@ router.get('/rutter/:slug', async (req, res) => {
 
     const route: Route = { ...routeRaw, airlines: airlineList };
 
+    const airlineLinks = airlineList.map(name => ({
+      name,
+      slug: AIRLINE_SLUG_MAP[name] ?? null,
+    }));
+
     const faqSchema = JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'FAQPage',
@@ -318,6 +396,7 @@ router.get('/rutter/:slug', async (req, res) => {
 
     res.render('pages/rutt', {
       route,
+      airlineLinks,
       title:    route.meta_title ?? `Försenat flyg ${route.dep_city}–${route.arr_city}? Kräv ${route.comp_amount ?? '250–600'}€ | FlightClaim`,
       metaDesc: route.meta_desc  ?? '',
       canonical: `/rutter/${route.slug}`,
