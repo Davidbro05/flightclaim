@@ -354,6 +354,28 @@ router.get('/installda-flyg', async (_req, res) => {
   }
 });
 
+// ── Rutter index ──────────────────────────────────────────────────────────
+
+router.get('/rutter', async (_req, res) => {
+  try {
+    const routes = await db('routes')
+      .where({ published: true })
+      .orderBy('comp_amount', 'desc')
+      .orderBy('dep_city', 'asc')
+      .select('slug', 'dep_city', 'arr_city', 'dep_airport', 'arr_airport', 'distance_km', 'comp_amount');
+
+    res.render('pages/rutter', {
+      title: 'Rutter — försenat flyg och ersättning per sträcka | FlightClaim',
+      metaDesc: 'Hitta din flygrutt och läs om rätten till upp till 600€ ersättning enligt EU 261/2004. Täcker Stockholm, Göteborg, Malmö och populära semesterrutter.',
+      canonical: '/rutter',
+      routes,
+    });
+  } catch (err) {
+    logger.error({ err }, 'Rutter index error');
+    res.status(500).render('pages/404', { title: 'Serverfel | FlightClaim', metaDesc: '' });
+  }
+});
+
 // ── Rutt-specifika landningssidor ─────────────────────────────────────────
 
 router.get('/rutter/:slug', async (req, res) => {

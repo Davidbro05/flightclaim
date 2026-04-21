@@ -1,0 +1,47 @@
+<!-- Page Hero -->
+<section class="page-hero">
+  <div class="container">
+    <h1>Rutter — försenat eller inställt flyg?</h1>
+    <p>Välj din flygrutt nedan och läs om rätten till upp till 600€ ersättning per person enligt EU 261/2004.</p>
+  </div>
+</section>
+
+<div class="container" style="padding: 60px 0;">
+
+  <%
+    // Group routes by dep_city
+    const grouped = {};
+    routes.forEach(function(r) {
+      if (!grouped[r.dep_city]) grouped[r.dep_city] = [];
+      grouped[r.dep_city].push(r);
+    });
+    const cities = Object.keys(grouped).sort();
+  %>
+
+  <% cities.forEach(function(city) { %>
+  <section style="margin-bottom: 48px;">
+    <h2 style="font-size:1.25rem; font-weight:700; margin-bottom:16px; color:var(--gray-900);">
+      Avgång från <%= city %>
+    </h2>
+    <div class="rutt-link-grid">
+      <% grouped[city].forEach(function(r) { %>
+      <a href="/rutter/<%= r.slug %>" class="rutt-link-card">
+        <span class="rutt-link-route"><%= r.dep_city %> → <%= r.arr_city %></span>
+        <span class="rutt-link-amount">upp till <%= r.comp_amount %>€</span>
+      </a>
+      <% }) %>
+    </div>
+  </section>
+  <% }) %>
+
+  <div class="blog-cta-strip" style="margin-top: 16px;">
+    <div class="blog-cta-strip-inner">
+      <div>
+        <strong>Hittar du inte din rutt?</strong>
+        <span>Ansök ändå — vi utreder din rätt oavsett sträcka.</span>
+      </div>
+      <a href="/anmalan" class="btn-cta">Ansök gratis nu →</a>
+    </div>
+  </div>
+
+</div>

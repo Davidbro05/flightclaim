@@ -46,7 +46,7 @@ function url(loc: string, priority: string, changefreq: string, lastmod?: unknow
   ].filter(Boolean).join('\n');
 }
 
-router.get('/sitemap.xml', async (req, res) => {
+router.get('/sitemap.xml', async (_req, res) => {
   const siteUrl = (res.locals.siteUrl as string | undefined) ?? 'https://flightclaim.se';
   const today = new Date().toISOString().slice(0, 10);
 
@@ -79,6 +79,7 @@ router.get('/sitemap.xml', async (req, res) => {
       url(`${siteUrl}/installda-flyg`,  '0.9', 'weekly',   today),
       url(`${siteUrl}/sa-fungerar-det`, '0.7', 'monthly',  today),
       url(`${siteUrl}/flygbolag`,       '0.7', 'monthly',  today),
+      url(`${siteUrl}/rutter`,          '0.7', 'monthly',  today),
       url(`${siteUrl}/blogg`,           '0.7', 'weekly',   today),
       url(`${siteUrl}/om-oss`,          '0.5', 'monthly',  today),
       url(`${siteUrl}/kontakt`,         '0.5', 'monthly',  today),
