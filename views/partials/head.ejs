@@ -11,8 +11,17 @@
   <link rel="canonical" href="<%= siteUrl %><%= canonical %>">
   <% } %>
 
+  <!-- Google Search Console -->
+  <% if (typeof googleSiteVerification !== 'undefined' && googleSiteVerification) { %>
+  <meta name="google-site-verification" content="<%= googleSiteVerification %>">
+  <% } %>
+
+  <!-- Robots -->
+  <meta name="robots" content="<%= typeof noindex !== 'undefined' && noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' %>">
+
   <!-- Open Graph -->
   <meta property="og:type" content="<%= typeof ogType !== 'undefined' ? ogType : 'website' %>">
+  <meta property="og:locale" content="sv_SE">
   <meta property="og:site_name" content="<%= siteName %>">
   <meta property="og:title" content="<%= typeof ogTitle !== 'undefined' ? ogTitle : (typeof title !== 'undefined' ? title : siteName) %>">
   <meta property="og:description" content="<%= typeof ogDesc !== 'undefined' ? ogDesc : (typeof metaDesc !== 'undefined' ? metaDesc : '') %>">
@@ -22,6 +31,18 @@
   <meta property="og:image" content="<%= siteUrl %><%= typeof ogImage !== 'undefined' && ogImage ? ogImage : '/images/hero-bg.jpg' %>">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="<%= typeof ogImageAlt !== 'undefined' ? ogImageAlt : 'FlightClaim – ersättning för försenat och inställt flyg' %>">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="<%= typeof ogTitle !== 'undefined' ? ogTitle : (typeof title !== 'undefined' ? title : siteName) %>">
+  <meta name="twitter:description" content="<%= typeof ogDesc !== 'undefined' ? ogDesc : (typeof metaDesc !== 'undefined' ? metaDesc : '') %>">
+  <meta name="twitter:image" content="<%= siteUrl %><%= typeof ogImage !== 'undefined' && ogImage ? ogImage : '/images/hero-bg.jpg' %>">
+
+  <!-- Preload LCP image on hero pages -->
+  <% if (typeof preloadHero !== 'undefined' && preloadHero) { %>
+  <link rel="preload" as="image" href="/images/hero-bg.jpg" fetchpriority="high">
+  <% } %>
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -30,30 +51,62 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
   <link rel="manifest" href="/images/site.webmanifest">
 
+  <!-- RSS feed -->
+  <link rel="alternate" type="application/rss+xml" title="FlightClaim Blogg" href="<%= siteUrl %>/feed.xml">
+
   <!-- CSS + Google Fonts -->
   <link rel="stylesheet" href="/style.css?v=<%= assetVersion %>">
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- JSON-LD: LocalBusiness -->
+  <!-- JSON-LD: Organization + WebSite + LegalService -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "LegalService",
-    "name": "FlightClaim AB",
-    "url": "<%= siteUrl %>",
-    "description": "FlightClaim hjälper resenärer att kräva ersättning för försenade och inställda flyg enligt EU 261/2004.",
-    "areaServed": "SE",
-    "telephone": "08-123 456 78",
-    "email": "info@flightclaim.se",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "Gibraltargatan 84",
-      "postalCode": "412 79",
-      "addressLocality": "Göteborg",
-      "addressCountry": "SE"
-    }
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "<%= siteUrl %>/#organization",
+        "name": "FlightClaim AB",
+        "url": "<%= siteUrl %>",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "<%= siteUrl %>/images/logo.svg",
+          "width": 200,
+          "height": 47
+        },
+        "email": "info@flightclaim.se",
+        "telephone": "08-123 456 78",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Gibraltargatan 84",
+          "postalCode": "412 79",
+          "addressLocality": "Göteborg",
+          "addressCountry": "SE"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "<%= siteUrl %>/#website",
+        "url": "<%= siteUrl %>",
+        "name": "<%= siteName %>",
+        "inLanguage": "sv-SE",
+        "publisher": { "@id": "<%= siteUrl %>/#organization" }
+      },
+      {
+        "@type": "LegalService",
+        "@id": "<%= siteUrl %>/#legalservice",
+        "name": "FlightClaim",
+        "url": "<%= siteUrl %>",
+        "description": "FlightClaim hjälper svenska resenärer att kräva ersättning för försenade och inställda flyg enligt EU 261/2004.",
+        "areaServed": { "@type": "Country", "name": "Sverige" },
+        "priceRange": "Gratis om vi inte vinner — annars 25% + moms av ersättningen",
+        "parentOrganization": { "@id": "<%= siteUrl %>/#organization" }
+      }
+    ]
   }
   </script>
 </head>

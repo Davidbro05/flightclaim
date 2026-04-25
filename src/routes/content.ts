@@ -1,9 +1,15 @@
 import express from 'express';
 import db from '../db';
 import logger from '../logger';
-import { render as renderMarkdown } from '../services/markdownService';
+import {
+  render as renderMarkdown,
+  wordCount,
+  readingTimeMinutes,
+  extractFirstImage,
+  extractToc,
+} from '../services/markdownService';
 import { sendContactNotification } from '../services/emailService';
-import type { Article, FaqItem, Breadcrumb, Route } from '../types';
+import type { Article, Author, FaqItem, Breadcrumb, Route } from '../types';
 
 const router = express.Router();
 
@@ -69,7 +75,19 @@ async function buildBreadcrumbs(article: Article, siteUrl: string): Promise<Brea
   return crumbs;
 }
 
-function buildSchemaJson(article: Article, faqItems: FaqItem[] | null, crumbs: Breadcrumb[], siteUrl: string): string {
+interface SchemaExtras {
+  heroImage: string | null;
+  words: number;
+  author: Author | null;
+}
+
+function buildSchemaJson(
+  article: Article,
+  faqItems: FaqItem[] | null,
+  crumbs: Breadcrumb[],
+  siteUrl: string,
+  extras: SchemaExtras,
+): string {
   const schemas: object[] = [];
 
   schemas.push({
@@ -83,6 +101,36 @@ function buildSchemaJson(article: Article, faqItems: FaqItem[] | null, crumbs: B
     })),
   });
 
+  const imageUrl = extras.heroImage
+    ? (extras.heroImage.startsWith('http') ? extras.heroImage : `${siteUrl}${extras.heroImage}`)
+    : `${siteUrl}/images/hero-bg.jpg`;
+
+  const authorNode = extras.author
+    ? {
+        '@type': 'Person',
+        '@id': `${siteUrl}/forfattare/${extras.author.slug}#person`,
+        name: extras.author.name,
+        url: `${siteUrl}/forfattare/${extras.author.slug}`,
+        ...(extras.author.role ? { jobTitle: extras.author.role } : {}),
+        ...(extras.author.credentials ? { description: extras.author.credentials } : {}),
+        ...(extras.author.image_url ? { image: `${siteUrl}${extras.author.image_url}` } : {}),
+      }
+    : { '@id': `${siteUrl}/#organization` };
+
+  const baseArticleFields = {
+    headline: article.title,
+    description: article.meta_desc ?? '',
+    url: `${siteUrl}/${article.slug}`,
+    datePublished: article.created_at,
+    dateModified: article.updated_at ?? article.created_at,
+    inLanguage: 'sv-SE',
+    image: imageUrl,
+    wordCount: extras.words,
+    author: authorNode,
+    publisher: { '@id': `${siteUrl}/#organization` },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${siteUrl}/${article.slug}` },
+  };
+
   if (article.schema_type === 'FAQPage' && faqItems) {
     schemas.push({
       '@context': 'https://schema.org',
@@ -93,21 +141,97 @@ function buildSchemaJson(article: Article, faqItems: FaqItem[] | null, crumbs: B
         acceptedAnswer: { '@type': 'Answer', text: f.a },
       })),
     });
+    schemas.push({
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      ...baseArticleFields,
+    });
   } else if (article.schema_type === 'Article') {
     schemas.push({
       '@context': 'https://schema.org',
       '@type': 'Article',
-      headline: article.title,
-      description: article.meta_desc ?? '',
-      url: `${siteUrl}/${article.slug}`,
-      datePublished: article.created_at,
-      dateModified: article.updated_at ?? article.created_at,
-      publisher: { '@type': 'Organization', name: 'FlightClaim.se', url: siteUrl },
+      ...baseArticleFields,
     });
   }
 
   if (schemas.length === 1) return JSON.stringify(schemas[0]);
   return JSON.stringify({ '@context': 'https://schema.org', '@graph': schemas });
+}
+
+interface RelatedArticle {
+  slug: string;
+  title: string;
+  meta_desc: string | null;
+  type: string;
+  parent_slug: string | null;
+}
+
+async function buildRelatedArticles(article: Article): Promise<RelatedArticle[]> {
+  const results: RelatedArticle[] = [];
+  const seen = new Set<string>([article.slug]);
+
+  const push = (rows: RelatedArticle[]) => {
+    for (const r of rows) {
+      if (seen.has(r.slug)) continue;
+      seen.add(r.slug);
+      results.push(r);
+      if (results.length >= 5) return true;
+    }
+    return false;
+  };
+
+  if (article.parent_slug) {
+    const pillar = await db('articles')
+      .where({ slug: article.parent_slug, status: 'published' })
+      .select<RelatedArticle[]>('slug', 'title', 'meta_desc', 'type', 'parent_slug');
+    if (push(pillar)) return results;
+
+    const siblings = await db('articles')
+      .where({ parent_slug: article.parent_slug, status: 'published' })
+      .whereNot({ slug: article.slug })
+      .orderBy('created_at', 'desc')
+      .limit(4)
+      .select<RelatedArticle[]>('slug', 'title', 'meta_desc', 'type', 'parent_slug');
+    if (push(siblings)) return results;
+  } else {
+    const spokes = await db('articles')
+      .where({ parent_slug: article.slug, status: 'published' })
+      .orderBy('created_at', 'asc')
+      .limit(4)
+      .select<RelatedArticle[]>('slug', 'title', 'meta_desc', 'type', 'parent_slug');
+    if (push(spokes)) return results;
+  }
+
+  if (article.category) {
+    const sameCategory = await db('articles')
+      .where({ status: 'published', category: article.category })
+      .whereNot({ slug: article.slug })
+      .orderBy('created_at', 'desc')
+      .limit(5)
+      .select<RelatedArticle[]>('slug', 'title', 'meta_desc', 'type', 'parent_slug');
+    if (push(sameCategory)) return results;
+  }
+
+  if (results.length < 3) {
+    const topBlogs = await db('articles')
+      .where({ status: 'published', type: 'blog' })
+      .whereNot({ slug: article.slug })
+      .orderBy('created_at', 'desc')
+      .limit(3)
+      .select<RelatedArticle[]>('slug', 'title', 'meta_desc', 'type', 'parent_slug');
+    push(topBlogs);
+  }
+
+  return results;
+}
+
+function formatSwedishDate(date: string | Date | null | undefined): string {
+  if (!date) return '';
+  const d = date instanceof Date ? date : new Date(date);
+  if (Number.isNaN(d.getTime())) return '';
+  const months = ['januari', 'februari', 'mars', 'april', 'maj', 'juni',
+    'juli', 'augusti', 'september', 'oktober', 'november', 'december'];
+  return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
 }
 
 // ── Static EJS pages ───────────────────────────────────────────────────────
@@ -117,6 +241,7 @@ router.get('/', (_req, res) => {
     title: 'FlightClaim – Få ersättning för försenat flyg',
     metaDesc: 'Du kan ha rätt till upp till 600€ per person. Vi sköter hela processen mot flygbolaget – utan risk.',
     canonical: '/',
+    preloadHero: true,
   });
 });
 
@@ -196,6 +321,7 @@ router.get('/tack', (_req, res) => {
     title: 'Tack för din ansökan | FlightClaim',
     metaDesc: '',
     canonical: '/tack',
+    noindex: true,
   });
 });
 
@@ -261,6 +387,7 @@ router.get('/blogg', async (req, res) => {
   const aktiv = typeof req.query.kategori === 'string' && BLOG_CATEGORIES[req.query.kategori]
     ? req.query.kategori
     : null;
+  const siteUrl = (res.locals.siteUrl as string | undefined) ?? 'https://flightclaim.se';
 
   try {
     const query = db('articles')
@@ -272,6 +399,24 @@ router.get('/blogg', async (req, res) => {
 
     const posts = await query;
 
+    const blogSchema = {
+      '@context': 'https://schema.org',
+      '@type': 'Blog',
+      '@id': `${siteUrl}/blogg#blog`,
+      url: `${siteUrl}/blogg`,
+      name: 'FlightClaim Blogg',
+      description: 'Guider, case studies och nyheter om flygkompensation och EU 261/2004.',
+      inLanguage: 'sv-SE',
+      publisher: { '@id': `${siteUrl}/#organization` },
+      blogPost: posts.slice(0, 20).map((p: { slug: string; title: string; meta_desc: string | null; created_at: string }) => ({
+        '@type': 'BlogPosting',
+        headline: p.title,
+        url: `${siteUrl}/${p.slug}`,
+        datePublished: p.created_at,
+        ...(p.meta_desc ? { description: p.meta_desc } : {}),
+      })),
+    };
+
     res.render('pages/blogg', {
       title: 'Blogg om flygrättigheter | FlightClaim.se',
       metaDesc: 'Guider, case studies och nyheter om flygkompensation och EU 261/2004. Lär dig kräva ersättning för försenat eller inställt flyg.',
@@ -279,10 +424,69 @@ router.get('/blogg', async (req, res) => {
       posts,
       kategorier: BLOG_CATEGORIES,
       aktiv,
+      scripts: `<script type="application/ld+json">${JSON.stringify(blogSchema)}</script>`,
     });
   } catch (err) {
     logger.error({ err }, 'Blogg index error');
     res.status(500).render('pages/404', { title: 'Serverfel | FlightClaim', metaDesc: '' });
+  }
+});
+
+// ── RSS feed ───────────────────────────────────────────────────────────────
+
+function escapeXml(unsafe: string): string {
+  return unsafe
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
+router.get('/feed.xml', async (_req, res) => {
+  const siteUrl = (res.locals.siteUrl as string | undefined) ?? 'https://flightclaim.se';
+
+  try {
+    const posts = await db('articles')
+      .where({ type: 'blog', status: 'published' })
+      .orderBy('created_at', 'desc')
+      .limit(30)
+      .select('slug', 'title', 'meta_desc', 'created_at', 'updated_at');
+
+    const lastBuild = posts.length > 0
+      ? new Date(posts[0].updated_at ?? posts[0].created_at).toUTCString()
+      : new Date().toUTCString();
+
+    const items = posts.map((p: { slug: string; title: string; meta_desc: string | null; created_at: string }) => {
+      const link = `${siteUrl}/${p.slug}`;
+      const desc = p.meta_desc ?? '';
+      const pubDate = new Date(p.created_at).toUTCString();
+      return `    <item>
+      <title>${escapeXml(p.title)}</title>
+      <link>${escapeXml(link)}</link>
+      <guid isPermaLink="true">${escapeXml(link)}</guid>
+      <description>${escapeXml(desc)}</description>
+      <pubDate>${pubDate}</pubDate>
+    </item>`;
+    }).join('\n');
+
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>FlightClaim Blogg</title>
+    <link>${escapeXml(siteUrl + '/blogg')}</link>
+    <atom:link href="${escapeXml(siteUrl + '/feed.xml')}" rel="self" type="application/rss+xml" />
+    <description>Guider, case studies och nyheter om flygkompensation och EU 261/2004.</description>
+    <language>sv-SE</language>
+    <lastBuildDate>${lastBuild}</lastBuildDate>
+${items}
+  </channel>
+</rss>`;
+
+    res.type('application/rss+xml; charset=utf-8').send(xml);
+  } catch (err) {
+    logger.error({ err }, 'RSS feed error');
+    res.status(500).type('text/plain').send('Serverfel');
   }
 });
 
@@ -416,9 +620,12 @@ router.get('/rutter/:slug', async (req, res) => {
       ],
     });
 
+    const routeBodyHtml = route.content ? renderMarkdown(route.content) : null;
+
     res.render('pages/rutt', {
       route,
       airlineLinks,
+      routeBodyHtml,
       title:    route.meta_title ?? `Försenat flyg ${route.dep_city}–${route.arr_city}? Kräv ${route.comp_amount ?? '250–600'}€ | FlightClaim`,
       metaDesc: route.meta_desc  ?? '',
       canonical: `/rutter/${route.slug}`,
@@ -426,6 +633,54 @@ router.get('/rutter/:slug', async (req, res) => {
     });
   } catch (err) {
     logger.error({ err, slug }, 'Rutt page error');
+    res.status(500).render('pages/404', { title: 'Serverfel | FlightClaim', metaDesc: '' });
+  }
+});
+
+// ── Författar-sidor ────────────────────────────────────────────────────────
+
+router.get('/forfattare/:slug', async (req, res) => {
+  const { slug } = req.params;
+  const siteUrl = (res.locals.siteUrl as string | undefined) ?? 'https://flightclaim.se';
+
+  try {
+    const author = await db('authors').where({ slug }).first<Author>();
+
+    if (!author) {
+      res.status(404).render('pages/404', { title: 'Sidan hittades inte | FlightClaim', metaDesc: '' });
+      return;
+    }
+
+    const articles = await db('articles')
+      .where({ author_id: author.id, status: 'published' })
+      .orderBy('created_at', 'desc')
+      .limit(20)
+      .select('slug', 'title', 'meta_desc', 'type', 'created_at');
+
+    const personSchema = {
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      '@id': `${siteUrl}/forfattare/${author.slug}#person`,
+      name: author.name,
+      url: `${siteUrl}/forfattare/${author.slug}`,
+      ...(author.role ? { jobTitle: author.role } : {}),
+      ...(author.credentials ? { description: author.credentials } : {}),
+      ...(author.image_url ? { image: `${siteUrl}${author.image_url}` } : {}),
+      ...(author.email ? { email: author.email } : {}),
+      ...(author.linkedin_url ? { sameAs: [author.linkedin_url] } : {}),
+      worksFor: { '@id': `${siteUrl}/#organization` },
+    };
+
+    res.render('pages/forfattare', {
+      author,
+      articles,
+      title:    `${author.name}${author.role ? ', ' + author.role : ''} | FlightClaim`,
+      metaDesc: author.credentials ?? `Artiklar av ${author.name} på FlightClaim.`,
+      canonical: `/forfattare/${author.slug}`,
+      scripts: `<script type="application/ld+json">${JSON.stringify(personSchema)}</script>`,
+    });
+  } catch (err) {
+    logger.error({ err, slug }, 'Författar-sida fel');
     res.status(500).render('pages/404', { title: 'Serverfel | FlightClaim', metaDesc: '' });
   }
 });
@@ -447,16 +702,17 @@ router.get('/:slug{/*path}', async (req, res) => {
     const faqItems   = parseFaq(article.faq_json);
     const crumbs     = await buildBreadcrumbs(article, siteUrl);
     const bodyHtml   = renderMarkdown(article.content ?? '');
-    const schemaJson = buildSchemaJson(article, faqItems, crumbs, siteUrl);
+    const heroImage  = extractFirstImage(article.content);
+    const words      = wordCount(article.content);
+    const readMin    = readingTimeMinutes(article.content);
+    const tocEntries = extractToc(article.content);
+    const toc        = tocEntries.length >= 3 ? tocEntries : null;
+    const author     = article.author_id
+      ? (await db('authors').where({ id: article.author_id }).first<Author>()) ?? null
+      : null;
+    const schemaJson = buildSchemaJson(article, faqItems, crumbs, siteUrl, { heroImage, words, author });
 
-    const relatedArticles = article.category
-      ? await db('articles')
-          .where({ status: 'published', category: article.category })
-          .whereNot({ slug })
-          .orderBy('created_at', 'desc')
-          .limit(3)
-          .select('slug', 'title', 'meta_desc')
-      : [];
+    const relatedArticles = await buildRelatedArticles(article);
 
     res.render('pages/artikel', {
       article,
@@ -465,10 +721,16 @@ router.get('/:slug{/*path}', async (req, res) => {
       crumbs,
       schemaJson,
       relatedArticles,
+      readMin,
+      words,
+      author,
+      toc,
+      updatedAtLabel: formatSwedishDate(article.updated_at ?? article.created_at),
       title:    article.meta_title ?? `${article.title} | FlightClaim.se`,
       metaDesc: article.meta_desc  ?? '',
       canonical: `/${article.slug}`,
       ogType: 'article',
+      ogImage: heroImage ?? undefined,
     });
   } catch (err) {
     logger.error({ err, slug }, 'Content route error');

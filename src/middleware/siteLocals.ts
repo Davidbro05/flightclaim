@@ -13,11 +13,12 @@ async function getNavItems(): Promise<NavItem[]> {
 }
 
 export default async function siteLocals(req: Request, res: Response, next: NextFunction): Promise<void> {
-  res.locals.siteUrl      = process.env.SITE_URL ?? 'https://flightclaim.se';
-  res.locals.siteName     = 'FlightClaim';
-  res.locals.currentYear  = new Date().getFullYear();
-  res.locals.assetVersion = process.env.npm_package_version ?? '1';
-  res.locals.currentPath  = req.path;
+  res.locals.siteUrl                 = process.env.SITE_URL ?? 'https://flightclaim.se';
+  res.locals.siteName                = 'FlightClaim';
+  res.locals.currentYear             = new Date().getFullYear();
+  res.locals.assetVersion            = process.env.npm_package_version ?? '1';
+  res.locals.currentPath             = req.path;
+  res.locals.googleSiteVerification  = process.env.GOOGLE_SITE_VERIFICATION ?? null;
   try {
     res.locals.navItems = await getNavItems();
   } catch {

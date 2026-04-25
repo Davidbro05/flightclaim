@@ -1,3 +1,35 @@
+<%
+  const howToSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'Så fungerar det — ansök om flygkompensation med FlightClaim',
+    description: 'Tre enkla steg för att få ersättning för försenat eller inställt flyg enligt EU 261/2004.',
+    totalTime: 'PT2M',
+    estimatedCost: { '@type': 'MonetaryAmount', currency: 'SEK', value: '0' },
+    step: [
+      {
+        '@type': 'HowToStep',
+        position: 1,
+        name: 'Fyll i formuläret',
+        url: siteUrl + '/anmalan',
+        text: 'Ange dina personuppgifter och flyginformation — flygbolag, flygnummer, datum och vad som hände. Det tar ungefär 2 minuter. Signera fullmakten digitalt direkt i formuläret.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 2,
+        name: 'Vi granskar ditt ärende',
+        text: 'Våra juridiska experter bedömer om ditt flyg kvalificerar för ersättning enligt EU 261/2004. Vi kontaktar flygbolaget och kräver ersättning å dina vägnar. Du behöver inte göra något mer.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 3,
+        name: 'Du får din ersättning',
+        text: 'När flygbolaget betalar drar vi av vår provision (25% + moms) och resten betalas direkt till dig. De flesta ärenden är klara inom 4–8 veckor.'
+      }
+    ]
+  };
+  scripts = '<script type="application/ld+json">' + JSON.stringify(howToSchema) + '</script>';
+%>
 <!-- Page Hero -->
 <section class="page-hero">
   <div class="container">

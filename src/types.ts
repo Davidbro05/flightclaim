@@ -50,6 +50,21 @@ export interface Article {
   category: string | null;
   sitemap_priority: string | null;
   sitemap_changefreq: string | null;
+  author_id: number | null;
+  created_at: string;
+  updated_at: string | null;
+}
+
+export interface Author {
+  id: number;
+  slug: string;
+  name: string;
+  role: string | null;
+  credentials: string | null;
+  bio: string | null;
+  image_url: string | null;
+  email: string | null;
+  linkedin_url: string | null;
   created_at: string;
   updated_at: string | null;
 }
@@ -66,6 +81,7 @@ export interface Route {
   airlines: string[] | null;
   meta_title: string | null;
   meta_desc: string | null;
+  content: string | null;
   published: boolean;
   created_at: string;
   updated_at: string | null;

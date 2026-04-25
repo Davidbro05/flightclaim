@@ -25,6 +25,31 @@
     <article class="article-body">
       <h1><%= article.title %></h1>
 
+      <% if (typeof updatedAtLabel !== 'undefined' && updatedAtLabel) { %>
+      <div class="article-meta">
+        <% if (typeof author !== 'undefined' && author) { %>
+        <span class="article-meta-item">Av <a href="/forfattare/<%= author.slug %>" class="article-author-link" rel="author"><%= author.name %></a></span>
+        <span class="article-meta-sep" aria-hidden="true">·</span>
+        <% } %>
+        <span class="article-meta-item">Senast uppdaterad: <time datetime="<%= article.updated_at ?? article.created_at %>"><%= updatedAtLabel %></time></span>
+        <% if (typeof readMin !== 'undefined' && readMin) { %>
+        <span class="article-meta-sep" aria-hidden="true">·</span>
+        <span class="article-meta-item"><%= readMin %> min läsning</span>
+        <% } %>
+      </div>
+      <% } %>
+
+      <% if (typeof toc !== 'undefined' && toc) { %>
+      <nav class="article-toc" aria-label="Innehåll">
+        <p class="article-toc-title">Innehåll</p>
+        <ol>
+          <% toc.forEach(function(t){ %>
+          <li><a href="#<%= t.id %>"><%= t.text %></a></li>
+          <% }) %>
+        </ol>
+      </nav>
+      <% } %>
+
       <%- bodyHtml %>
 
       <!-- FAQ section -->
@@ -68,5 +93,15 @@
       <% } %>
     </aside>
 
+  </div>
+</div>
+
+<!-- Sticky mobile CTA -->
+<div class="article-sticky-cta" role="complementary" aria-label="Ansök om ersättning">
+  <div class="article-sticky-cta-inner">
+    <div class="article-sticky-cta-text">
+      <strong>Drabbad?</strong> <span>Kolla gratis om du har rätt</span>
+    </div>
+    <a href="/anmalan" class="btn-cta article-sticky-cta-btn">Ansök →</a>
   </div>
 </div>

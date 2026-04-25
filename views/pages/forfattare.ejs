@@ -1,0 +1,47 @@
+<section class="author-hero">
+  <div class="container">
+    <div class="author-hero-inner">
+      <% if (author.image_url) { %>
+      <img src="<%= author.image_url %>" alt="<%= author.name %>" class="author-avatar" width="120" height="120" loading="eager" decoding="async">
+      <% } %>
+      <div>
+        <h1><%= author.name %></h1>
+        <% if (author.role) { %>
+        <p class="author-role"><%= author.role %></p>
+        <% } %>
+        <% if (author.credentials) { %>
+        <p class="author-credentials"><%= author.credentials %></p>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<% if (author.bio) { %>
+<section class="author-bio">
+  <div class="container">
+    <h2>Om <%= author.name %></h2>
+    <% author.bio.split(/\n\n+/).forEach(function(para){ %>
+    <p><%= para.trim() %></p>
+    <% }) %>
+  </div>
+</section>
+<% } %>
+
+<% if (articles && articles.length > 0) { %>
+<section class="author-articles">
+  <div class="container">
+    <h2>Publicerade artiklar</h2>
+    <ul class="author-article-list">
+      <% articles.forEach(function(a){ %>
+      <li class="author-article-item">
+        <a href="/<%= a.slug %>">
+          <h3><%= a.title %></h3>
+          <% if (a.meta_desc) { %><p><%= a.meta_desc %></p><% } %>
+        </a>
+      </li>
+      <% }) %>
+    </ul>
+  </div>
+</section>
+<% } %>
